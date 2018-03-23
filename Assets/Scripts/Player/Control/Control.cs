@@ -1,0 +1,177 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using PlayerAbilities;
+
+public class Control : Photon.MonoBehaviour {
+
+	[HideInInspector]
+    public Camera main_c;
+
+	[HideInInspector]
+    public GameObject CamRef;
+
+    private Vector3 camera_position, camera_rotation;
+    CoreControl coreControl;
+    IClassControl classControl;
+    private Animator ani;
+
+    void Start ()
+    {
+        coreControl = GetComponent<CoreControl>();
+        ani = GetComponent<Animator>();
+        if (CompareTag("Mechanic"))
+        {
+            classControl = GetComponent<MechanicControl>();
+        } else if (CompareTag("Doctor"))
+        {
+            classControl = GetComponent<DoctorControl>();
+        } else if (CompareTag("Sarge"))
+        {
+            classControl = GetComponent<SergeantControl>();
+        } else if (CompareTag("Captain"))
+        {
+            classControl = GetComponent<CaptainControl>();
+        }
+    }
+
+	void LateStart()
+    {
+		camera_position = CamRef.transform.localPosition;
+	}
+
+    // Update is called once per frame
+    private void Update()
+    {
+        classControl.UpdateActions(Time.deltaTime);
+    }
+
+    // Update is called once per frame
+    void FixedUpdate () {
+		// We only want to update our character! Added on 2/6/18
+		if (photonView.isMine == false && PhotonNetwork.connected == true)
+        {
+			return;
+		}
+
+        coreControl.GetMovement();
+        coreControl.UpdateAnimationStates();
+        
+        classControl.UpdateAnimationStates(coreControl.GetAnimator());
+
+        // Set the Layer Weights for the Idle state.
+        if (coreControl.IsIdle() && classControl.CanIdle()&&!ani.GetCurrentAnimatorStateInfo(0).IsName("Die"))
+        {
+            coreControl.SetLayerWeight(2, 1f);
+        }
+        else
+        {
+            coreControl.SetLayerWeight(2, 0f);
+        }
+
+        // Enter Aiming Mode
+        if (Input.GetMouseButtonUp(1) && coreControl.CanAim() && classControl.CanAim())
+        {
+            coreControl.StartAiming();
+        }
+        // Exit Aiming Mode
+        else if(Input.GetMouseButtonUp(1) && coreControl.IsInAimingMode() && classControl.CanAim())
+        {
+            coreControl.StopAiming();
+        }
+
+        // Ensure the layer is weighted 1 when shooting and reloading.
+        if ((coreControl.IsReloading() || coreControl.IsShooting()) && (classControl.CanReload() || classControl.CanShoot()))
+        {
+            coreControl.SetLayerWeight(1, 1f);
+        }
+        else
+        {
+            coreControl.SetLayerWeight(1, 0f);
+        }
+
+        // Shoot
+		if (Input.GetMouseButton(0) && coreControl.CanShoot() && classControl.CanShoot())
+        {
+            coreControl.Shoot();
+        } else
+        {
+            coreControl.StopShooting();
+        }
+
+        // Reload
+        if (Input.GetKeyDown(KeyCode.R) && coreControl.CanReload() && classControl.CanReload())
+        {
+            coreControl.Reload();
+        }
+
+        // Sprint
+        if (Input.GetKey(KeyCode.LeftShift) && classControl.CanSprint())
+        {
+            coreControl.Sprint();
+        }
+        else
+        {
+            coreControl.Walk();
+        }
+
+        // Roll
+        if (Input.GetKeyDown(KeyCode.C) && classControl.CanRoll())
+        {
+            coreControl.Roll();
+        }
+
+        // Jump
+        if (Input.GetKeyDown(KeyCode.Space) && coreControl.CanJump() && classControl.CanJump())
+        {
+            coreControl.Jump();
+        }
+
+        // Pick Up Object
+        if (Input.GetKeyDown(KeyCode.F) && coreControl.CanPickupObject() && classControl.CanPickUpObject())
+        {
+            coreControl.PickUpObject();
+        }
+
+        // Getting Hit.
+        if (Input.GetKeyDown(KeyCode.H))
+        {
+            coreControl.GetHit();
+        }
+
+        // Stop current special action.
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            classControl.StopAction();
+        }
+
+        classControl.FixedUpdateActions(Time.deltaTime);
+
+        // Activate Ability 1
+        if (Input.GetKeyDown(KeyCode.Q) && !coreControl.IsAiming())
+        {
+            classControl.Activate(SpecialAbility.ThrowPill);
+            classControl.Activate(SpecialAbility.Build);
+            classControl.Activate(SpecialAbility.HealSelf);
+            classControl.Activate(SpecialAbility.Leadership);
+        }
+
+        // Moving
+        if (classControl.CanMove())
+        {
+            coreControl.Move();
+        }
+
+        //Enter dead state
+        if (Input.GetKeyDown(KeyCode.K))
+        {
+            coreControl.DieOnGround();
+        }
+
+        //revived by allies
+        if (Input.GetKeyDown(KeyCode.N))
+        {
+            coreControl.Revived();
+        }
+    }
+}

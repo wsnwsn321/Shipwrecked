@@ -1,0 +1,12 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class CritterBehaviors : MonsterBehaviors
+{
+
+    public override void Behave()
+    {
+        base.Behave();
+    }
+}
