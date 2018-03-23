@@ -24,7 +24,7 @@ public class Enemy : Photon.MonoBehaviour {
 		}
 		else
 		{
-			health = (int)stream.ReceiveNext();
+			health = (float)stream.ReceiveNext();
 		}
 	}
 

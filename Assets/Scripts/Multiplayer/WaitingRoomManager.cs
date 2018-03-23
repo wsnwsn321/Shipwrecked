@@ -21,7 +21,6 @@ public class WaitingRoomManager : Photon.PunBehaviour {
 		waitingWindow.SetActive(true);
 		lobbyTitle.text = PhotonNetwork.room.Name;
 		startReady.text = PhotonNetwork.isMasterClient ? "Start" : "Ready";
-		UpdateWindow ();
 	}
 
 	void OnPhotonPlayerConnected(PhotonPlayer player) {
@@ -37,7 +36,7 @@ public class WaitingRoomManager : Photon.PunBehaviour {
 	}
 
 	public void UpdateWindow() {
-		string playerName = PlayerPrefs.GetString ("PlayerName", "???");
+		string playerName = PhotonNetwork.player.NickName;
 		string playerClass = player.GetComponent<playerInfo>().GetClassName();
 		string methodName = "SetPlayer1Info";
 		switch (playerIndex) {
@@ -62,7 +61,7 @@ public class WaitingRoomManager : Photon.PunBehaviour {
 	public void SetPlayerList(PhotonPlayer[] pl) {
 		playerList = pl;
 		for (int i = 0; i < playerList.Length; i++) {
-			if (playerList [i].NickName.Equals (PlayerPrefs.GetString ("PlayerName", "???"))) {
+			if (playerList [i].NickName.Equals (PhotonNetwork.player.NickName)) {
 				playerIndex = i; 
 				SetSpawnIndex (playerIndex);
 				break;
@@ -97,6 +96,7 @@ public class WaitingRoomManager : Photon.PunBehaviour {
 
 	private void SetSpawnIndex(int i) {
 		// Sets the playerprefs for the spawn point that the player will use
+		// If this is used for local testing, every player will spawn in the same spot
 		PlayerPrefs.SetInt ("pin", i);
 
 	}

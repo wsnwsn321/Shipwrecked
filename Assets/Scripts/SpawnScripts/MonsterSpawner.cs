@@ -33,6 +33,7 @@ public class MonsterSpawner : MonoBehaviour {
             }
 
             monster.transform.SetParent(monsterContainer.transform);
+			monster.GetComponent<Enemy>().spawnManager = gameObject.GetComponentInParent<MonsterSpawnManager>();
         }
     }
 }
