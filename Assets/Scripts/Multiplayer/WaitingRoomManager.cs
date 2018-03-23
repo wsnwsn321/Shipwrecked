@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -14,7 +15,7 @@ public class WaitingRoomManager : Photon.PunBehaviour {
 	[HideInInspector]
 	public bool playerIsReady = false;
 
-	private PhotonPlayer[] playerList;
+	private List<PhotonPlayer> playerList = new List<PhotonPlayer>();
 	private int playerIndex;
 
 	public void DisplayWindow() {
@@ -23,21 +24,39 @@ public class WaitingRoomManager : Photon.PunBehaviour {
 		startReady.text = PhotonNetwork.isMasterClient ? "Start" : "Ready";
 	}
 
-	void OnPhotonPlayerConnected(PhotonPlayer player) {
-		if (PhotonNetwork.isMasterClient) {
-			this.photonView.RPC ("SetPlayerList", PhotonTargets.All, PhotonNetwork.playerList);
-		}
+	// ONLY CALLED BY MASTER CLIENT!!!
+	public void AddPlayerToList(PhotonPlayer player) {
+		playerList.Add (player);
+		PhotonPlayer[] tempArr = playerList.ToArray();
+		Debug.Log (player.ToString ());
+		this.photonView.RPC ("SetPlayerList", PhotonTargets.All, (object)tempArr);
 	}
 
-	void OnPhotonPlayerDisconnected(PhotonPlayer player) {
-		if (PhotonNetwork.isMasterClient) {
-			this.photonView.RPC ("SetPlayerList", PhotonTargets.All, PhotonNetwork.playerList);
+	// ONLY CALLED BY MASTER CLIENT!!!
+	public void RemovePlayerFromList(PhotonPlayer player) {
+		playerList.Remove (player);
+		PhotonPlayer[] tempArr = playerList.ToArray();
+		this.photonView.RPC ("SetPlayerList", PhotonTargets.All, (object)tempArr);
+	}
+
+	// For the host, updates the window for players upon them joining
+	// For the clients, makes their local playerList match the host's player list
+	[PunRPC]
+	public void SetPlayerList(PhotonPlayer[] pl) {
+		playerList = pl.ToList ();
+		for (int i = 0; i < playerList.Count; i++) {
+			if (playerList [i].NickName.Equals (PhotonNetwork.player.NickName)) {
+				playerIndex = i; 
+				SetSpawnIndex (playerIndex);
+				break;
+			}
 		}
+		UpdateWindow ();
 	}
 
 	public void UpdateWindow() {
 		string playerName = PhotonNetwork.player.NickName;
-		string playerClass = player.GetComponent<playerInfo>().GetClassName();
+		string playerClass = player.GetComponent<playerInfo> ().GetClassName ();
 		string methodName = "SetPlayer1Info";
 		switch (playerIndex) {
 		case 1:
@@ -52,23 +71,12 @@ public class WaitingRoomManager : Photon.PunBehaviour {
 		}
 
 		string nameToDisplay = playerIsReady ? playerName + " (Ready)" : playerName;
+		Debug.Log (nameToDisplay);
+		// This is called by each client since we want the class to update
 		this.photonView.RPC (methodName, PhotonTargets.All, nameToDisplay, playerClass);
-
-
 	}
 			
-	[PunRPC]
-	public void SetPlayerList(PhotonPlayer[] pl) {
-		playerList = pl;
-		for (int i = 0; i < playerList.Length; i++) {
-			if (playerList [i].NickName.Equals (PhotonNetwork.player.NickName)) {
-				playerIndex = i; 
-				SetSpawnIndex (playerIndex);
-				break;
-			}
-		}
-		UpdateWindow ();
-	}
+
 
 	[PunRPC]
 	private void SetPlayer1Info(string playerName, string playerClass) {

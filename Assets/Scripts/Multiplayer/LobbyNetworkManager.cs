@@ -92,6 +92,7 @@ public class LobbyNetworkManager : Photon.MonoBehaviour {
 		}
 	}
 
+
 	public void DisconnectFromRoom() {
 		PhotonNetwork.LeaveRoom (true);
 
@@ -118,6 +119,7 @@ public class LobbyNetworkManager : Photon.MonoBehaviour {
 		} else {
 			// Tell everyone that the player is ready
 			wrm.playerIsReady = !wrm.playerIsReady;
+			wrm.UpdateWindow ();
 		}
 	}
 
@@ -125,8 +127,11 @@ public class LobbyNetworkManager : Photon.MonoBehaviour {
 		// Master client joined, set playerCount to 1
 		if (PhotonNetwork.isMasterClient) {
 			playerCount = 1;
+			wrm.DisplayWindow ();
+			wrm.AddPlayerToList (PhotonNetwork.player);
+		} else {
+			wrm.DisplayWindow ();
 		}
-		wrm.DisplayWindow ();
 	}
 
 	void OnPhotonPlayerConnected(PhotonPlayer other) {
@@ -134,18 +139,13 @@ public class LobbyNetworkManager : Photon.MonoBehaviour {
 		// Player joined, master client increments playerCount
 		if (PhotonNetwork.isMasterClient) {
 			playerCount++;
-
+			wrm.AddPlayerToList (other);
 			// Hide and close the room if it is full
 			if (playerCount == MaxPlayersPerRoom) {
 				PhotonNetwork.room.IsVisible = true;
-				PhotonNetwork.room.open = false;
+				PhotonNetwork.room.IsOpen = false;
 			}
-
-
-
 		}
-		wrm.UpdateWindow ();
-
 	}
 
 	void OnPhotonPlayerDisconnected(PhotonPlayer other) {
@@ -153,15 +153,13 @@ public class LobbyNetworkManager : Photon.MonoBehaviour {
 		// Player joined, master client increments playerCount
 		if (PhotonNetwork.isMasterClient) {
 			playerCount--;
-
+			wrm.RemovePlayerFromList (other);
 			// Show and open the room for others to join
 			if (playerCount < MaxPlayersPerRoom) {
 				PhotonNetwork.room.IsVisible = true;
 				PhotonNetwork.room.IsOpen = true;
 			}
 		}
-		wrm.UpdateWindow ();
-
 	}
 
 
