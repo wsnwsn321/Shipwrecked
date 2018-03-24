@@ -11,7 +11,7 @@ public class PlayerHealth : MonoBehaviour {
     private Text healthText;
     private Slider healthBar;
     private bool tookDmg = false;
-
+	CoreControl corecontrol;
     private float timeColliding;
     public float timeThreshold = 1f;
 
@@ -19,7 +19,8 @@ public class PlayerHealth : MonoBehaviour {
 	void Start () {
         healthText = GameObject.FindGameObjectWithTag("HealthText").GetComponent<Text>();
         healthBar = GameObject.FindGameObjectWithTag("HealthBar").GetComponent<Slider>();
-    }
+		corecontrol = GetComponent<CoreControl> ();
+			}
 	
 	// Update is called once per frame
 	void Update () {
@@ -64,6 +65,7 @@ public class PlayerHealth : MonoBehaviour {
         if (health <= 0)
         {
             //player dies
-        }
+			corecontrol.DieOnGround();
+		}
     }
 }
