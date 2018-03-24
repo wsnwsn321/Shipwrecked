@@ -102,8 +102,8 @@ public class TurretBehaviors : GenericBehaviors
 
     private IEnumerator KickBack(Transform gun)
     {
-        int kickbackIterations = 5;
-        float maxKickbackDistance = 0.1f;
+        int kickbackIterations = 10;
+        float maxKickbackDistance = 0.2f;
         float kickbackIncrement = maxKickbackDistance / kickbackIterations;
         float kickbackDistance = 0;
 
@@ -151,7 +151,7 @@ public class TurretBehaviors : GenericBehaviors
             yield return new WaitForFixedUpdate();
         }
         
-        while (gunRotationSpeed > 0)
+        while (!isRotating && gunRotationSpeed > 0)
         {
             gunRotationSpeed -= speedIncrement;
 
