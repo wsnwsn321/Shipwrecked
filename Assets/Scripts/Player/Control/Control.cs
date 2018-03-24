@@ -162,16 +162,26 @@ public class Control : Photon.MonoBehaviour {
             coreControl.Move();
         }
 
-        //Enter dead state
+        //Enter dead state, for test
         if (Input.GetKeyDown(KeyCode.K))
         {
             coreControl.DieOnGround();
         }
 
-        //revived by allies
+        //revived by allies, for test
         if (Input.GetKeyDown(KeyCode.N))
         {
             coreControl.Revived();
         }
-    }
+
+		//revive allies
+		if (Input.GetKeyDown(KeyCode.G))
+		{
+			if (coreControl.distance < 1.2f) {
+				if (ani.GetCurrentAnimatorStateInfo (0).IsName ("Die")) {
+					coreControl.ReviveAllies ();
+				}
+			}
+    	}
+	}
 }

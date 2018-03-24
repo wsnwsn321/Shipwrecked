@@ -14,6 +14,8 @@ public class CoreControl : MonoBehaviour {
     float forwardMovement, horizontalMovement, timeScale;
     float forwardSpeed, horizontalSpeed;
     bool aiming, turnLeft, turnRight, sprint, isGrounded, turn,dead;
+	public float distance;
+	Animator ani;
 
     private Animator animator;
     private Rigidbody rb;
@@ -309,6 +311,14 @@ public class CoreControl : MonoBehaviour {
             animator.SetTrigger("Revived");
         }
     }
+	public void ReviveAllies()
+	{
+		if (animator)
+		{
+			animator.SetTrigger("Help");
+		}
+
+	}
 
     #endregion Actions
 
@@ -331,6 +341,12 @@ public class CoreControl : MonoBehaviour {
         {
             isGrounded = true;
         }
+
+		if (other.gameObject.tag == "Mechanic" || other.gameObject.tag == "Sarge" || other.gameObject.tag == "Doctor"||other.gameObject.tag == "Captain")
+		{
+			ani = other.gameObject.GetComponent<Animator> ();
+			distance = Vector3.Distance(transform.position, other.gameObject.transform.position);
+		}
 
     }
 }
