@@ -16,9 +16,9 @@ public class ShipHealth : Photon.MonoBehaviour {
 	public float timeThreshold = 1f;
 
 	// Use this for initialization
-	void Start () {
-		healthText = GameObject.FindGameObjectWithTag("HealthText").GetComponent<Text>();
-		healthBar = GameObject.FindGameObjectWithTag("HealthBar").GetComponent<Slider>();
+	void LateStart () {
+		healthText = GameObject.FindGameObjectWithTag("ShipHealthText").GetComponent<Text>();
+		healthBar = GameObject.FindGameObjectWithTag("ShipHealthBar").GetComponent<Slider>();
 	}
 
 	// Update is called once per frame
