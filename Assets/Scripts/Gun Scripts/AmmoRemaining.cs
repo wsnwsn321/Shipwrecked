@@ -10,7 +10,7 @@ public class AmmoRemaining : MonoBehaviour {
 
 
 	// Use this for initialization
-	void Start () {
+	void LateStart () {
 		ammoText = GameObject.FindGameObjectWithTag("AmmoText").GetComponent<Text>();
 	}
 
@@ -27,6 +27,7 @@ public class AmmoRemaining : MonoBehaviour {
 
 	private void updateAmmoText()
 	{
+		if(ammoText != null)
 		ammoText.text = ammo.ToString() + "/20";
 	}
 
