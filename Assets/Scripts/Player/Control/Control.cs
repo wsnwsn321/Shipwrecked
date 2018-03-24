@@ -60,7 +60,7 @@ public class Control : Photon.MonoBehaviour {
         classControl.UpdateAnimationStates(coreControl.GetAnimator());
 
         // Set the Layer Weights for the Idle state.
-        if (coreControl.IsIdle() && classControl.CanIdle()&&!ani.GetCurrentAnimatorStateInfo(0).IsName("Die"))
+		if (coreControl.IsIdle() && classControl.CanIdle()&&!ani.GetCurrentAnimatorStateInfo(0).IsName("Die")&&!ani.GetCurrentAnimatorStateInfo (0).IsName ("Reviving"))
         {
             coreControl.SetLayerWeight(2, 1f);
         }
@@ -122,7 +122,7 @@ public class Control : Photon.MonoBehaviour {
         }
 
         // Jump
-        if (Input.GetKeyDown(KeyCode.Space) && coreControl.CanJump() && classControl.CanJump())
+		if (Input.GetKeyDown(KeyCode.Space) && coreControl.CanJump() && classControl.CanJump()&&!ani.GetCurrentAnimatorStateInfo (0).IsName ("Reviving"))
         {
             coreControl.Jump();
         }
@@ -178,9 +178,15 @@ public class Control : Photon.MonoBehaviour {
 		if (Input.GetKeyDown(KeyCode.G))
 		{
 			if (coreControl.distance < 1.2f) {
-				if (ani.GetCurrentAnimatorStateInfo (0).IsName ("Die")) {
-					coreControl.ReviveAllies ();
+				if (!ani.GetCurrentAnimatorStateInfo (0).IsName ("Reviving")) {
+					if (coreControl.allie_ani.GetCurrentAnimatorStateInfo (0).IsName ("Die")) {
+						coreControl.ReviveAllies ();
+					}
+				} else {
+					print ("called!");
+					coreControl.UnReviveAllies ();
 				}
+
 			}
     	}
 	}

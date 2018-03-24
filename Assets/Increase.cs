@@ -5,6 +5,8 @@ using UnityEngine;
 public class Increase : MonoBehaviour {
     public GameObject healedEffect;
     private GameObject h;
+	private CoreControl cc;
+	private Animator an;
 	// Use this for initialization
 	void Start () {
 		
@@ -19,9 +21,16 @@ public class Increase : MonoBehaviour {
     {
         if (other.gameObject.tag == "Sarge"|| other.gameObject.tag == "Mechanic"|| other.gameObject.tag == "Captain")
         {
-            Destroy(gameObject);
-            h = Instantiate(healedEffect, other.transform.position, Quaternion.identity);
-            Destroy(h, 2f);
+			cc = other.gameObject.GetComponent<CoreControl> ();
+			an = other.gameObject.GetComponent<Animator> ();
+			Destroy(gameObject);
+			h = Instantiate(healedEffect, other.transform.position, Quaternion.identity);
+			Destroy(h, 2f);
+			if (cc.dead||an.GetCurrentAnimatorStateInfo(0).IsName("Die")) {
+				an.SetTrigger ("Revived");
+
+			}
+            
         }
 
     }

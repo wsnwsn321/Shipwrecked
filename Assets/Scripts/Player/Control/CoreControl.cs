@@ -13,10 +13,12 @@ public class CoreControl : MonoBehaviour {
 
     float forwardMovement, horizontalMovement, timeScale;
     float forwardSpeed, horizontalSpeed;
-    bool aiming, turnLeft, turnRight, sprint, isGrounded, turn,dead;
+    bool aiming, turnLeft, turnRight, sprint, isGrounded, turn;
 	public float distance;
-	Animator ani;
-
+	public Animator allie_ani;
+	public CoreControl allie_core;
+	public PlayerHealth allie_health;
+	public bool dead;
     private Animator animator;
     private Rigidbody rb;
 
@@ -158,14 +160,17 @@ public class CoreControl : MonoBehaviour {
                 animator.SetTrigger("Jump");
             }
         }
-        rb.AddForce(new Vector3(0, 9f, 0), ForceMode.Impulse);
+		if (!dead) {
+			rb.AddForce(new Vector3(0, 9f, 0), ForceMode.Impulse);
+		}
+        
         isGrounded = false;
     }
 
     public void Move()
     {
         Camera main_c = GetComponent<Control>().main_c;
-        if (main_c && !dead)
+		if (main_c && !dead&&!animator.GetCurrentAnimatorStateInfo (0).IsName ("Reviving"))
         {
             Vector3 movement = new Vector3(horizontalMovement * Time.deltaTime * horizontalSpeed, 0.0f, forwardMovement * Time.deltaTime * forwardSpeed);
 
@@ -185,7 +190,7 @@ public class CoreControl : MonoBehaviour {
 
     public void PickUpObject()
     {
-        if (animator&&!dead)
+		if (animator&&!dead&&!animator.GetCurrentAnimatorStateInfo (0).IsName ("Reviving"))
         {
             animator.SetTrigger("Pickup");
         }
@@ -193,7 +198,7 @@ public class CoreControl : MonoBehaviour {
 
     public void Reload()
     {
-        if (animator && !dead)
+		if (animator && !dead&&!animator.GetCurrentAnimatorStateInfo (0).IsName ("Reviving"))
         {
             animator.SetTrigger("Reload");
         }
@@ -202,7 +207,7 @@ public class CoreControl : MonoBehaviour {
 
     public void Roll()
     {
-        if (animator && !dead)
+		if (animator && !dead&&!animator.GetCurrentAnimatorStateInfo (0).IsName ("Reviving"))
         {
             animator.SetTrigger("Roll");
         }
@@ -210,7 +215,7 @@ public class CoreControl : MonoBehaviour {
 
     public void Shoot()
     {
-        if (!dead)
+		if (!dead&&!animator.GetCurrentAnimatorStateInfo (0).IsName ("Reviving"))
         {
             //GetComponent<AudioSource>().PlayOneShot(Shoot);// play audio
             nextTimeToFire = Time.time + (2f / fireRate);
@@ -235,7 +240,7 @@ public class CoreControl : MonoBehaviour {
 
     public void StartAiming()
     {
-        if (!dead)
+		if (!dead&&!animator.GetCurrentAnimatorStateInfo (0).IsName ("Reviving"))
         {
             aiming = true;
             if (animator)
@@ -262,7 +267,7 @@ public class CoreControl : MonoBehaviour {
 
     public void StopAiming()
     {
-        if (!dead)
+		if (!dead&&!animator.GetCurrentAnimatorStateInfo (0).IsName ("Reviving"))
         {
             aiming = false;
             if (animator)
@@ -315,7 +320,18 @@ public class CoreControl : MonoBehaviour {
 	{
 		if (animator)
 		{
-			animator.SetTrigger("Help");
+				animator.SetTrigger ("Help");
+				StartCoroutine (animationDelay ());
+
+		}
+
+	}
+
+	public void UnReviveAllies()
+	{
+		if (animator)
+		{
+			animator.SetTrigger ("Unrevive");
 		}
 
 	}
@@ -344,9 +360,20 @@ public class CoreControl : MonoBehaviour {
 
 		if (other.gameObject.tag == "Mechanic" || other.gameObject.tag == "Sarge" || other.gameObject.tag == "Doctor"||other.gameObject.tag == "Captain")
 		{
-			ani = other.gameObject.GetComponent<Animator> ();
+			
+			allie_ani = other.gameObject.GetComponent<Animator> ();
+			allie_core = other.gameObject.GetComponent<CoreControl> ();
+			allie_health = other.gameObject.GetComponent<PlayerHealth> ();
 			distance = Vector3.Distance(transform.position, other.gameObject.transform.position);
 		}
 
     }
+
+	IEnumerator animationDelay( )
+	{
+		yield return new WaitForSeconds(5f);
+			allie_core.Revived ();
+			allie_health.health = 10;
+		animator.SetTrigger ("FinishRevive");
+	}
 }
