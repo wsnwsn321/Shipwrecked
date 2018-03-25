@@ -12,8 +12,8 @@ public class Experience : MonoBehaviour {
 
     CoreControl core;
     TeammateTypes characterType;
-    int experience;
-    int level;
+    public int experience;
+    public int level;
     int nextLevelThreshold;
     int nextThresholdPosition;
 
