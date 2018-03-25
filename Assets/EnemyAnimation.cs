@@ -28,16 +28,19 @@ public class EnemyAnimation : MonoBehaviour {
 	void Update () {
         attack = false ;
             ani.SetBool("findPlayer", run);
-            if (fov.visibleTargets.Count > 0&&!Player_ani.GetCurrentAnimatorStateInfo(0).IsName("Die"))
-            {
-                run = true;
-                ap.maxSpeed = 3;
-            }
-            else
-            {
-                run = false;
-                ap.maxSpeed = 1;
-            }
+		//if (Player_ani != null) {
+			if (fov.visibleTargets.Count > 0)
+			{
+				run = true;
+				ap.maxSpeed = 3;
+			}
+			else
+			{
+				run = false;
+				ap.maxSpeed = 1;
+			}
+		//}
+           
 
             if (ani.GetCurrentAnimatorStateInfo(0).IsName("Die"))
             {
@@ -83,7 +86,7 @@ public class EnemyAnimation : MonoBehaviour {
 
     void OnCollisionEnter(Collision collision)
     {
-        if ((collision.gameObject.tag == "Sarge" || collision.gameObject.tag == "Mechanic" || collision.gameObject.tag == "Doctor")&& fov.visibleTargets.Count > 0)
+        if ((collision.gameObject.tag == "Sarge" || collision.gameObject.tag == "Mechanic" || collision.gameObject.tag == "Doctor"))
         {
             Player_ani = collision.gameObject.GetComponent<Animator>();
             collide = true;
@@ -94,7 +97,7 @@ public class EnemyAnimation : MonoBehaviour {
     }
     void OnCollisionExit(Collision collisionInfo)
     {
-        if ((collisionInfo.gameObject.tag == "Sarge" || collisionInfo.gameObject.tag == "Mechanic" || collisionInfo.gameObject.tag == "Doctor") && fov.visibleTargets.Count > 0)
+        if ((collisionInfo.gameObject.tag == "Sarge" || collisionInfo.gameObject.tag == "Mechanic" || collisionInfo.gameObject.tag == "Doctor"))
         {
             collide = false;
             distance = Vector3.Distance(transform.position, collisionInfo.gameObject.transform.position);
