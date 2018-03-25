@@ -42,7 +42,7 @@ public class brain_control : MonoBehaviour {
             }
         }
         
-		else if(distance>1.55f) {
+		else if(distance>1.65f) {
             an.Play("Walk");
             if (fov.visibleTargets.Count > 0)
             {
