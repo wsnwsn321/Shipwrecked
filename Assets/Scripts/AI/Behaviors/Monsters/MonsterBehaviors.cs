@@ -79,6 +79,7 @@ public class MonsterBehaviors : GenericBehaviors
         }
         else if (fov.visibleTargets.Count > 0)
         {
+            /** This splits the visible targets up into characters and turrets. */
             //visibleCharacters.Clear();
             //visibleTurrets.Clear();
             //for (int i = 0; i < fov.visibleTargets.Count; i++)

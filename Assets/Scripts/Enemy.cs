@@ -5,7 +5,9 @@ using System.Collections.Generic;
 public class Enemy : Photon.MonoBehaviour {
 	//extends MonsterSpawnManager class to update monster count
 	public MonsterSpawnManager spawnManager;
+    private MonsterTypes monsterType;
     private Animator enemy_ani;
+    private bool isDead;
 
 	// We want Photon to sync this value, so we will serialize it
 	[SerializeField]
@@ -26,7 +28,9 @@ public class Enemy : Photon.MonoBehaviour {
     
 	void Start()
     {
+        monsterType = GetComponent<EntityType>().monsterType;
         enemy_ani = GetComponent<Animator>();
+        isDead = false;
         attackers = new List<Transform>();
         characterAttackers = new List<Transform>();
         times = new List<float>();
@@ -60,7 +64,7 @@ public class Enemy : Photon.MonoBehaviour {
 
     public void TakeDamage(float amount){
 		health -= amount;
-		if (health <= 0f) {
+		if (health <= 0f && !isDead) {
 			Die ();
 		}
 	}
@@ -100,9 +104,40 @@ public class Enemy : Photon.MonoBehaviour {
 
 	void Die(){
         enemy_ani.SetTrigger("die");
+        isDead = true;
         Destroy (gameObject,2f);
 		UpdateMonsterAmount ();
+        AllocateExp();
 	}
+
+    void AllocateExp()
+    {
+        int expToAllocate = 0;
+        switch(monsterType)
+        {
+            case MonsterTypes.Brains:
+                expToAllocate = 3;
+                break;
+            case MonsterTypes.Critter:
+                expToAllocate = 2;
+                break;
+            case MonsterTypes.Spaz:
+                expToAllocate = 2;
+                break;
+            case MonsterTypes.Tough:
+                expToAllocate = 4;
+                break;
+        }
+
+        for (int i = 0; i < characterAttackers.Count; i++)
+        {
+            // Allocate exp.
+            characterAttackers[i].GetComponent<Experience>().IncreaseBy(expToAllocate);
+        }
+
+        // Allocate more to most recent attacker.
+        mostRecentCharacterAttacker.GetComponent<Experience>().IncreaseBy(expToAllocate / 2);
+    }
 
 	//updates the amount of monsters remaining
 	void UpdateMonsterAmount(){

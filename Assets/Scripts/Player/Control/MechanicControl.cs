@@ -8,8 +8,15 @@ public class MechanicControl : MonoBehaviour, IClassControl {
 
     public float buildPositionOffset = 3;
     public float buildingPieceTime = 1.2f;
-    public GameObject turret;
-    public GameObject turretGhost;
+    public GameObject[] turrets;
+    public GameObject[] turretGhosts;
+
+    [HideInInspector]
+    public int currentTurretBuildLevel = 0;
+    [HideInInspector]
+    public float turretHealth = 20f;
+    [HideInInspector]
+    public float turretDamage = 2f;
 
     private bool isBuilding;
     private Vector3 buildPosition;
@@ -64,8 +71,8 @@ public class MechanicControl : MonoBehaviour, IClassControl {
             child.gameObject.SetActive(true);
             children.Add(child);
             
-            // Stop at the prefab's child named "Gun".
-            if (child.name.Equals("Gun"))
+            // Stop at the prefab's "Gun" level.
+            if (child.name.Equals("Gun") || child.name.Equals("RotatingGuns"))
             {
                 isBuilding = false;
             }
@@ -110,7 +117,10 @@ public class MechanicControl : MonoBehaviour, IClassControl {
         isBuilding = true;
         Destroy(currentPlaceableObject);
         currentPlaceableObject = null;
-        currentTurret = Instantiate(turret, buildPosition, Quaternion.identity);
+        currentTurret = Instantiate(turrets[currentTurretBuildLevel], buildPosition, Quaternion.identity);
+        TurretBehaviors turretStats = currentTurret.GetComponent<TurretBehaviors>();
+        turretStats.damage = turretDamage;
+        turretStats.health = turretHealth;
     }
 
     void ContinueBuildingNearestTurret(Collider[] nearbyTurrets)
@@ -138,7 +148,7 @@ public class MechanicControl : MonoBehaviour, IClassControl {
 
     void CreateTurretGhost()
     {
-        currentPlaceableObject = Instantiate(turretGhost, buildPosition, Quaternion.identity);
+        currentPlaceableObject = Instantiate(turretGhosts[currentTurretBuildLevel], buildPosition, Quaternion.identity);
     }
 
     void ExitBuildingMode()

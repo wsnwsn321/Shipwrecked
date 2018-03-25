@@ -7,6 +7,9 @@ public class CoreControl : MonoBehaviour {
     [HideInInspector]
     public float nextTimeToFire = 0f;
 
+    [HideInInspector]
+    public float damageModifier = 1f;
+
     public float fireRate = 15f;
 
     public AudioClip shootingAudio;
@@ -18,7 +21,7 @@ public class CoreControl : MonoBehaviour {
 	public Animator allie_ani;
 	public CoreControl allie_core;
 	public PlayerHealth allie_health;
-	public bool dead;
+	public bool dead, hasSpecialAbility;
     private Animator animator;
     private Rigidbody rb;
 
@@ -31,6 +34,7 @@ public class CoreControl : MonoBehaviour {
         isGrounded = true;
         turn = false;
         dead = false;
+        hasSpecialAbility = false;
         forwardSpeed = 1f;
         horizontalSpeed = 1.5f;
         timeScale = 0.3f * Time.deltaTime;
