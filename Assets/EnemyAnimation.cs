@@ -111,10 +111,12 @@ public class EnemyAnimation : MonoBehaviour {
         switch (transform.gameObject.tag)
         {
             case "CrabAlien":
-                PlayerHealth.enemyAttackType = PlayerHealth.EnemyAttackType.CRAB_ALIEN;
+				// make this access the specific player that got hit instead of all instances of PlayerHealth
+			// Otherwise, this will hit every player.
+            //    PlayerHealth.enemyAttackType = PlayerHealth.EnemyAttackType.CRAB_ALIEN;
                 break;
             case "SpiderBrain":
-                PlayerHealth.enemyAttackType = PlayerHealth.EnemyAttackType.SPIDER_BRAIN;
+            //    PlayerHealth.enemyAttackType = PlayerHealth.EnemyAttackType.SPIDER_BRAIN;
                 break;
             default:
                 break;

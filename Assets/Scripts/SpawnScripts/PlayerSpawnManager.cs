@@ -30,22 +30,8 @@ public class PlayerSpawnManager : Photon.MonoBehaviour {
 	[HideInInspector]
 	public string prefabName;
 
-//	private static PlayerSpawnManager ps_Instance;
-//	public static PlayerSpawnManager Instance {
-//		get {
-//			if (ps_Instance == null) {
-//				ps_Instance = new PlayerSpawnManager ();
-//			}
-//			return ps_Instance;
-//		}
-//	}
+	private GameObject player;
 
-//	public void Awake() {
-//		ps_Instance = new PlayerSpawnManager ();
-//		ps_Instance.spawnPoints = spawnPoints;
-//		ps_Instance.sargePrefab = sargePrefab;
-//	}
-//
 	public void Start() {
 		SpawnPlayer ();
 	}
@@ -92,14 +78,15 @@ public class PlayerSpawnManager : Photon.MonoBehaviour {
 		/// 
 		Debug.Log("You spawned as: " + prefabName);
 		Debug.Log ("SpawnIndex: " + spawnIndex);
+
 		// Spawn the player using their prefab name
 		if (spawnIndex > -1) {
 			if (PhotonNetwork.connected) {
 				// Multiplayer instantiate
-				GameObject player = PhotonNetwork.Instantiate (prefabName, spawnPoints [spawnIndex].transform.position, spawnPoints [spawnIndex].transform.rotation, 0);
+				player = PhotonNetwork.Instantiate (prefabName, spawnPoints [spawnIndex].transform.position, spawnPoints [spawnIndex].transform.rotation, 0);
 			} else {
 				// Singleplayer instantiate
-				GameObject player = Instantiate(Resources.Load (prefabName, typeof(GameObject)) as GameObject, 
+				player = Instantiate(Resources.Load (prefabName, typeof(GameObject)) as GameObject, 
 					spawnPoints [0].transform.position, spawnPoints [0].transform.rotation);
 			}
 
@@ -113,7 +100,11 @@ public class PlayerSpawnManager : Photon.MonoBehaviour {
 	public void RespawnPlayer() {
 		// Spawn the player using their prefab name
 		if (spawnIndex > -1) {
-			PhotonNetwork.Instantiate (prefabName, spawnPoints [spawnIndex].transform.position, spawnPoints [spawnIndex].transform.rotation, 0);
+			player.transform.position = spawnPoints [spawnIndex].transform.position;
+			player.transform.rotation = spawnPoints [spawnIndex].transform.rotation;
+
+			// We need some way of resetting player stats (health, cooldowns, ammo, etc)
+			// player.GetComponent<PlayerScript>().Respawn();
 		} else {
 			// MAJOR ERROR WHOA
 		}

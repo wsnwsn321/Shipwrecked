@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PlayerHealth : MonoBehaviour {
+public class PlayerHealth : Photon.MonoBehaviour {
 
     public int health = 100;
     public int earthDwellerDmg = 20;
@@ -15,7 +15,7 @@ public class PlayerHealth : MonoBehaviour {
     private float timeColliding;
     public float timeThreshold = 1f;
 
-    public static EnemyAttackType enemyAttackType = EnemyAttackType.NONE;
+    public EnemyAttackType enemyAttackType = EnemyAttackType.NONE;
 
     //Enemy type with corresponding attack values (how much damage is done to player)
     public enum EnemyAttackType
@@ -46,10 +46,14 @@ public class PlayerHealth : MonoBehaviour {
     private void updateHealthText()
     {
         health -= (int)enemyAttackType;
-        /*if (health < 0)
+        if (health < 0)
         {
             health = 0;
-        }*/
+        }
+		if (photonView.isMine) {
+			PhotonNetwork.player.SetScore (health);
+			UIManager.updateUI = true;
+		}
         healthText.text = health.ToString() + "/100";
     }
 
