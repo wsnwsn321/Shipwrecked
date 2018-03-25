@@ -14,7 +14,9 @@ public class Enemy : Photon.MonoBehaviour {
     // Variables to keep track of recent attackers.
     [HideInInspector]
     List<Transform> attackers;
+    List<Transform> characterAttackers;
     List<float> times;
+    Transform mostRecentCharacterAttacker;
     float secondsToKeepTrack = 2f;
 
     public List<Transform> Attackers
@@ -26,6 +28,7 @@ public class Enemy : Photon.MonoBehaviour {
     {
         enemy_ani = GetComponent<Animator>();
         attackers = new List<Transform>();
+        characterAttackers = new List<Transform>();
         times = new List<float>();
         InvokeRepeating("CheckAttackers", 0, 0.5f);
     }
@@ -73,6 +76,26 @@ public class Enemy : Photon.MonoBehaviour {
         {
             times[attackers.IndexOf(attacker)] = Time.time;
         }
+
+        if (attacker.gameObject.layer == LayerMask.NameToLayer("Character"))
+        {
+            if (!characterAttackers.Contains(attacker))
+            {
+                characterAttackers.Add(attacker);
+            }
+
+            mostRecentCharacterAttacker = attacker;
+        }
+    }
+
+    public List<Transform> GetCharacterAttackers()
+    {
+        return characterAttackers;
+    }
+
+    public Transform GetMostRecentCharacterAttacker()
+    {
+        return mostRecentCharacterAttacker;
     }
 
 	void Die(){
