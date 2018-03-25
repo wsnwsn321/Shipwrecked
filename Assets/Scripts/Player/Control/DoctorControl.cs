@@ -9,32 +9,36 @@ public class DoctorControl : Photon.MonoBehaviour, IClassControl {
     public int maxPills = 1;
     public GameObject healParticle;
     public GameObject pill;
-
+	public GameObject healBuff;
+	public GameObject healEffect;
     [HideInInspector]
     public float healthPerSec = 1f;
     [HideInInspector]
     public float researchBuff = 1f;
 
+	public LayerMask layerMask;
+
     private GameObject healing;
     private List<GameObject> pills;
     private bool heal;
+	private Animator animator;
 
     void Start()
     {
         heal = false;
         pills = new List<GameObject>();
+		animator = GetComponent<CoreControl>().GetAnimator();
     }
 
     void ThrowPill()
     {
         if (pills.Count < maxPills)
         {
-            Animator animator = GetComponent<CoreControl>().GetAnimator();
+            
             if (animator&&!animator.GetCurrentAnimatorStateInfo(0).IsName("Die"))
             {
                 animator.SetTrigger("Ability1");
             }
-            StartCoroutine(animationDelay());
 			GameObject currentPill = PhotonNetwork.connected ? PhotonNetwork.Instantiate(pill.name, new Vector3(transform.position.x, transform.position.y + 1f, transform.position.z), Quaternion.identity, 0) :Instantiate(pill, new Vector3(transform.position.x, transform.position.y + 1f, transform.position.z), Quaternion.identity);
             Physics.IgnoreCollision(this.GetComponent<BoxCollider>(), currentPill.GetComponent<CapsuleCollider>());
             currentPill.GetComponent<Rigidbody>().velocity = GetComponent<Control>().main_c.transform.forward * 10;
@@ -43,6 +47,46 @@ public class DoctorControl : Photon.MonoBehaviour, IClassControl {
             StartCoroutine(waitPillDie());
         }
     }
+
+	void HealingCircle(){
+		if (animator&&!animator.GetCurrentAnimatorStateInfo(0).IsName("Die"))
+		{
+			if (!animator.GetCurrentAnimatorStateInfo (0).IsName ("AB2")) {
+				animator.SetTrigger("Ability2");
+				healBuff.SetActive (true);
+				StartCoroutine(HealBuff());
+			}
+			Collider[] players = Physics.OverlapSphere (transform.position, 15f,layerMask, QueryTriggerInteraction.Collide);
+			Debug.Log (players.Length);
+			for(int i=0;i<players.Length;i++){
+				Debug.Log (players[i].name);
+				healing = PhotonNetwork.connected? PhotonNetwork.Instantiate(healEffect.name, players[i].transform.position, Quaternion.identity,0) :Instantiate(healEffect, transform.position, Quaternion.identity);
+				StartCoroutine(EndBuff());
+			}
+
+		}
+
+	}
+
+
+
+	IEnumerator EndBuff()
+	{
+		yield return new WaitForSeconds(5f);
+		StopHealing ();
+		healBuff.SetActive (false);
+
+	}
+
+	void StopHealing()
+	{
+		if (PhotonNetwork.connected) {
+			PhotonNetwork.Destroy (healing);
+		} else {
+			Destroy (healing);
+		}
+		healing = null;
+	}
 
     IEnumerator waitPillDie()
     {
@@ -54,12 +98,16 @@ public class DoctorControl : Photon.MonoBehaviour, IClassControl {
 		}
         pills.RemoveAt(0);
     }
+		
 
-    IEnumerator animationDelay( )
-    {
-        yield return new WaitForSeconds(0.5f);
-    }
 
+	IEnumerator HealBuff( )
+	{
+		yield return new WaitForSeconds(5f);
+		healBuff.SetActive (false);
+		animator.SetTrigger("Ab2Finished");
+
+	}
     #region Inherited Methods
 
     public void Activate(SpecialAbility ability)
@@ -68,6 +116,10 @@ public class DoctorControl : Photon.MonoBehaviour, IClassControl {
         {
             ThrowPill();
         }
+		if (ability == SpecialAbility.HealingCircle)
+		{
+			HealingCircle();
+		}
     }
 
     public bool CanAim()

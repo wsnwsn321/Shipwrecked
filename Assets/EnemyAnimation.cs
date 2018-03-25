@@ -47,7 +47,7 @@ public class EnemyAnimation : MonoBehaviour {
                 ap.maxSpeed = 0;
             }
 
-            if (collide)
+		if (collide&&fov.visibleTargets.Count > 0)
             {
                 if (!Player_ani.GetCurrentAnimatorStateInfo(0).IsName("Die"))
                 {
