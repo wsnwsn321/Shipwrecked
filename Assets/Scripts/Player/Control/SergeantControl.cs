@@ -9,7 +9,7 @@ public class SergeantControl : MonoBehaviour, IClassControl
     [Range(0f, 10f)]
     public float healCooldown = 5f;
     [Range(0f, 10f)]
-    public float healTime = 3f;
+    public float healTime = 5f;
     [Range(1, 100)]
     public int healDivisions = 10;
     public GameObject healParticle;

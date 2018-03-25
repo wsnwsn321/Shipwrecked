@@ -18,7 +18,7 @@ namespace PlayerAbilities
         ThrowPill,
         
         // Ability 2
-        Unnamed
+        HealingCircle
     }
 }
 
