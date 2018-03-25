@@ -6,6 +6,8 @@ using UnityEngine;
 
 public class CaptainControl : MonoBehaviour, IClassControl
 {
+    [HideInInspector]
+    public float attackBuff = 1f, defenseBuff = 1f;
 
     void Start()
     {

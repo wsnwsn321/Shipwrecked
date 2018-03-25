@@ -10,6 +10,11 @@ public class DoctorControl : Photon.MonoBehaviour, IClassControl {
     public GameObject healParticle;
     public GameObject pill;
 
+    [HideInInspector]
+    public float healthPerSec = 1f;
+    [HideInInspector]
+    public float researchBuff = 1f;
+
     private GameObject healing;
     private List<GameObject> pills;
     private bool heal;

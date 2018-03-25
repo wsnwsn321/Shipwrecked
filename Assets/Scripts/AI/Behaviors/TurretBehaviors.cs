@@ -8,9 +8,11 @@ public class TurretBehaviors : GenericBehaviors
     List<Transform> guns;
     List<Transform> turningElements;
 
-    private float shootingDelay = 0.3f;
+    private float shootingDelay = 1/3f;
     [HideInInspector]
     public float damage = 2f;
+    [HideInInspector]
+    public float health = 20f;
 
     private bool isGatling;
     private FieldOfView fov;
@@ -42,6 +44,15 @@ public class TurretBehaviors : GenericBehaviors
 
         GetTurningElements();
         GetGuns();
+    }
+
+    public void TakeDamage(float damage)
+    {
+        health -= damage;
+        if (health < 0)
+        {
+            Destroy(gameObject, 1f);
+        }
     }
 
     // Assumes that the format of the turret is:
@@ -264,7 +275,7 @@ public class TurretBehaviors : GenericBehaviors
 
             if (fov.visibleTargets.Count > 0)
             {
-                if (isGatling && !isRotating)
+                if (isGatling && !isRotating && guns[0].gameObject.activeSelf)
                 {
                     isRotating = true;
                     StartCoroutine(RotateGuns());
@@ -273,7 +284,7 @@ public class TurretBehaviors : GenericBehaviors
                 if (IsAttacking())
                 {
                     TurnTowardsTarget(fov.nearestTarget);
-                    if (IsPointingAt(fov.nearestTarget))
+                    if (IsPointingAt(fov.nearestTarget) && guns[0].gameObject.activeSelf)
                     {
                         Attack();
                     }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using PlayerAbilities;
 
+[RequireComponent(typeof(EntityType))]
 public class Control : Photon.MonoBehaviour {
 
 	[HideInInspector]
@@ -11,6 +12,9 @@ public class Control : Photon.MonoBehaviour {
 	[HideInInspector]
     public GameObject CamRef;
 
+    [HideInInspector]
+    public TeammateTypes characterType;
+
     private Vector3 camera_position, camera_rotation;
     CoreControl coreControl;
     IClassControl classControl;
@@ -18,20 +22,35 @@ public class Control : Photon.MonoBehaviour {
 
     void Start ()
     {
-        coreControl = GetComponent<CoreControl>();
-        ani = GetComponent<Animator>();
-        if (CompareTag("Mechanic"))
+        EntityType type = GetComponent<EntityType>();
+
+        if (type.type == EntityTypes.Teammate)
         {
-            classControl = GetComponent<MechanicControl>();
-        } else if (CompareTag("Doctor"))
+            coreControl = GetComponent<CoreControl>();
+            ani = GetComponent<Animator>();
+            switch(type.teammateType)
+            {
+                case TeammateTypes.Captain:
+                    classControl = GetComponent<CaptainControl>();
+                    characterType = TeammateTypes.Captain;
+                    break;
+                case TeammateTypes.Doctor:
+                    classControl = GetComponent<DoctorControl>();
+                    characterType = TeammateTypes.Doctor;
+                    break;
+                case TeammateTypes.Engineer:
+                    classControl = GetComponent<MechanicControl>();
+                    characterType = TeammateTypes.Engineer;
+                    break;
+                case TeammateTypes.Sergeant:
+                    classControl = GetComponent<SergeantControl>();
+                    characterType = TeammateTypes.Sergeant;
+                    break;
+            }
+        }
+        else
         {
-            classControl = GetComponent<DoctorControl>();
-        } else if (CompareTag("Sarge"))
-        {
-            classControl = GetComponent<SergeantControl>();
-        } else if (CompareTag("Captain"))
-        {
-            classControl = GetComponent<CaptainControl>();
+            Debug.LogError("Object is not a player type.");
         }
     }
 
