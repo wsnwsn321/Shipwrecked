@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class PartPickup : NewPickupItem {
 
@@ -36,7 +37,7 @@ public class PartPickup : NewPickupItem {
         slot++;
         if (slot >= 5)
         {
-            //Players win!
+			SceneManager.LoadScene("RegularCredits");
         }
 	}
 }
