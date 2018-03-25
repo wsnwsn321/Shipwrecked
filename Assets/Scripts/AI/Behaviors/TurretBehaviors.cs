@@ -8,7 +8,9 @@ public class TurretBehaviors : GenericBehaviors
     List<Transform> guns;
     List<Transform> turningElements;
 
-    private float shootingDelay = 0.5f;
+    private float shootingDelay = 0.3f;
+    [HideInInspector]
+    public float damage = 2f;
 
     private bool isGatling;
     private FieldOfView fov;
@@ -16,9 +18,12 @@ public class TurretBehaviors : GenericBehaviors
     private float idleRotationSpeed;
     private bool ableToRotate;
     private float currentShootingTime;
+    private Transform previousTarget;
 
     // Gatling
     private bool isRotating;
+    private bool isShooting;
+    private float maxGunRotationSpeed = 1000f;
     private float gunRotationSpeed;
 
     private void Start()
@@ -33,6 +38,7 @@ public class TurretBehaviors : GenericBehaviors
         currentShootingTime = shootingDelay;
 
         isRotating = false;
+        isShooting = false;
 
         GetTurningElements();
         GetGuns();
@@ -56,7 +62,10 @@ public class TurretBehaviors : GenericBehaviors
         Transform turret = transform.GetChild(0).GetChild(1).GetChild(1);
         foreach (Transform gun in turret)
         {
-            guns.Add(gun);
+            if (!gun.name.Equals("View Visualization"))
+            {
+                guns.Add(gun);
+            }
         }
 
         if (guns.Count == 1)
@@ -120,23 +129,33 @@ public class TurretBehaviors : GenericBehaviors
             yield return new WaitForFixedUpdate();
             kickbackDistance -= kickbackIncrement;
         }
-
-        yield break;
     }
 
     private IEnumerator Shoot()
     {
+        isShooting = true;
+
+        var target = fov.nearestTarget.GetComponent<Enemy>();
+        if (!target)
+        {
+            target = fov.nearestTarget.GetComponentInParent<Enemy>();
+        }
+
+        target.AddAttacker(transform);
+
         foreach (Transform gun in guns)
         {
             StartCoroutine(KickBack(gun));
-            yield return new WaitForSeconds(0.2f);
+            target.TakeDamage(damage);
+            yield return new WaitForSeconds(shootingDelay / guns.Count);
         }
+
+        isShooting = false;
     }
 
     private IEnumerator RotateGuns()
     {
         int speedIterations = 200;
-        float maxGunRotationSpeed = 1000f;
         float speedIncrement = maxGunRotationSpeed / speedIterations;
 
         while (isRotating)
@@ -161,19 +180,53 @@ public class TurretBehaviors : GenericBehaviors
         }
     }
 
+    private IEnumerator ShootGatling()
+    {
+        isShooting = true;
+
+        var target = fov.nearestTarget.GetComponent<Enemy>();
+        if (!target)
+        {
+            target = fov.nearestTarget.GetComponentInParent<Enemy>();
+        }
+
+        while (isRotating)
+        {
+            if (gunRotationSpeed >= 0.6 * maxGunRotationSpeed)
+            {
+                target.TakeDamage(damage);
+            }
+
+            yield return new WaitForSeconds(0.1f * (maxGunRotationSpeed / gunRotationSpeed));
+        }
+
+        isShooting = false;
+    }
+
     public override void Attack()
     {
         if (currentShootingTime >= shootingDelay)
         {
             currentShootingTime -= shootingDelay;
 
-            if (isGatling)
+            if (!isShooting)
             {
-                // Put code for shooting gatling here.
-            }
-            else
+                if (isGatling)
+                {
+                    StartCoroutine(ShootGatling());
+                }
+                else
+                {
+                    StartCoroutine(Shoot());
+                }
+
+                previousTarget = fov.nearestTarget;
+            } else
             {
-                StartCoroutine(Shoot());
+                if (!previousTarget.Equals(fov.nearestTarget))
+                {
+                    isShooting = false;
+                }
             }
         }
     }

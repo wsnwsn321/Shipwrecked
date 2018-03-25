@@ -183,10 +183,8 @@ public class Control : Photon.MonoBehaviour {
 						coreControl.ReviveAllies ();
 					}
 				} else {
-					print ("called!");
 					coreControl.UnReviveAllies ();
 				}
-
 			}
     	}
 	}

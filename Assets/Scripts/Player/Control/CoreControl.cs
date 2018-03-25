@@ -346,7 +346,7 @@ public class CoreControl : MonoBehaviour {
             animator.SetFloat("Y", horizontalMovement);
             animator.SetBool("Aiming", aiming);
             animator.SetBool("Sprint", sprint);
-            animator.SetBool("Turn", turn);
+            //animator.SetBool("Turn", turn);
             animator.SetBool("Dead", dead);
         }
     }
