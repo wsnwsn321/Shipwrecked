@@ -26,7 +26,7 @@ public class PlayerHealth : MonoBehaviour {
     };
 
     // Use this for initialization
-    void Start () {
+    void LateStart () {
         healthText = GameObject.FindGameObjectWithTag("HealthText").GetComponent<Text>();
         healthBar = GameObject.FindGameObjectWithTag("HealthBar").GetComponent<Slider>();
 		corecontrol = GetComponent<CoreControl> ();
