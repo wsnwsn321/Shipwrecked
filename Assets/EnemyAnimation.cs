@@ -50,9 +50,11 @@ public class EnemyAnimation : MonoBehaviour {
                 {
                     ap.maxSpeed = 0;
                     ani.SetTrigger("attack");
+                    setEnemyAttackType();
+
                     if (!Player_ani.GetCurrentAnimatorStateInfo(0).IsName("Hitted"))
                     {
-                    Player_ani.SetTrigger("Hit");
+                        Player_ani.SetTrigger("Hit");
                     }
                 }
             else
@@ -98,6 +100,21 @@ public class EnemyAnimation : MonoBehaviour {
             distance = Vector3.Distance(transform.position, collisionInfo.gameObject.transform.position);
             //hitted = false;
             //Player_ani.SetBool("hit", false);
+        }
+    }
+
+    void setEnemyAttackType()
+    {
+        switch (transform.gameObject.tag)
+        {
+            case "CrabAlien":
+                PlayerHealth.enemyAttackType = PlayerHealth.EnemyAttackType.CRAB_ALIEN;
+                break;
+            case "SpiderBrain":
+                PlayerHealth.enemyAttackType = PlayerHealth.EnemyAttackType.SPIDER_BRAIN;
+                break;
+            default:
+                break;
         }
     }
 }

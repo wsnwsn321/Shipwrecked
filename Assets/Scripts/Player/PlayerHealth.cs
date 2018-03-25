@@ -15,8 +15,18 @@ public class PlayerHealth : MonoBehaviour {
     private float timeColliding;
     public float timeThreshold = 1f;
 
-	// Use this for initialization
-	void Start () {
+    public static EnemyAttackType enemyAttackType = EnemyAttackType.NONE;
+
+    //Enemy type with corresponding attack values (how much damage is done to player)
+    public enum EnemyAttackType
+    {
+        NONE = 0,
+        CRAB_ALIEN = 20,
+        SPIDER_BRAIN = 10
+    };
+
+    // Use this for initialization
+    void Start () {
         healthText = GameObject.FindGameObjectWithTag("HealthText").GetComponent<Text>();
         healthBar = GameObject.FindGameObjectWithTag("HealthBar").GetComponent<Slider>();
 		corecontrol = GetComponent<CoreControl> ();
@@ -24,35 +34,23 @@ public class PlayerHealth : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        if (tookDmg)
+        if (enemyAttackType != EnemyAttackType.NONE)
         {
             updateHealthText();
             updateHealthBar();
+            enemyAttackType = EnemyAttackType.NONE;
         }
         checkHealth();
 	}
 
-    private void OnCollisionStay(Collision collision)
-    {
-        switch (collision.gameObject.tag)
-        {
-            case "EarthDweller":
-                if (timeColliding < timeThreshold)
-                {
-                    timeColliding += Time.deltaTime;
-                } else if (health > 0)
-                {                    
-                    health -= earthDwellerDmg;
-                    tookDmg = true;
-                    timeColliding = 0f;
-                }
-                break;
-        }
-    }
-
     private void updateHealthText()
     {
-       healthText.text = health.ToString() + "/100";
+        health -= (int)enemyAttackType;
+        /*if (health < 0)
+        {
+            health = 0;
+        }*/
+        healthText.text = health.ToString() + "/100";
     }
 
     private void updateHealthBar()
