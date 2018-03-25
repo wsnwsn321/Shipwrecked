@@ -19,6 +19,8 @@ public class BehaviorManager : MonoBehaviour {
 
     GenericBehaviors behavior;
 
+    public Transform spaceship;
+
     public float wanderRandomlyRadius;
     public float wanderAheadRadius;
     public float wanderAheadChance;

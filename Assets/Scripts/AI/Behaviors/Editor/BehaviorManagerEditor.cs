@@ -13,6 +13,12 @@ public class BehaviorManagerEditor : Editor {
         var bm = target as BehaviorManager;
         var entityType = bm.GetComponent<EntityType>();
 
+        if (entityType.type == EntityTypes.Monster)
+        {
+            EditorGUILayout.LabelField("Spaceship");
+            bm.spaceship = (Transform)EditorGUILayout.ObjectField(bm.spaceship, typeof(Transform), true);
+        }
+
         if (entityType.type == EntityTypes.Monster || entityType.type == EntityTypes.Teammate)
         {
             EditorGUILayout.LabelField("Wander Ahead Chance");
@@ -37,6 +43,14 @@ public class BehaviorManagerEditor : Editor {
 
             EditorGUILayout.LabelField("Wander Randomly Radius");
             bm.wanderRandomlyRadius = EditorGUILayout.Slider(bm.wanderRandomlyRadius, 0, 30);
+        }
+        else
+        {
+            bm.wanderAheadAngle = 0;
+            bm.wanderAheadChance = 0;
+            bm.wanderAheadDistance = 0;
+            bm.wanderAheadRadius = 0;
+            bm.wanderRandomlyRadius = 0;
         }
     }
 }

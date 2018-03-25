@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Collections.Generic;
 
 [RequireComponent(typeof(PhotonView))]
 public class Enemy : Photon.MonoBehaviour {
@@ -9,14 +10,43 @@ public class Enemy : Photon.MonoBehaviour {
 	// We want Photon to sync this value, so we will serialize it
 	[SerializeField]
 	public float health = 50f;
+
+    // Variables to keep track of recent attackers.
+    [HideInInspector]
+    List<Transform> attackers;
+    List<Transform> characterAttackers;
+    List<float> times;
+    Transform mostRecentCharacterAttacker;
+    float secondsToKeepTrack = 2f;
+
+    public List<Transform> Attackers
+    {
+        get { return attackers; }
+    }
     
 	void Start()
     {
         enemy_ani = GetComponent<Animator>();
+        attackers = new List<Transform>();
+        characterAttackers = new List<Transform>();
+        times = new List<float>();
+        InvokeRepeating("CheckAttackers", 0, 0.5f);
     }
 
-	// This method is responsible for synchronizing the health of the enemy
-	void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    void CheckAttackers()
+    {
+        for (int i = 0; i < attackers.Count; i++)
+        {
+            if (Time.time > times[i] + secondsToKeepTrack)
+            {
+                attackers.RemoveAt(i);
+                times.RemoveAt(i);
+            }
+        }
+    }
+
+    // This method is responsible for synchronizing the health of the enemy
+    void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
 	{
 		if (stream.isWriting)
 		{
@@ -32,9 +62,41 @@ public class Enemy : Photon.MonoBehaviour {
 		health -= amount;
 		if (health <= 0f) {
 			Die ();
-            print("called");
 		}
 	}
+
+    public void AddAttacker(Transform attacker)
+    {
+        if (!attackers.Contains(attacker))
+        {
+            attackers.Add(attacker);
+            times.Add(Time.time);
+        }
+        else
+        {
+            times[attackers.IndexOf(attacker)] = Time.time;
+        }
+
+        if (attacker.gameObject.layer == LayerMask.NameToLayer("Character"))
+        {
+            if (!characterAttackers.Contains(attacker))
+            {
+                characterAttackers.Add(attacker);
+            }
+
+            mostRecentCharacterAttacker = attacker;
+        }
+    }
+
+    public List<Transform> GetCharacterAttackers()
+    {
+        return characterAttackers;
+    }
+
+    public Transform GetMostRecentCharacterAttacker()
+    {
+        return mostRecentCharacterAttacker;
+    }
 
 	void Die(){
         enemy_ani.SetTrigger("die");

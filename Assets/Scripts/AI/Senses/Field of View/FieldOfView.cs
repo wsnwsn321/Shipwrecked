@@ -120,7 +120,7 @@ public class FieldOfView : MonoBehaviour {
         float nearestTargetDistance = 0;
         Vector3 forwardWithOffset = Quaternion.Euler(0, angleOffset, 0) * transform.forward;
 
-        Collider[] targetsInViewRadius = Physics.OverlapSphere(transform.position + offset, viewRadius, targetMask);
+        Collider[] targetsInViewRadius = Physics.OverlapSphere(transform.position + offset, viewRadius, targetMask, QueryTriggerInteraction.Collide);
 
         foreach (Collider target in targetsInViewRadius)
         {
@@ -163,7 +163,7 @@ public class FieldOfView : MonoBehaviour {
             {
                 float distanceToTarget = Vector3.Distance(transform.position, target.transform.position);
 
-                if (!Physics.Raycast(transform.position + offset, directionToTarget, distanceToTarget, obstacleMask))
+                if (!Physics.Raycast(transform.position + offset, directionToTarget, distanceToTarget, obstacleMask, QueryTriggerInteraction.Collide))
                 {
                     visibleTargets.Add(target.transform);
 
