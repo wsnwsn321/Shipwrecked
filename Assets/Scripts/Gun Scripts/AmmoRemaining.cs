@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 public class AmmoRemaining : MonoBehaviour {
 
-	public int ammo = 20;
+	public int ammo;
 	public int ammoPerShot = 1;
 
 	private Text ammoText;
@@ -12,6 +12,19 @@ public class AmmoRemaining : MonoBehaviour {
 	// Use this for initialization
 	void LateStart () {
 		ammoText = GameObject.FindGameObjectWithTag("AmmoText").GetComponent<Text>();
+		if (gameObject.GetComponentInParent<EntityType> ().teammateType.Equals("Sergeant")) {
+			ammo = 20;
+		}
+		else if (gameObject.GetComponentInParent<EntityType> ().teammateType.Equals("Engineer")) {
+			ammo = 1;
+		}
+		else if(gameObject.GetComponentInParent<EntityType> ().teammateType.Equals("Doctor")) {
+			ammo = 20;
+		}
+		else if(gameObject.GetComponentInParent<EntityType> ().teammateType.Equals("Captain")) {
+			ammo = 15;
+		}
+
 	}
 
 	// Update is called once per frame
@@ -27,8 +40,9 @@ public class AmmoRemaining : MonoBehaviour {
 
 	private void updateAmmoText()
 	{
-		if(ammoText != null)
-		ammoText.text = ammo.ToString() + "/20";
+		if (ammoText != null) {
+			ammoText.text = ammo.ToString () + "/20";
+		}
 	}
 
 	private void checkAmmo()
