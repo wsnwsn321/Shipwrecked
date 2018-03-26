@@ -13,6 +13,8 @@ public class TurretBehaviors : GenericBehaviors
     public float damage = 2f;
     [HideInInspector]
     public float health = 20f;
+    [HideInInspector]
+    public int turretLevel;
 
     private bool isGatling;
     private FieldOfView fov;
@@ -28,12 +30,11 @@ public class TurretBehaviors : GenericBehaviors
     private float maxGunRotationSpeed = 1000f;
     private float gunRotationSpeed;
 
-    private void Start()
+    private void Awake()
     {
         guns = new List<Transform>();
         turningElements = new List<Transform>();
         isGatling = false;
-        fov = GetComponentInChildren<FieldOfView>();
         maxRotationSpeed = 50f;
         idleRotationSpeed = 30f;
         ableToRotate = false;
@@ -44,6 +45,11 @@ public class TurretBehaviors : GenericBehaviors
 
         GetTurningElements();
         GetGuns();
+    }
+
+    void OnEnable()
+    {
+        fov = GetComponentInChildren<FieldOfView>();
     }
 
     public void TakeDamage(float damage)

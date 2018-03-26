@@ -6,10 +6,12 @@ public class Placement : MonoBehaviour {
 
     public Material goodPlacementMaterial;
     public Material badPlacementMaterial;
-    public LayerMask disallowedLayers;
+    public LayerMask allowedLayers;
 
     [HideInInspector]
     public bool canBeBuilt = false;
+    [HideInInspector]
+    public CoreControl builderCoreControl;
 
     Collider col;
 
@@ -20,16 +22,17 @@ public class Placement : MonoBehaviour {
 
     void FixedUpdate()
     {
-        Collider[] overlap = Physics.OverlapBox(transform.position, col.bounds.extents, transform.rotation, disallowedLayers);
+        Collider[] overlap = Physics.OverlapBox(transform.position, col.bounds.extents, transform.rotation, allowedLayers);
 
-        if (overlap.Length > 0)
-        {
-            SetMaterial(transform, badPlacementMaterial);
-            canBeBuilt = false;
-        } else
+        if (overlap.Length > 0 && !builderCoreControl.IsJumping())
         {
             SetMaterial(transform, goodPlacementMaterial);
             canBeBuilt = true;
+            
+        } else
+        {
+            SetMaterial(transform, badPlacementMaterial);
+            canBeBuilt = false;
         }
     }
 
@@ -47,7 +50,7 @@ public class Placement : MonoBehaviour {
         }
     }
 
-    void SetMaterial(Transform t, Material material)
+    public static void SetMaterial(Transform t, Material material)
     {
         foreach (Transform child in t)
         {

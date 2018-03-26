@@ -8,8 +8,10 @@ public class MechanicControl : MonoBehaviour, IClassControl {
 
     public float buildPositionOffset = 3;
     public float buildingPieceTime = 1.2f;
+    public Material highlightMaterial;
     public GameObject[] turrets;
     public GameObject[] turretGhosts;
+    public Material[] turretMaterials;
 
     [HideInInspector]
     public int currentTurretBuildLevel = 0;
@@ -25,6 +27,8 @@ public class MechanicControl : MonoBehaviour, IClassControl {
     private List<Transform> currentBuildingChildren;
     private GameObject currentPlaceableObject;
     private GameObject currentTurret;
+    private GameObject highlightedTurret;
+    private Material previousTurretMaterial;
     private Dictionary<GameObject, UnfinishedBuilding> unfinishedBuildings;
     private Animator ani;
 
@@ -70,11 +74,16 @@ public class MechanicControl : MonoBehaviour, IClassControl {
         {
             child.gameObject.SetActive(true);
             children.Add(child);
-            
+
             // Stop at the prefab's "Gun" level.
             if (child.name.Equals("Gun") || child.name.Equals("RotatingGuns"))
             {
                 isBuilding = false;
+            }
+
+            if (child.name.Equals("Turret"))
+            {
+                currentTurret.GetComponent<TurretBehaviors>().enabled = true;
             }
         }
 
@@ -89,7 +98,7 @@ public class MechanicControl : MonoBehaviour, IClassControl {
         }
         else
         {
-            if (currentPlaceableObject)
+            if (currentPlaceableObject && currentPlaceableObject.activeSelf)
             {
                 if (currentPlaceableObject.GetComponent<Placement>().canBeBuilt)
                 {
@@ -104,7 +113,7 @@ public class MechanicControl : MonoBehaviour, IClassControl {
                 {
                     ContinueBuildingNearestTurret(nearbyTurrets);
                 }
-                else
+                else if (!currentPlaceableObject)
                 {
                     CreateTurretGhost();
                 }
@@ -121,6 +130,7 @@ public class MechanicControl : MonoBehaviour, IClassControl {
         TurretBehaviors turretStats = currentTurret.GetComponent<TurretBehaviors>();
         turretStats.damage = turretDamage;
         turretStats.health = turretHealth;
+        turretStats.turretLevel = currentTurretBuildLevel;
     }
 
     void ContinueBuildingNearestTurret(Collider[] nearbyTurrets)
@@ -149,6 +159,7 @@ public class MechanicControl : MonoBehaviour, IClassControl {
     void CreateTurretGhost()
     {
         currentPlaceableObject = Instantiate(turretGhosts[currentTurretBuildLevel], buildPosition, Quaternion.identity);
+        currentPlaceableObject.GetComponent<Placement>().builderCoreControl = gameObject.GetComponent<CoreControl>();
     }
 
     void ExitBuildingMode()
@@ -169,6 +180,13 @@ public class MechanicControl : MonoBehaviour, IClassControl {
                 ResetBuildingVariables();
                 isBuilding = false;
             }
+        }
+
+        if (highlightedTurret)
+        {
+            Placement.SetMaterial(highlightedTurret.transform, previousTurretMaterial);
+            highlightedTurret = null;
+            previousTurretMaterial = null;
         }
     }
 
@@ -246,16 +264,60 @@ public class MechanicControl : MonoBehaviour, IClassControl {
         if (currentPlaceableObject)
         {
             buildPosition = transform.localPosition + transform.forward * buildPositionOffset;
-            currentPlaceableObject.transform.position = buildPosition;
+            Collider[] nearbyTurrets = Physics.OverlapSphere(buildPosition, 0.5f, LayerMask.GetMask("TurretParent"), QueryTriggerInteraction.Collide);
+            if (nearbyTurrets.Length > 0)
+            {
+                if (currentPlaceableObject.activeSelf)
+                {
+                    currentPlaceableObject.SetActive(false);
+                }
+
+                Collider nearestTurret = nearbyTurrets[0];
+                float nearestDistance = Vector3.Distance(buildPosition, nearestTurret.transform.position);
+                for (int i = 1; i < nearbyTurrets.Length; i++)
+                {
+                    float distance = Vector3.Distance(buildPosition, nearbyTurrets[i].transform.position);
+                    if (distance < nearestDistance)
+                    {
+                        nearestTurret = nearbyTurrets[i];
+                        nearestDistance = distance;
+                    }
+                }
+
+                if (highlightedTurret && !nearestTurret.gameObject.Equals(highlightedTurret))
+                {
+                    Placement.SetMaterial(highlightedTurret.transform, previousTurretMaterial);
+                }
+
+                if (!highlightedTurret || !nearestTurret.gameObject.Equals(highlightedTurret))
+                {
+                    highlightedTurret = nearestTurret.gameObject;
+                    previousTurretMaterial = turretMaterials[highlightedTurret.GetComponent<TurretBehaviors>().turretLevel];
+                    Placement.SetMaterial(highlightedTurret.transform, highlightMaterial);
+                }
+            }
+            else
+            {
+                if (highlightedTurret)
+                {
+                    Placement.SetMaterial(highlightedTurret.transform, previousTurretMaterial);
+                    highlightedTurret = null;
+                    previousTurretMaterial = null;
+                }
+
+                if (!currentPlaceableObject.activeSelf)
+                {
+                    currentPlaceableObject.SetActive(true);
+                }
+                
+                currentPlaceableObject.transform.position = buildPosition;
+            }
         }
     }
 
     public void StopAction()
     {
-        if (isBuilding)
-        {
-            ExitBuildingMode();
-        }
+        ExitBuildingMode();
     }
 
     public void UpdateActions(float deltaTime)
