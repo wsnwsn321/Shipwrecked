@@ -18,7 +18,9 @@ public class CoreControl : MonoBehaviour {
     float forwardSpeed, horizontalSpeed;
     bool aiming, turnLeft, turnRight, sprint, isGrounded, turn;
 	public float distance;
-	private Animator allie_ani;
+
+    [HideInInspector]
+    public  Animator allie_ani;
 	private CoreControl allie_core;
 	private PlayerHealth allie_health;
 	public bool dead, hasSpecialAbility;
