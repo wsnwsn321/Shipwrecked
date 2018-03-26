@@ -70,6 +70,16 @@ public class CaptainControl : MonoBehaviour, IClassControl
         return true;
     }
 
+	public bool CanUseAbility1()
+	{
+		return true;
+	}
+
+	public bool CanUseAbility2()
+	{
+		return true;
+	}
+
     public void FixedUpdateActions(float deltaTime)
     {
         // TODO

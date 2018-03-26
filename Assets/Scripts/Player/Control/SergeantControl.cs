@@ -133,6 +133,16 @@ public class SergeantControl : MonoBehaviour, IClassControl
         return true;
     }
 
+	public bool CanUseAbility1()
+	{
+		return !IsHealing();
+	}
+
+	public bool CanUseAbility2()
+	{
+		return true;
+	}
+
     public void FixedUpdateActions(float deltaTime)
     {
         if (healing)

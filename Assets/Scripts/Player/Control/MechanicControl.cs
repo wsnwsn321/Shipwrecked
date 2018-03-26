@@ -92,31 +92,20 @@ public class MechanicControl : MonoBehaviour, IClassControl {
 
     void BuildTurret()
     {
-        if (isBuilding)
+        if (currentPlaceableObject && currentPlaceableObject.activeSelf)
         {
-            ExitBuildingMode();
-        }
-        else
-        {
-            if (currentPlaceableObject && currentPlaceableObject.activeSelf)
+            if (currentPlaceableObject.GetComponent<Placement>().canBeBuilt)
             {
-                if (currentPlaceableObject.GetComponent<Placement>().canBeBuilt)
-                {
-                    BuildNewTurret();
-                }
+                BuildNewTurret();
             }
-            else
+        }
+		else if (highlightedTurret)
+        {
+            buildPosition = transform.localPosition + transform.forward * buildPositionOffset;
+            Collider[] nearbyTurrets = Physics.OverlapSphere(buildPosition, 0.5f, LayerMask.GetMask("TurretParent"), QueryTriggerInteraction.Collide);
+            if (nearbyTurrets.Length > 0)
             {
-                buildPosition = transform.localPosition + transform.forward * buildPositionOffset;
-                Collider[] nearbyTurrets = Physics.OverlapSphere(buildPosition, 0.5f, LayerMask.GetMask("TurretParent"), QueryTriggerInteraction.Collide);
-                if (nearbyTurrets.Length > 0)
-                {
-                    ContinueBuildingNearestTurret(nearbyTurrets);
-                }
-                else if (!currentPlaceableObject)
-                {
-                    CreateTurretGhost();
-                }
+                ContinueBuildingNearestTurret(nearbyTurrets);
             }
         }
     }
@@ -178,7 +167,6 @@ public class MechanicControl : MonoBehaviour, IClassControl {
             {
                 unfinishedBuildings.Add(currentTurret, new UnfinishedBuilding(currentBuildingIteration, currentBuildingChildren));
                 ResetBuildingVariables();
-                isBuilding = false;
             }
         }
 
@@ -188,6 +176,7 @@ public class MechanicControl : MonoBehaviour, IClassControl {
             highlightedTurret = null;
             previousTurretMaterial = null;
         }
+		isBuilding = false;
     }
 
     void ResetBuildingVariables()
@@ -208,8 +197,14 @@ public class MechanicControl : MonoBehaviour, IClassControl {
 
     public void Activate(SpecialAbility ability)
     {
+		if (ability == SpecialAbility.MakeGhostTurret)
+		{
+			CreateTurretGhost();
+		}
+
         if (ability == SpecialAbility.Build)
         {
+			Debug.Log ("What'sup");
             BuildTurret();
         }
     }
@@ -258,6 +253,25 @@ public class MechanicControl : MonoBehaviour, IClassControl {
     {
         return !isBuilding;
     }
+
+	public bool CanUseAbility1()
+	{
+		if (currentPlaceableObject || isBuilding) {
+			return false;
+		}
+
+		return true;
+	}
+
+	public bool CanUseAbility2()
+	{
+		if (currentPlaceableObject)
+		{
+			return true;
+		}
+
+		return false;
+	}
 
     public void FixedUpdateActions(float deltaTime)
     {

@@ -167,6 +167,16 @@ public class DoctorControl : Photon.MonoBehaviour, IClassControl {
         return true;
     }
 
+	public bool CanUseAbility1()
+	{
+		return !heal;
+	}
+
+	public bool CanUseAbility2()
+	{
+		return !heal;
+	}
+
     public void FixedUpdateActions(float deltaTime)
     {
         // TODO

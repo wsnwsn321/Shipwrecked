@@ -34,7 +34,16 @@ public class Placement : MonoBehaviour {
             SetMaterial(transform, badPlacementMaterial);
             canBeBuilt = false;
         }
-    }
+
+		overlap = Physics.OverlapBox(transform.position, col.bounds.extents, transform.rotation, LayerMask.NameToLayer("TurretParent"));
+    
+		if (canBeBuilt && overlap.Length > 0)
+		{
+			SetMaterial(transform, badPlacementMaterial);
+			canBeBuilt = false;
+
+		}
+	}
 
     void OnTriggerEnter(Collider collider)
     {

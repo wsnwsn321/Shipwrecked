@@ -62,6 +62,12 @@ public class Control : Photon.MonoBehaviour {
     // Update is called once per frame
     private void Update()
     {
+		// We only want to update our character! Added on 2/6/18
+		if (photonView.isMine == false && PhotonNetwork.connected == true)
+		{
+			return;
+		}
+
         classControl.UpdateActions(Time.deltaTime);
     }
 
@@ -167,18 +173,19 @@ public class Control : Photon.MonoBehaviour {
         classControl.FixedUpdateActions(Time.deltaTime);
 
         // Activate Ability 1
-        if (Input.GetKeyDown(KeyCode.Q) && !coreControl.IsAiming())
+		if (Input.GetKeyDown(KeyCode.Q) && !coreControl.IsAiming() && classControl.CanUseAbility1())
         {
             classControl.Activate(SpecialAbility.ThrowPill);
-            classControl.Activate(SpecialAbility.Build);
+			classControl.Activate(SpecialAbility.MakeGhostTurret);
             classControl.Activate(SpecialAbility.HealSelf);
             classControl.Activate(SpecialAbility.Leadership);
         }
 
 		// Activate Ability 2
-		if (Input.GetKeyDown(KeyCode.E) && !coreControl.IsAiming())
+		if (Input.GetKeyDown(KeyCode.E) && !coreControl.IsAiming() && classControl.CanUseAbility2())
 		{
 			classControl.Activate(SpecialAbility.HealingCircle);
+			classControl.Activate(SpecialAbility.Build);
 		}
 
         // Moving

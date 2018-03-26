@@ -12,12 +12,13 @@ namespace PlayerAbilities
         // Note: the order doesn't actually matter, but it's good for consistency and quick understanding.
 
         // Ability 1
-        Build,
+        MakeGhostTurret,
         HealSelf,
         Leadership,
         ThrowPill,
         
         // Ability 2
+		Build,
         HealingCircle
     }
 }
@@ -43,6 +44,10 @@ public interface IClassControl {
     bool CanShoot();
 
     bool CanSprint();
+
+	bool CanUseAbility1();
+
+	bool CanUseAbility2();
 
     void FixedUpdateActions(float deltaTime);
 
