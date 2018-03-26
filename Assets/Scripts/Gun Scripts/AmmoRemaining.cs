@@ -5,6 +5,7 @@ public class AmmoRemaining : MonoBehaviour {
 
 	public int ammo;
 	public int ammoPerShot = 1;
+	public EntityType type;
 
 	private Text ammoText;
 
@@ -12,25 +13,30 @@ public class AmmoRemaining : MonoBehaviour {
 	// Use this for initialization
 	void LateStart () {
 		ammoText = GameObject.FindGameObjectWithTag("AmmoText").GetComponent<Text>();
-		if (gameObject.GetComponentInParent<EntityType> ().teammateType.Equals("Sergeant")) {
-			ammo = 20;
-		}
-		else if (gameObject.GetComponentInParent<EntityType> ().teammateType.Equals("Engineer")) {
-			ammo = 1;
-		}
-		else if(gameObject.GetComponentInParent<EntityType> ().teammateType.Equals("Doctor")) {
-			ammo = 20;
-		}
-		else if(gameObject.GetComponentInParent<EntityType> ().teammateType.Equals("Captain")) {
+	
+		type = GetComponentInParent<EntityType> ();
+		switch (type.teammateType) {
+		case TeammateTypes.Sergeant:
 			ammo = 15;
+			break;
+		case TeammateTypes.Doctor:
+			ammo = 20;
+			break;
+		case TeammateTypes.Engineer:
+			ammo = 1;
+			break;
+		case TeammateTypes.Captain:
+			ammo = 20;
+			break;
 		}
+
+		print (type.teammateType);
 
 	}
 
 	// Update is called once per frame
 	void Update () {
 		updateAmmoText();
-		
 		//checkAmmo();
 	}
 
