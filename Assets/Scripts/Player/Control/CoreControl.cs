@@ -43,6 +43,11 @@ public class CoreControl : MonoBehaviour {
         rb = GetComponent<Rigidbody>();
     }
 
+    public bool IsJumping()
+    {
+        return !isGrounded;
+    }
+
     public Animator GetAnimator()
     {
         return animator;
