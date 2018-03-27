@@ -6,13 +6,63 @@ using UnityEngine;
 
 public class CaptainControl : MonoBehaviour, IClassControl
 {
+	[Range(0f, 10f)]
+	public float RampageCooldown = 10f;
+	[Range(0f, 10f)]
+	public float RampageTime = 8f;
     [HideInInspector]
     public float attackBuff = 1f, defenseBuff = 1f;
-
+	private Animator animator;
+	public GameObject flame;
+	private GameObject flaming;
+	private animation shoot;
+	private bool canRampage;
     void Start()
     {
         // TODO
+		animator = GetComponent<Animator>();
+		canRampage = true;
+
     }
+
+	void Rampage(){
+		if (canRampage&&!animator.GetCurrentAnimatorStateInfo (0).IsName ("AB1")) {
+			canRampage = false;
+			if (animator) {
+				animator.SetTrigger("Ability1");
+			}
+			flaming = PhotonNetwork.connected? PhotonNetwork.Instantiate(flame.name, transform.position, Quaternion.identity,0) :Instantiate(flame, transform.position, Quaternion.identity);
+			flaming.transform.parent = transform;
+			AnimatorStateInfo shoot = animator.GetCurrentAnimatorStateInfo (0);
+			StartCoroutine(HealForTime());
+			canRampage = true;
+		}
+	}
+
+	void StopRampage()
+	{
+		if (PhotonNetwork.connected) {
+			PhotonNetwork.Destroy (flaming);
+		} else {
+			Destroy (flaming);
+		}
+		flaming = null;
+		StartCoroutine(WaitAbilityUse());
+	}
+
+	IEnumerator HealForTime()
+	{
+		yield return new WaitForSeconds(RampageTime);
+		if (flaming)
+		{
+			StopRampage();
+		}
+	}
+	IEnumerator WaitAbilityUse()
+	{
+		yield return new WaitForSeconds(RampageCooldown);
+		canRampage = true;
+	}
 
     #region Inherited Methods
 
@@ -20,8 +70,7 @@ public class CaptainControl : MonoBehaviour, IClassControl
     {
         if (ability == SpecialAbility.Leadership)
         {
-            print("Captain Ability 1 Activated!");
-            // TODO
+			Rampage ();
         }
     }
 

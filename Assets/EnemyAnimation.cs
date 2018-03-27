@@ -86,7 +86,7 @@ public class EnemyAnimation : MonoBehaviour {
 
     void OnCollisionEnter(Collision collision)
     {
-        if ((collision.gameObject.tag == "Sarge" || collision.gameObject.tag == "Mechanic" || collision.gameObject.tag == "Doctor"))
+		if (collision.gameObject.tag == "Sarge" || collision.gameObject.tag == "Mechanic" || collision.gameObject.tag == "Doctor" || collision.gameObject.tag == "Captain" )
         {
             Player_ani = collision.gameObject.GetComponent<Animator>();
             collide = true;
@@ -97,7 +97,7 @@ public class EnemyAnimation : MonoBehaviour {
     }
     void OnCollisionExit(Collision collisionInfo)
     {
-        if ((collisionInfo.gameObject.tag == "Sarge" || collisionInfo.gameObject.tag == "Mechanic" || collisionInfo.gameObject.tag == "Doctor"))
+		if ((collisionInfo.gameObject.tag == "Sarge" || collisionInfo.gameObject.tag == "Mechanic" || collisionInfo.gameObject.tag == "Doctor"|| collisionInfo.gameObject.tag == "Captain" ))
         {
             collide = false;
             distance = Vector3.Distance(transform.position, collisionInfo.gameObject.transform.position);
