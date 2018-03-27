@@ -5,6 +5,7 @@ public class AmmoRemaining : MonoBehaviour {
 
 	public int ammo;
 	public int ammoPerShot = 1;
+	private int originalAmmo;
 	public string playerType;
 
 	private Text ammoText;
@@ -39,11 +40,13 @@ public class AmmoRemaining : MonoBehaviour {
 			print ("Ope");
 			break;
 		}
+		originalAmmo = ammo;
 	}
 
 	// Update is called once per frame
 	void Update () {
 		updateAmmoText();
+		print (ammo);
 		//checkAmmo();
 	}
 
@@ -54,7 +57,7 @@ public class AmmoRemaining : MonoBehaviour {
 	private void updateAmmoText()
 	{
 		if (ammoText != null) {
-			ammoText.text = ammo.ToString () + "/20";
+			ammoText.text = ammo.ToString () + "/" + originalAmmo.ToString();
 		}
 	}
 
@@ -67,6 +70,6 @@ public class AmmoRemaining : MonoBehaviour {
 	}
 
 	public void reload(){
-		ammo = 20;
+		ammo = originalAmmo;
 	}
 }
