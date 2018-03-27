@@ -5,7 +5,7 @@ public class AmmoRemaining : MonoBehaviour {
 
 	public int ammo;
 	public int ammoPerShot = 1;
-	public EntityType type;
+	public string playerType;
 
 	private Text ammoText;
 
@@ -14,24 +14,31 @@ public class AmmoRemaining : MonoBehaviour {
 	void LateStart () {
 		ammoText = GameObject.FindGameObjectWithTag("AmmoText").GetComponent<Text>();
 	
-		type = GetComponentInParent<EntityType> ();
-		switch (type.teammateType) {
-		case TeammateTypes.Sergeant:
+	}
+
+	void Start(){
+		string type = gameObject.tag;
+		switch (type) {
+		case "SargeGun":
+			ammo = 20;
+			playerType = "Sergeant";
+			break;
+		case "DoctorGun":
 			ammo = 15;
+			playerType = "Doctor";
 			break;
-		case TeammateTypes.Doctor:
-			ammo = 20;
-			break;
-		case TeammateTypes.Engineer:
+		case "MechanicGun":
 			ammo = 1;
+			playerType = "Mechanic";
 			break;
-		case TeammateTypes.Captain:
-			ammo = 20;
+		case "CaptainGun":
+			ammo = 10;
+			playerType = "Captain";
+			break;
+		default:
+			print ("Ope");
 			break;
 		}
-
-		print (type.teammateType);
-
 	}
 
 	// Update is called once per frame
