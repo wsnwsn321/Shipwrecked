@@ -51,7 +51,7 @@ public class NewGun : PlayerManager {
 					Shoot ();
 				}
 			}
-			else if (gameObject.GetComponentInParent<AmmoRemaining> ().ammo > 0 && gameObject.GetComponentInParent<AmmoRemaining>().playerType.Equals("Engineer")) {
+			else if (gameObject.GetComponentInParent<AmmoRemaining> ().ammo > 0 && gameObject.GetComponentInParent<AmmoRemaining>().playerType.Equals("Mechanic")) {
 				if (Input.GetButtonDown ("Fire1") && Time.time >= nextTimeToFire) {
 					nextTimeToFire = Time.time + 2f / fireRate;
 					Shoot ();
