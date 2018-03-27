@@ -237,6 +237,7 @@ public class CoreControl : MonoBehaviour {
 
             if (animator)
             {
+				
                 animator.SetTrigger("Shoot");
             }
         }

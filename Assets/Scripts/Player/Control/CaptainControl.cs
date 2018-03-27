@@ -33,9 +33,12 @@ public class CaptainControl : MonoBehaviour, IClassControl
 			}
 			flaming = PhotonNetwork.connected? PhotonNetwork.Instantiate(flame.name, transform.position, Quaternion.identity,0) :Instantiate(flame, transform.position, Quaternion.identity);
 			flaming.transform.parent = transform;
-			AnimatorStateInfo shoot = animator.GetCurrentAnimatorStateInfo (0);
+			if (animator.GetCurrentAnimatorStateInfo (0).IsName("Shoot")) {
+				animator.speed = 2f;
+			} else {
+				animator.speed = 1f;
+			}
 			StartCoroutine(HealForTime());
-			canRampage = true;
 		}
 	}
 
@@ -47,6 +50,7 @@ public class CaptainControl : MonoBehaviour, IClassControl
 			Destroy (flaming);
 		}
 		flaming = null;
+		animator.speed = 1f;
 		StartCoroutine(WaitAbilityUse());
 	}
 
