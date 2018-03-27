@@ -85,7 +85,7 @@ public class Control : Photon.MonoBehaviour {
         classControl.UpdateAnimationStates(coreControl.GetAnimator());
 
         // Set the Layer Weights for the Idle state.
-		if (coreControl.IsIdle() && classControl.CanIdle()&&!ani.GetCurrentAnimatorStateInfo(0).IsName("Die")&&!ani.GetCurrentAnimatorStateInfo (0).IsName ("Reviving"))
+		if (coreControl.IsIdle() && classControl.CanIdle()&&!ani.GetCurrentAnimatorStateInfo(0).IsName("Die")&&!ani.GetCurrentAnimatorStateInfo (0).IsName ("Reviving")&&!ani.GetCurrentAnimatorStateInfo (0).IsName ("AB2"))
         {
             coreControl.SetLayerWeight(2, 1f);
         }

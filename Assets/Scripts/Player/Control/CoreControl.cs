@@ -218,7 +218,7 @@ public class CoreControl : MonoBehaviour {
 
     public void Roll()
     {
-		if (animator && !dead&&!animator.GetCurrentAnimatorStateInfo (0).IsName ("Reviving"))
+		if (animator && !dead&&!animator.GetCurrentAnimatorStateInfo (0).IsName ("Reviving")&&!animator.GetCurrentAnimatorStateInfo (0).IsName ("AB2"))
         {
             animator.SetTrigger("Roll");
         }
@@ -226,7 +226,7 @@ public class CoreControl : MonoBehaviour {
 
     public void Shoot()
     {
-		if (!dead&&!animator.GetCurrentAnimatorStateInfo (0).IsName ("Reviving"))
+		if (!dead&&!animator.GetCurrentAnimatorStateInfo (0).IsName ("Reviving")&&!animator.GetCurrentAnimatorStateInfo (0).IsName ("AB2"))
         {
             //GetComponent<AudioSource>().PlayOneShot(Shoot);// play audio
             nextTimeToFire = Time.time + (2f / fireRate);
@@ -251,7 +251,7 @@ public class CoreControl : MonoBehaviour {
 
     public void StartAiming()
     {
-		if (!dead&&!animator.GetCurrentAnimatorStateInfo (0).IsName ("Reviving"))
+		if (!dead&&!animator.GetCurrentAnimatorStateInfo (0).IsName ("Reviving")&&!animator.GetCurrentAnimatorStateInfo (0).IsName ("AB2"))
         {
             aiming = true;
             if (animator)
@@ -278,7 +278,7 @@ public class CoreControl : MonoBehaviour {
 
     public void StopAiming()
     {
-		if (!dead&&!animator.GetCurrentAnimatorStateInfo (0).IsName ("Reviving"))
+		if (!dead&&!animator.GetCurrentAnimatorStateInfo (0).IsName ("Reviving")&&!animator.GetCurrentAnimatorStateInfo (0).IsName ("AB2"))
         {
             aiming = false;
             if (animator)

@@ -10,7 +10,7 @@ public class DoctorControl : Photon.MonoBehaviour, IClassControl {
     public GameObject healParticle;
     public GameObject pill;
 	public GameObject healBuff;
-	public GameObject healEffect;
+	private GameObject healEffect;
     [HideInInspector]
     public float healthPerSec = 1f;
     [HideInInspector]
@@ -60,8 +60,12 @@ public class DoctorControl : Photon.MonoBehaviour, IClassControl {
 			Debug.Log (players.Length);
 			for(int i=0;i<players.Length;i++){
 				Debug.Log (players[i].name);
-				healing = PhotonNetwork.connected? PhotonNetwork.Instantiate(healEffect.name, players[i].transform.position, Quaternion.identity,0) :Instantiate(healEffect, transform.position, Quaternion.identity);
-				StartCoroutine(EndBuff());
+				healEffect = players [i].transform.GetChild (5).gameObject;
+				healEffect.SetActive (true);
+				//healing = PhotonNetwork.connected? PhotonNetwork.Instantiate(healEffect.name, players[i].transform.position, Quaternion.identity,0) :Instantiate(healEffect,  players[i].transform.position, Quaternion.identity);
+				//healing.transform.position = players [i].transform.position;	
+				StartCoroutine(EndBuff(healEffect));
+
 			}
 
 		}
@@ -70,10 +74,11 @@ public class DoctorControl : Photon.MonoBehaviour, IClassControl {
 
 
 
-	IEnumerator EndBuff()
+	IEnumerator EndBuff(GameObject hE)
 	{
 		yield return new WaitForSeconds(5f);
-		StopHealing ();
+		hE.SetActive (false);
+		//StopHealing ();
 		healBuff.SetActive (false);
 
 	}
