@@ -16,14 +16,14 @@ public class CoreControl : MonoBehaviour {
 
     float forwardMovement, horizontalMovement, timeScale;
     float forwardSpeed, horizontalSpeed;
-    bool aiming, turnLeft, turnRight, sprint, isGrounded, turn;
+	bool aiming, turnLeft, turnRight, sprint, isGrounded, turn;
 	public float distance;
 
     [HideInInspector]
     public  Animator allie_ani;
 	private CoreControl allie_core;
 	private PlayerHealth allie_health;
-	public bool dead, hasSpecialAbility;
+	public bool dead, hasSpecialAbility,rampage;
     private Animator animator;
     private Rigidbody rb;
 
@@ -37,6 +37,7 @@ public class CoreControl : MonoBehaviour {
         turn = false;
         dead = false;
         hasSpecialAbility = false;
+		rampage = false;
         forwardSpeed = 1f;
         horizontalSpeed = 1.5f;
         timeScale = 0.3f * Time.deltaTime;
@@ -237,8 +238,12 @@ public class CoreControl : MonoBehaviour {
 
             if (animator)
             {
-				
-                animator.SetTrigger("Shoot");
+				if (rampage) {
+					animator.SetTrigger ("Rampageshoot");
+				} else {
+					animator.SetTrigger("Shoot");
+				}
+                
             }
         }
         

@@ -17,11 +17,13 @@ public class CaptainControl : MonoBehaviour, IClassControl
 	private GameObject flaming;
 	private animation shoot;
 	private bool canRampage;
+	private CoreControl corecontrol;
     void Start()
     {
         // TODO
 		animator = GetComponent<Animator>();
 		canRampage = true;
+		corecontrol = GetComponent<CoreControl> ();
 
     }
 
@@ -33,11 +35,7 @@ public class CaptainControl : MonoBehaviour, IClassControl
 			}
 			flaming = PhotonNetwork.connected? PhotonNetwork.Instantiate(flame.name, transform.position, Quaternion.identity,0) :Instantiate(flame, transform.position, Quaternion.identity);
 			flaming.transform.parent = transform;
-			if (animator.GetCurrentAnimatorStateInfo (0).IsName("Shoot")) {
-				animator.speed = 2f;
-			} else {
-				animator.speed = 1f;
-			}
+			corecontrol.rampage = true;
 			StartCoroutine(HealForTime());
 		}
 	}
@@ -50,7 +48,7 @@ public class CaptainControl : MonoBehaviour, IClassControl
 			Destroy (flaming);
 		}
 		flaming = null;
-		animator.speed = 1f;
+		corecontrol.rampage = false;
 		StartCoroutine(WaitAbilityUse());
 	}
 
