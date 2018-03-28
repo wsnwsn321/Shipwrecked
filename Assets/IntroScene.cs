@@ -12,6 +12,7 @@ public class IntroScene : MonoBehaviour {
 	public AudioClip[] clips;
 	void Start()
 	{
+		GameObject.Find ("Main Camera").GetComponent<AudioSource>().Pause();
 		StartCoroutine("PlayVideo");
 	}
 
@@ -27,8 +28,11 @@ public class IntroScene : MonoBehaviour {
 	
 	private IEnumerator PlayVideo()
 	{
-		yield return new WaitForSeconds(3f);
-			//type out story text
+		
+		yield return new WaitForSeconds(1f);
+		GameObject.Find ("Main Camera").GetComponent<AudioSource>().Play();	
+		yield return new WaitForSeconds(1f);
+		//type out story text
 			for (int i = 0; i < 8; i++) {
 				
 			int randomClip = Random.Range (0, clips.Length);
