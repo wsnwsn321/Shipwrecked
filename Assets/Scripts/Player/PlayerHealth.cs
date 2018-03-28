@@ -27,13 +27,16 @@ public class PlayerHealth : Photon.MonoBehaviour {
 
     // Use this for initialization
     void LateStart () {
-        healthText = GameObject.FindGameObjectWithTag("HealthText").GetComponent<Text>();
-        healthBar = GameObject.FindGameObjectWithTag("HealthBar").GetComponent<Slider>();
+
 		corecontrol = GetComponent<CoreControl> ();
 			}
 	
 	// Update is called once per frame
 	void Update () {
+		if (healthText == null || healthBar == null) {
+			healthText = GameObject.FindGameObjectWithTag("HealthText").GetComponent<Text>();
+			healthBar = GameObject.FindGameObjectWithTag("HealthBar").GetComponent<Slider>();
+		}
         if (enemyAttackType != EnemyAttackType.NONE)
         {
             updateHealthText();
@@ -46,6 +49,7 @@ public class PlayerHealth : Photon.MonoBehaviour {
     private void updateHealthText()
     {
         health -= (int)enemyAttackType;
+		enemyAttackType = EnemyAttackType.NONE;
         if (health < 0)
         {
             health = 0;

@@ -19,17 +19,23 @@ public class UIManager : Photon.PunBehaviour {
 	public Slider teammateThreeHealth;
 
 
-	// Use this for initialization
-	void LateStart () {
-		teammates = PhotonNetwork.otherPlayers;
-		InitializeUI ();
+	void Update() {
+		if (teammates == null) {
+			teammates = PhotonNetwork.otherPlayers;
+			InitializeUI ();
+		}
+		if (updateUI) {
+			HealthChanged ();
+			updateUI = false;
+		}
 	}
 
 	void InitializeUI() {
 		int numberOfTeammates = teammates.Length;
+		Debug.Log ("Teammate Count: " + numberOfTeammates);
 		switch (numberOfTeammates) {
 		case 3:
-			teammateThreeName.enabled = true;
+			teammateThreeName.gameObject.SetActive(true);
 			teammateThreeHealth.enabled = true;
 			teammateTwoName.enabled = true;
 			teammateTwoHealth.enabled = true;
@@ -37,26 +43,32 @@ public class UIManager : Photon.PunBehaviour {
 			teammateOneHealth.enabled = true;
 			break;
 		case 2:
+			teammateThreeName.gameObject.SetActive(false);
+			teammateThreeHealth.enabled = false;
 			teammateTwoName.enabled = true;
 			teammateTwoHealth.enabled = true;
 			teammateOneName.enabled = true;
 			teammateOneHealth.enabled = true;
 			break;
 		case 1:
+			teammateThreeName.gameObject.SetActive(false);
+			teammateThreeHealth.enabled = false;
+			teammateTwoName.enabled = false;
+			teammateTwoHealth.enabled = false;
 			teammateOneName.enabled = true;
 			teammateOneHealth.enabled = true;
 			break;
 		default:
+			teammateThreeName.gameObject.SetActive (false);
+			teammateThreeHealth.gameObject.SetActive (false);
+			teammateTwoName.gameObject.SetActive (false);
+			teammateTwoHealth.gameObject.SetActive (false);
+			teammateOneName.gameObject.SetActive (false);
+			teammateOneHealth.gameObject.SetActive (false);
 			break;
 		}
 	}
 
-	void Update() {
-		if (updateUI) {
-			HealthChanged ();
-			updateUI = false;
-		}
-	}
 
 
 	public void HealthChanged() {

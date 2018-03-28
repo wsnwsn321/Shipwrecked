@@ -57,7 +57,9 @@ public class AmmoRemaining : MonoBehaviour {
 	private void updateAmmoText()
 	{
 		if (ammoText != null) {
-			ammoText.text = ammo.ToString () + "/" + originalAmmo.ToString();
+			ammoText.text = ammo.ToString () + "/" + originalAmmo.ToString ();
+		} else {
+			ammoText = GameObject.FindGameObjectWithTag("AmmoText").GetComponent<Text>();
 		}
 	}
 
