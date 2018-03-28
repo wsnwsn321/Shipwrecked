@@ -9,10 +9,15 @@ public class EnemyAnimation : MonoBehaviour {
     private Animator ani;
     //public GameObject AI;
     private Animator Player_ani;
+	private GameObject player_hit;
     private FieldOfView fov;
     private AIPath ap;
     private float distance;
+	private float nextAttack = 0f;
+
+	public float attackCooldown = 2.5f;
     bool run, attack, collide, hitted;
+
 	void Start () {
         attack = false;
         run = false;
@@ -89,6 +94,7 @@ public class EnemyAnimation : MonoBehaviour {
 		if (collision.gameObject.tag == "Sarge" || collision.gameObject.tag == "Mechanic" || collision.gameObject.tag == "Doctor" || collision.gameObject.tag == "Captain" )
         {
             Player_ani = collision.gameObject.GetComponent<Animator>();
+			player_hit = collision.gameObject;
             collide = true;
             distance = Vector3.Distance(transform.position, collision.gameObject.transform.position);
 
@@ -108,18 +114,21 @@ public class EnemyAnimation : MonoBehaviour {
 
     void setEnemyAttackType()
     {
-        switch (transform.gameObject.tag)
-        {
-            case "CrabAlien":
+		if (player_hit != null && Time.time > nextAttack) {
+			nextAttack = attackCooldown + Time.time;
+			PlayerHealth ph = player_hit.GetComponent<PlayerHealth> ();
+			switch (transform.gameObject.tag) {
+			case "CrabAlien":
 				// make this access the specific player that got hit instead of all instances of PlayerHealth
 			// Otherwise, this will hit every player.
-            //    PlayerHealth.enemyAttackType = PlayerHealth.EnemyAttackType.CRAB_ALIEN;
-                break;
-            case "SpiderBrain":
-            //    PlayerHealth.enemyAttackType = PlayerHealth.EnemyAttackType.SPIDER_BRAIN;
-                break;
-            default:
-                break;
-        }
+				ph.enemyAttackType = PlayerHealth.EnemyAttackType.CRAB_ALIEN;
+				break;
+			case "SpiderBrain":
+				ph.enemyAttackType = PlayerHealth.EnemyAttackType.SPIDER_BRAIN;
+				break;
+			default:
+				break;
+			}
+		}
     }
 }
