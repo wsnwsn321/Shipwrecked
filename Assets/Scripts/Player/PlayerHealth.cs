@@ -24,16 +24,13 @@ public class PlayerHealth : Photon.MonoBehaviour {
         CRAB_ALIEN = 20,
         SPIDER_BRAIN = 10
     };
-
-    // Use this for initialization
-    void LateStart () {
-
-		corecontrol = GetComponent<CoreControl> ();
-			}
 	
 	// Update is called once per frame
 	void Update () {
-		if (healthText == null || healthBar == null) {
+		// This is required in Update instead of LateStart since the prefab
+		// is instantiated, not loaded in with the scene
+		if (healthText == null || healthBar == null || corecontrol == null) {
+			corecontrol = GetComponent<CoreControl> ();
 			healthText = GameObject.FindGameObjectWithTag("HealthText").GetComponent<Text>();
 			healthBar = GameObject.FindGameObjectWithTag("HealthBar").GetComponent<Slider>();
 		}

@@ -13,7 +13,11 @@ public class EnemyAnimation : MonoBehaviour {
     private FieldOfView fov;
     private AIPath ap;
     private float distance;
+	private float nextAttack = 0f;
+
+	public float attackCooldown = 2.5f;
     bool run, attack, collide, hitted;
+
 	void Start () {
         attack = false;
         run = false;
@@ -110,7 +114,8 @@ public class EnemyAnimation : MonoBehaviour {
 
     void setEnemyAttackType()
     {
-		if (player_hit != null) {
+		if (player_hit != null && Time.time > nextAttack) {
+			nextAttack = attackCooldown + Time.time;
 			PlayerHealth ph = player_hit.GetComponent<PlayerHealth> ();
 			switch (transform.gameObject.tag) {
 			case "CrabAlien":
