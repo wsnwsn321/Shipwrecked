@@ -64,13 +64,15 @@ public class Enemy : Photon.MonoBehaviour {
 		{
 			health = (float)stream.ReceiveNext();
 		}
+		if (health <= 0f && !isDead) {
+			print ("DIED");
+			Die ();
+		}
 	}
 
     public void TakeDamage(float amount){
 		health -= amount;
-		if (health <= 0f && !isDead) {
-			Die ();
-		}
+
 	}
 
     public void AddAttacker(Transform attacker)

@@ -71,9 +71,10 @@ public class BehaviorManager : MonoBehaviour {
                         break;
                 }
                 break;
-            case EntityTypes.Turret:
-                behavior = gameObject.AddComponent<TurretBehaviors>();
-                behavior.enabled = false;
+			case EntityTypes.Turret:
+				behavior = gameObject.AddComponent<TurretBehaviors> ();
+				behavior.enabled = false;
+				GetComponent<PhotonView> ().ObservedComponents.Add (behavior);
                 break;
         }
     }
