@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerManager : Photon.PunBehaviour {
+public class PlayerManager : Photon.MonoBehaviour {
 
 	[Tooltip("The local player instance. Use this to know if the local player is represented in the scene.")]
 	public static GameObject LocalPlayerInstance;
