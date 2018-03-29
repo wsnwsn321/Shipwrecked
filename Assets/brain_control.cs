@@ -12,6 +12,10 @@ public class brain_control : MonoBehaviour {
     private float distance;
     private bool collide;
     private Animator Player_ani;
+	private GameObject player_hit;
+	private float nextAttack = 0f;
+
+	public float attackCooldown = 2.5f;
     void Start () {
         an = GetComponent<Animation>();
         fov = GetComponentInParent<FieldOfView>();
@@ -28,21 +32,41 @@ public class brain_control : MonoBehaviour {
         }
         else
         {
+			an.Play("Walk");
             ap.maxSpeed = 1;
         }
 
-		if (collide)
-        {
-            ap.maxSpeed = 0;
-            an.Play("Attack_2");
-            if (!Player_ani.GetCurrentAnimatorStateInfo(0).IsName("Hitted"))
-            {
-				
-                Player_ani.SetTrigger("Hit");
-            }
-        }
-        
-		else if(distance>1.65f) {
+		if (an.IsPlaying("Die_3"))
+		{
+			ap.maxSpeed = 0;
+		}
+
+		distance = Vector3.Distance(transform.position, player_hit.transform.position);
+		if (distance>1.8f) {
+			collide = false;
+		}
+
+		if (collide && fov.visibleTargets.Count > 0) {
+			if (!Player_ani.GetCurrentAnimatorStateInfo (0).IsName ("Die")) {
+				ap.maxSpeed = 0;
+				an.Play ("Attack_2");
+				setEnemyAttackType ();
+				if (!Player_ani.GetCurrentAnimatorStateInfo (0).IsName ("Hitted")) {
+
+					Player_ani.SetTrigger ("Hit");
+				}
+			} else {
+				Physics.IgnoreCollision (GetComponent<BoxCollider> (), player_hit.GetComponent<BoxCollider> ());
+				an.Play ("Walk");
+				ap.maxSpeed = 1;
+			}
+
+
+		}
+
+		else{
+			
+			print (distance);
             an.Play("Walk");
             if (fov.visibleTargets.Count > 0)
             {
@@ -57,24 +81,41 @@ public class brain_control : MonoBehaviour {
 
     void OnCollisionEnter(Collision collision)
     {
-        if(collision.gameObject.tag == "Sarge" || collision.gameObject.tag == "Mechanic" || collision.gameObject.tag == "Doctor")
+		if(collision.gameObject.tag == "Sarge" || collision.gameObject.tag == "Mechanic" || collision.gameObject.tag == "Doctor"|| collision.gameObject.tag == "Captain" )
         {
 			Player_ani = collision.gameObject.GetComponent<Animator> ();
+			player_hit = collision.gameObject;
             distance = Vector3.Distance(transform.position, collision.gameObject.transform.position);
             collide = true;
-			print (distance);
 
         }
 
     }
     void OnCollisionExit(Collision collisionInfo)
     {
-        if (collisionInfo.gameObject.tag == "Sarge" || collisionInfo.gameObject.tag == "Mechanic" || collisionInfo.gameObject.tag == "Doctor") 
+		if (collisionInfo.gameObject.tag == "Sarge" || collisionInfo.gameObject.tag == "Mechanic" || collisionInfo.gameObject.tag == "Doctor"|| collisionInfo.gameObject.tag == "Captain" ) 
         {
-			collide = false;
             distance = Vector3.Distance(transform.position, collisionInfo.gameObject.transform.position);
-            //hitted = false;
-            //Player_ani.SetBool("hit", false);
         }
     }
+
+	void setEnemyAttackType()
+	{
+		if (player_hit != null && Time.time > nextAttack) {
+			nextAttack = attackCooldown + Time.time;
+			PlayerHealth ph = player_hit.GetComponent<PlayerHealth> ();
+			switch (transform.gameObject.tag) {
+			case "CrabAlien":
+				// make this access the specific player that got hit instead of all instances of PlayerHealth
+				// Otherwise, this will hit every player.
+				ph.enemyAttackType = PlayerHealth.EnemyAttackType.CRAB_ALIEN;
+				break;
+			case "SpiderBrain":
+				ph.enemyAttackType = PlayerHealth.EnemyAttackType.SPIDER_BRAIN;
+				break;
+			default:
+				break;
+			}
+		}
+	}
 }

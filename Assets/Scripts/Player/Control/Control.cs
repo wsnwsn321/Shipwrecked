@@ -19,7 +19,6 @@ public class Control : Photon.MonoBehaviour {
     CoreControl coreControl;
     IClassControl classControl;
     private Animator ani;
-
     void Start ()
     {
         EntityType type = GetComponent<EntityType>();

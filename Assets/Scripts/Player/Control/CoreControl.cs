@@ -26,6 +26,7 @@ public class CoreControl : MonoBehaviour {
 	public bool dead, hasSpecialAbility,rampage;
     private Animator animator;
     private Rigidbody rb;
+	private PlayerHealth myhp;
 
     void Start () {
         forwardMovement = 0;
@@ -44,6 +45,7 @@ public class CoreControl : MonoBehaviour {
 
         animator = GetComponent<Animator>();
         rb = GetComponent<Rigidbody>();
+		myhp = GetComponent<PlayerHealth> ();
     }
 
     public bool IsJumping()
@@ -306,7 +308,12 @@ public class CoreControl : MonoBehaviour {
     {
         if (animator)
         {
-            animator.ResetTrigger("Shoot");
+			
+			if (rampage) {
+				animator.ResetTrigger ("Rampageshoot");
+			} else {
+				animator.ResetTrigger("Shoot");
+			}
         }
         
     }
@@ -322,6 +329,9 @@ public class CoreControl : MonoBehaviour {
         if (animator)
         {
             dead = true;
+			myhp.health = 0;
+			myhp.updateHealthBar ();
+			myhp.updateHealthText ();
         }
     }
 
@@ -331,6 +341,11 @@ public class CoreControl : MonoBehaviour {
         {
             dead = false;
             animator.SetTrigger("Revived");
+			this.gameObject.layer = 10;
+			myhp.health = 10;
+			myhp.updateHealthBar ();
+			myhp.updateHealthText ();
+
         }
     }
 	public void ReviveAllies()
@@ -390,7 +405,7 @@ public class CoreControl : MonoBehaviour {
 	{
 		yield return new WaitForSeconds(5f);
 			allie_core.Revived ();
-			allie_health.health = 10;
+			//allie_health.health = 10;
 		animator.SetTrigger ("FinishRevive");
 	}
 }

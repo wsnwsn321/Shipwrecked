@@ -67,6 +67,7 @@ public class EnemyAnimation : MonoBehaviour {
                 }
             else
             {
+				Physics.IgnoreCollision (GetComponent<BoxCollider> (), player_hit.GetComponent<BoxCollider> ());
                 //remove the player from the fov
                 run = false;
                 ap.maxSpeed = 1;

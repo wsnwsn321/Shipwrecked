@@ -43,7 +43,7 @@ public class PlayerHealth : Photon.MonoBehaviour {
         checkHealth();
 	}
 
-    private void updateHealthText()
+	public void updateHealthText()
     {
         health -= (int)enemyAttackType;
 		enemyAttackType = EnemyAttackType.NONE;
@@ -58,7 +58,7 @@ public class PlayerHealth : Photon.MonoBehaviour {
         healthText.text = health.ToString() + "/100";
     }
 
-    private void updateHealthBar()
+	public void updateHealthBar()
     {
         healthBar.value = health;
     }
@@ -69,6 +69,7 @@ public class PlayerHealth : Photon.MonoBehaviour {
         {
             //player dies
 			corecontrol.DieOnGround();
+			this.gameObject.layer = 16;
 		}
 
 	
