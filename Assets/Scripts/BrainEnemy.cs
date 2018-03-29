@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 
 [RequireComponent(typeof(PhotonView))]
-public class Enemy : Photon.MonoBehaviour {
+public class BrainEnemy : Photon.MonoBehaviour {
 	//extends MonsterSpawnManager class to update monster count
 	public MonsterSpawnManager spawnManager;
     private MonsterTypes monsterType;
-	private Animator crab_ani;
+	private Animation enemy_ani;
     private bool isDead;
 
 	// We want Photon to sync this value, so we will serialize it
@@ -33,7 +33,7 @@ public class Enemy : Photon.MonoBehaviour {
         {
             monsterType = type.monsterType;
         }
-		crab_ani = GetComponent<Animator>();
+		enemy_ani = GetComponent<Animation>();
         isDead = false;
         attackers = new List<Transform>();
         characterAttackers = new List<Transform>();
@@ -109,7 +109,7 @@ public class Enemy : Photon.MonoBehaviour {
     }
 
 	void Die(){
-		crab_ani.SetTrigger("die");
+		enemy_ani.Play ("Die_3");
         isDead = true;
         Destroy (gameObject,2f);
 		UpdateMonsterAmount ();

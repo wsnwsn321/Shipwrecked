@@ -27,6 +27,7 @@ public class CoreControl : MonoBehaviour {
     private Animator animator;
     private Rigidbody rb;
 	private PlayerHealth myhp;
+	private AmmoRemaining ammo;
 
     void Start () {
         forwardMovement = 0;
@@ -46,6 +47,7 @@ public class CoreControl : MonoBehaviour {
         animator = GetComponent<Animator>();
         rb = GetComponent<Rigidbody>();
 		myhp = GetComponent<PlayerHealth> ();
+		ammo = GetComponentInChildren<AmmoRemaining> ();
     }
 
     public bool IsJumping()
@@ -238,7 +240,7 @@ public class CoreControl : MonoBehaviour {
                 AudioSource.PlayClipAtPoint(shootingAudio, transform.position, 1);
             }
 
-            if (animator)
+			if (animator&&ammo.ammo!=0)
             {
 				if (rampage) {
 					animator.SetTrigger ("Rampageshoot");

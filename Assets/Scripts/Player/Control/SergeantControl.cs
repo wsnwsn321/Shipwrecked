@@ -18,6 +18,7 @@ public class SergeantControl : MonoBehaviour, IClassControl
     private float healDelay;
     private GameObject healing;
     private bool canHeal;
+	private PlayerHealth myhp;
 
     void Start()
     {
@@ -25,6 +26,7 @@ public class SergeantControl : MonoBehaviour, IClassControl
         healDelay = healTime / healDivisions;
         canHeal = true;
         ani = GetComponent<Animator>();
+		myhp = GetComponent<PlayerHealth> ();
     }
 
     void HealSelf()
@@ -37,8 +39,9 @@ public class SergeantControl : MonoBehaviour, IClassControl
             {
                 animator.SetTrigger("Use");
             }
+
 			healing = PhotonNetwork.connected? PhotonNetwork.Instantiate(healParticle.name, transform.position, Quaternion.identity,0) :Instantiate(healParticle, transform.position, Quaternion.identity);
-            StartCoroutine(HealForTime());
+			StartCoroutine(HealForTime());
         }
     }
 
@@ -66,6 +69,9 @@ public class SergeantControl : MonoBehaviour, IClassControl
     IEnumerator HealForTime()
     {
         yield return new WaitForSeconds(healTime);
+		myhp.health += 20;
+		myhp.updateHealthBar ();
+		myhp.updateHealthText ();
         if (healing)
         {
             StopHealing();

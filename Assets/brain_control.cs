@@ -40,8 +40,10 @@ public class brain_control : MonoBehaviour {
 		{
 			ap.maxSpeed = 0;
 		}
+		if (player_hit != null) {
+			distance = Vector3.Distance(transform.position, player_hit.transform.position);
 
-		distance = Vector3.Distance(transform.position, player_hit.transform.position);
+		}
 		if (distance>1.8f) {
 			collide = false;
 		}
@@ -65,8 +67,6 @@ public class brain_control : MonoBehaviour {
 		}
 
 		else{
-			
-			print (distance);
             an.Play("Walk");
             if (fov.visibleTargets.Count > 0)
             {
