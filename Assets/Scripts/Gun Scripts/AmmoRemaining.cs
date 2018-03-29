@@ -46,7 +46,6 @@ public class AmmoRemaining : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		updateAmmoText();
-		print (ammo);
 		//checkAmmo();
 	}
 

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class GenericBehaviors : MonoBehaviour
+public abstract class GenericBehaviors : Photon.MonoBehaviour
 {
     [HideInInspector]
     public List<Behaviors> behaviors = new List<Behaviors>();
