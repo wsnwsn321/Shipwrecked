@@ -21,11 +21,11 @@ public class AmmoRemaining : MonoBehaviour {
 		string type = gameObject.tag;
 		switch (type) {
 		case "SargeGun":
-			ammo = 20;
+			ammo = 15;
 			playerType = "Sergeant";
 			break;
 		case "DoctorGun":
-			ammo = 15;
+			ammo = 12;
 			playerType = "Doctor";
 			break;
 		case "MechanicGun":
@@ -33,7 +33,7 @@ public class AmmoRemaining : MonoBehaviour {
 			playerType = "Mechanic";
 			break;
 		case "CaptainGun":
-			ammo = 10;
+			ammo = 20;
 			playerType = "Captain";
 			break;
 		default:

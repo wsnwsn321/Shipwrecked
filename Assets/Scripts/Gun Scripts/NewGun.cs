@@ -40,7 +40,7 @@ public class NewGun : PlayerManager {
 			//this if checks if the player has remaining ammo
 		if (!gameObject.GetComponentInParent<CoreControl> ().IsReloading ()) {
 			if (gameObject.GetComponentInParent<AmmoRemaining> ().ammo > 0 && gameObject.GetComponentInParent<AmmoRemaining>().playerType.Equals("Sergeant")) {
-				if (Input.GetButton ("Fire1") && Time.time >= nextTimeToFire) {
+				if (Input.GetButtonDown ("Fire1") && Time.time >= nextTimeToFire) {
 					nextTimeToFire = Time.time + 2f / fireRate;
 					Shoot ();
 				}
@@ -58,7 +58,7 @@ public class NewGun : PlayerManager {
 				}
 			}
 			else if (gameObject.GetComponentInParent<AmmoRemaining> ().ammo > 0 && gameObject.GetComponentInParent<AmmoRemaining>().playerType.Equals("Captain")) {
-				if (Input.GetButtonDown ("Fire1") && Time.time >= nextTimeToFire) {
+				if (Input.GetButton ("Fire1") && Time.time >= nextTimeToFire) {
 					nextTimeToFire = Time.time + 2f / fireRate;
 					Shoot ();
 				}
