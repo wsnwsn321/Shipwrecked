@@ -28,13 +28,17 @@ public class Enemy : Photon.MonoBehaviour {
     
 	void Start()
     {
-        monsterType = GetComponent<EntityType>().monsterType;
+        EntityType type = GetComponent<EntityType>();
+        if (type)
+        {
+            monsterType = type.monsterType;
+        }
 		enemy_ani = GetComponent<Animation>();
         isDead = false;
         attackers = new List<Transform>();
         characterAttackers = new List<Transform>();
         times = new List<float>();
-        InvokeRepeating("CheckAttackers", 0, 0.5f);
+        InvokeRepeating("CheckAttackers", 0, 0.1f);
     }
 
     void CheckAttackers()
@@ -127,6 +131,9 @@ public class Enemy : Photon.MonoBehaviour {
             case MonsterTypes.Tough:
                 expToAllocate = 4;
                 break;
+            default:
+                expToAllocate = 10;
+                break;
         }
 
         for (int i = 0; i < characterAttackers.Count; i++)
@@ -136,7 +143,10 @@ public class Enemy : Photon.MonoBehaviour {
         }
 
         // Allocate more to most recent attacker.
-        mostRecentCharacterAttacker.GetComponent<Experience>().IncreaseBy(expToAllocate / 2);
+        if (mostRecentCharacterAttacker)
+        {
+            mostRecentCharacterAttacker.GetComponent<Experience>().IncreaseBy(expToAllocate / 2);
+        }
     }
 
 	//updates the amount of monsters remaining
