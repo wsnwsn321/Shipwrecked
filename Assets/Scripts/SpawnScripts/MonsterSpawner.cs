@@ -24,10 +24,11 @@ public class MonsterSpawner : MonoBehaviour {
         if (monsters[index].monster)
         {
             GameObject monster;
-			if (PhotonNetwork.connected && PhotonNetwork.isMasterClient)
-            {
-                monster = PhotonNetwork.Instantiate(monsters[index].monster.name, spawnPoint, transform.rotation, 0);
-            } else
+			if (PhotonNetwork.connected) {
+				if (PhotonNetwork.isMasterClient) {
+					monster = PhotonNetwork.Instantiate (monsters [index].monster.name, spawnPoint, transform.rotation, 0);
+				} 
+			}else
             {
                 monster = Instantiate(monsters[index].monster, spawnPoint, transform.rotation);
             }
