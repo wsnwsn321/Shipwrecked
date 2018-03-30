@@ -12,17 +12,19 @@ public class EnemyAnimation : MonoBehaviour {
 	private GameObject player_hit;
     private FieldOfView fov;
     private AIPath ap;
-    private float distance;
+    private float distance, spaceshipDistance;
 	private float nextAttack = 0f;
+	public GameObject Spaceship;
 
 	public float attackCooldown = 2.5f;
-    bool run, attack, collide, hitted;
+    bool run, attack, collide, hitted, spaceship;
 
 	void Start () {
         attack = false;
         run = false;
         collide = false;
         hitted = false;
+		spaceship = false;
         distance = 0f;
         fov = GetComponent<FieldOfView>();
         ap = GetComponent<AIPath>();
@@ -86,20 +88,29 @@ public class EnemyAnimation : MonoBehaviour {
                 ap.maxSpeed = 1;
                 }
             }
+		spaceshipDistance = Vector3.Distance (transform.position, Spaceship.transform.position);
+		print (spaceshipDistance);
+		if (spaceshipDistance<3.5f) {
+			ap.maxSpeed = 0;
+			ani.SetTrigger("attack");
+			setEnemyAttackType();
+		}
         
         
     }
 
     void OnCollisionEnter(Collision collision)
     {
-		if ((collision.gameObject.tag == "Sarge" || collision.gameObject.tag == "Mechanic" || collision.gameObject.tag == "Doctor" || collision.gameObject.tag == "Captain") &&!ani.GetCurrentAnimatorStateInfo(0).IsName("Stunned")&&!ani.GetCurrentAnimatorStateInfo(0).IsName("GetUp"))
-        {
-            Player_ani = collision.gameObject.GetComponent<Animator>();
+		if ((collision.gameObject.tag == "Sarge" || collision.gameObject.tag == "Mechanic" || collision.gameObject.tag == "Doctor" || collision.gameObject.tag == "Captain") && !ani.GetCurrentAnimatorStateInfo (0).IsName ("Stunned") && !ani.GetCurrentAnimatorStateInfo (0).IsName ("GetUp")) {
+			Player_ani = collision.gameObject.GetComponent<Animator> ();
 			player_hit = collision.gameObject;
-            collide = true;
-            distance = Vector3.Distance(transform.position, collision.gameObject.transform.position);
+			collide = true;
+			distance = Vector3.Distance (transform.position, collision.gameObject.transform.position);
 
-        }
+		} else if (collision.gameObject.tag == "Spaceship") {
+			spaceship = true;
+			print ("with spaceship");
+		}
            
     }
     void OnCollisionExit(Collision collisionInfo)
