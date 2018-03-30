@@ -15,6 +15,8 @@ public class AmmoRemaining : MonoBehaviour {
 	public float reloadTime;
 	private Text ammoText;
 
+	public AudioClip shootingAudio;
+	public AudioClip reloadAudio;
 
 	// Use this for initialization
 	void LateStart () {
@@ -60,6 +62,10 @@ public class AmmoRemaining : MonoBehaviour {
 
 	public void shotFired(){
 		ammo -= 1;
+		if (shootingAudio)
+		{
+			AudioSource.PlayClipAtPoint(shootingAudio, transform.position, 1);
+		}
 	}
 
 	private void updateAmmoText()
@@ -81,6 +87,9 @@ public class AmmoRemaining : MonoBehaviour {
 
 	public void reload(){
 		StartCoroutine(WaitForReload ());
+		if (reloadAudio) {
+			AudioSource.PlayClipAtPoint (reloadAudio, transform.position, 1);
+		}
 	}
 
 	IEnumerator WaitForReload()

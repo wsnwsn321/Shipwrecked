@@ -12,8 +12,6 @@ public class CoreControl : MonoBehaviour {
 
     public float fireRate = 15f;
 
-    public AudioClip shootingAudio;
-
     float forwardMovement, horizontalMovement, timeScale;
     float forwardSpeed, horizontalSpeed;
 	bool aiming, turnLeft, turnRight, sprint, isGrounded, turn;
@@ -235,10 +233,10 @@ public class CoreControl : MonoBehaviour {
         {
             //GetComponent<AudioSource>().PlayOneShot(Shoot);// play audio
             nextTimeToFire = Time.time + (2f / fireRate);
-            if (shootingAudio)
+            /*if (shootingAudio)
             {
                 AudioSource.PlayClipAtPoint(shootingAudio, transform.position, 1);
-            }
+            }*/
 
 			if (animator&&ammo.ammo!=0)
             {
@@ -274,7 +272,7 @@ public class CoreControl : MonoBehaviour {
             {
                 nextTimeToFire = Time.time + 2f / fireRate;
                 //	GetComponent<AudioSource>().PlayOneShot(Shoot);// play audio
-                AudioSource.PlayClipAtPoint(shootingAudio, transform.position, 1);
+                //AudioSource.PlayClipAtPoint(shootingAudio, transform.position, 1);
 
             }
 
