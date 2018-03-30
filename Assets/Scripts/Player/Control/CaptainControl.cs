@@ -6,29 +6,40 @@ using UnityEngine;
 
 public class CaptainControl : Photon.MonoBehaviour, IClassControl
 {
+	
 	[Range(0f, 10f)]
+	public float StunDistance;
 	public float RampageCooldown = 10f;
+	public float StunCooldown;
+	public float EnemyStunnedTime;
 	[Range(0f, 10f)]
 	public float RampageTime = 8f;
     [HideInInspector]
     public float attackBuff = 1f, defenseBuff = 1f;
+
 	private Animator animator;
+	private Animator enemy_animator;
 	public GameObject flame;
 	private GameObject flaming;
 	private animation shoot;
-	private bool canRampage;
+	private bool canRampage,canKnockBack;
 	private CoreControl corecontrol;
+	public LayerMask layerMask;
     void Start()
     {
+		StunDistance = 3f;
+		StunCooldown = 5f;
+		EnemyStunnedTime = 2f;
         // TODO
 		animator = GetComponent<Animator>();
 		canRampage = true;
+		canKnockBack = true;
 		corecontrol = GetComponent<CoreControl> ();
 
     }
 
 	void Rampage(){
-		if (canRampage&&!animator.GetCurrentAnimatorStateInfo (0).IsName ("AB1")) {
+		if (canRampage&&!animator.GetCurrentAnimatorStateInfo (0).IsName ("AB1")&&!animator.GetCurrentAnimatorStateInfo(0).IsName("Die")) {
 			canRampage = false;
 			if (animator) {
 				animator.SetTrigger("Ability1");
@@ -41,7 +52,30 @@ public class CaptainControl : Photon.MonoBehaviour, IClassControl
 			}
 			flaming.transform.parent = transform;
 			corecontrol.rampage = true;
-			StartCoroutine(HealForTime());
+			StartCoroutine(RampageForTime());
+		}
+	}
+
+
+	void KnockBack(){
+		if (canKnockBack && !animator.GetCurrentAnimatorStateInfo (0).IsName ("AB2")&&!animator.GetCurrentAnimatorStateInfo(0).IsName("Die")) {
+			canKnockBack = false;
+			if (animator) {
+				animator.SetTrigger("Ability2");
+			}
+			Collider[] enemies = Physics.OverlapSphere (transform.position, StunDistance,layerMask, QueryTriggerInteraction.Collide);
+			if (enemies.Length > 0) {
+				for (int i = 0; i < enemies.Length; i++) {
+					if (enemies [i].tag == "CrabAlien") {
+						enemy_animator = enemies [i].GetComponent<Animator> ();
+						enemy_animator.SetTrigger ("stunned");
+						StartCoroutine (WaitForStun ());
+					}
+				}
+
+			}
+			StartCoroutine(WaitAbility2Use());
+
 		}
 	}
 
@@ -54,10 +88,10 @@ public class CaptainControl : Photon.MonoBehaviour, IClassControl
 		}
 		flaming = null;
 		corecontrol.rampage = false;
-		StartCoroutine(WaitAbilityUse());
+		StartCoroutine(WaitAbility1Use());
 	}
 
-	IEnumerator HealForTime()
+	IEnumerator RampageForTime()
 	{
 		yield return new WaitForSeconds(RampageTime);
 		if (flaming)
@@ -65,10 +99,23 @@ public class CaptainControl : Photon.MonoBehaviour, IClassControl
 			StopRampage();
 		}
 	}
-	IEnumerator WaitAbilityUse()
+		
+
+	IEnumerator WaitAbility1Use()
 	{
 		yield return new WaitForSeconds(RampageCooldown);
 		canRampage = true;
+	}
+	IEnumerator WaitAbility2Use()
+	{
+		yield return new WaitForSeconds(StunCooldown);
+		canKnockBack = true;
+	}
+
+	IEnumerator WaitForStun()
+	{
+		yield return new WaitForSeconds(EnemyStunnedTime);
+		enemy_animator.SetTrigger ("getUp");
 	}
 
     #region Inherited Methods
@@ -79,6 +126,10 @@ public class CaptainControl : Photon.MonoBehaviour, IClassControl
         {
 			Rampage ();
         }
+		if (ability == SpecialAbility.KnockBack)
+		{
+			KnockBack();
+		}
     }
 
     public bool CanAim()

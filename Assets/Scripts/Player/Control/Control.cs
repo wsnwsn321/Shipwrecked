@@ -192,6 +192,7 @@ public class Control : Photon.MonoBehaviour {
 		{
 			classControl.Activate(SpecialAbility.HealingCircle);
 			classControl.Activate(SpecialAbility.Build);
+			classControl.Activate(SpecialAbility.KnockBack);
 		}
 
         // Moving

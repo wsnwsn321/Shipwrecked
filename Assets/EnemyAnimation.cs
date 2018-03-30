@@ -47,7 +47,7 @@ public class EnemyAnimation : MonoBehaviour {
 		//}
            
 
-            if (ani.GetCurrentAnimatorStateInfo(0).IsName("Die"))
+		if (ani.GetCurrentAnimatorStateInfo(0).IsName("Die")||ani.GetCurrentAnimatorStateInfo(0).IsName("Stunned")||ani.GetCurrentAnimatorStateInfo(0).IsName("GetUp"))
             {
                 ap.maxSpeed = 0;
             }
@@ -67,7 +67,7 @@ public class EnemyAnimation : MonoBehaviour {
                 }
             else
             {
-				Physics.IgnoreCollision (GetComponent<BoxCollider> (), player_hit.GetComponent<BoxCollider> ());
+				Physics.IgnoreCollision (GetComponent<CapsuleCollider> (), player_hit.GetComponent<BoxCollider> ());
                 //remove the player from the fov
                 run = false;
                 ap.maxSpeed = 1;
@@ -92,7 +92,7 @@ public class EnemyAnimation : MonoBehaviour {
 
     void OnCollisionEnter(Collision collision)
     {
-		if (collision.gameObject.tag == "Sarge" || collision.gameObject.tag == "Mechanic" || collision.gameObject.tag == "Doctor" || collision.gameObject.tag == "Captain" )
+		if ((collision.gameObject.tag == "Sarge" || collision.gameObject.tag == "Mechanic" || collision.gameObject.tag == "Doctor" || collision.gameObject.tag == "Captain") &&!ani.GetCurrentAnimatorStateInfo(0).IsName("Stunned")&&!ani.GetCurrentAnimatorStateInfo(0).IsName("GetUp"))
         {
             Player_ani = collision.gameObject.GetComponent<Animator>();
 			player_hit = collision.gameObject;
