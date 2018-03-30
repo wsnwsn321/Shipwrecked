@@ -15,20 +15,17 @@ public class ShipHealth : Photon.MonoBehaviour {
 	private float timeColliding;
 	public float timeThreshold = 1f;
 
-	// Use this for initialization
-	void LateStart () {
-		healthText = GameObject.FindGameObjectWithTag("ShipHealthText").GetComponent<Text>();
-		healthBar = GameObject.FindGameObjectWithTag("ShipHealthBar").GetComponent<Slider>();
-	}
-
 	// Update is called once per frame
 	void Update () {
+		if (healthText == null) {
+			healthText = GameObject.FindGameObjectWithTag("ShipHealthText").GetComponent<Text>();
+			healthBar = GameObject.FindGameObjectWithTag("ShipHealthBar").GetComponent<Slider>();
+		}
 		if (tookDmg)
 		{
 			updateHealthText();
 			updateHealthBar();
 		}
-		checkHealth();
 	}
 
 	public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info) {
@@ -40,26 +37,12 @@ public class ShipHealth : Photon.MonoBehaviour {
 	}
 
 
-	private void OnCollisionStay(Collision collision)
-	{
-		switch (collision.gameObject.tag)
-		{
-		case "EarthDweller":
-			if (timeColliding < timeThreshold)
-			{
-				timeColliding += Time.deltaTime;
-			} else if (health > 0)
-			{                    
-				health -= earthDwellerDmg;
-				tookDmg = true;
-				timeColliding = 0f;
-			}
-			break;
-		default:
-			// Players bring items to the ship
-			break;
+	public void TakeDamage(int damage) {
+		health -= damage;
+		if (health <= 0) {
+			loseGame ();
 		}
-
+		tookDmg = true;
 	}
 
 	private void updateHealthText()
@@ -72,11 +55,8 @@ public class ShipHealth : Photon.MonoBehaviour {
 		healthBar.value = health;
 	}
 
-	private void checkHealth()
+	private void loseGame()
 	{
-		if (health <= 0)
-		{
-			// Players lose
-		}
+
 	}
 }

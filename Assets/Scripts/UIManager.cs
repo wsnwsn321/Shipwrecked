@@ -88,6 +88,7 @@ public class UIManager : Photon.PunBehaviour {
 	[PunRPC]
 	private void UpdateUI () {
 		// Updates the UI for other teammates, aka "Teammate Health bars"
+		teammates = PhotonNetwork.otherPlayers;
 		int numberOfTeammates = teammates.Length;
 		switch (numberOfTeammates) {
 		case 3:

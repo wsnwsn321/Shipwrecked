@@ -93,6 +93,7 @@ public class EnemyAnimation : MonoBehaviour {
 			ap.maxSpeed = 0;
 			ani.SetTrigger("attack");
 			setEnemyAttackType();
+			setEnemyAttackTypeForSpaceship ();
 		}
         
         
@@ -142,4 +143,25 @@ public class EnemyAnimation : MonoBehaviour {
 			}
 		}
     }
+
+	void setEnemyAttackTypeForSpaceship()
+	{
+		if (Time.time > nextAttack) {
+			nextAttack = attackCooldown + Time.time;
+			ShipHealth ph = Spaceship.GetComponent<ShipHealth> ();
+			switch (transform.gameObject.tag) {
+			case "CrabAlien":
+				// make this access the specific player that got hit instead of all instances of PlayerHealth
+				// Otherwise, this will hit every player.
+				ph.TakeDamage((int)PlayerHealth.EnemyAttackType.CRAB_ALIEN);
+				break;
+			case "SpiderBrain":
+				ph.TakeDamage((int)PlayerHealth.EnemyAttackType.SPIDER_BRAIN);
+				break;
+			default:
+				break;
+			}
+		}
+	}
+
 }
