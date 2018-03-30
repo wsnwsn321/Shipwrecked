@@ -19,8 +19,11 @@ public class Control : Photon.MonoBehaviour {
     CoreControl coreControl;
     IClassControl classControl;
     private Animator ani;
+    //test only
+    private Experience exp;
     void Start ()
     {
+        exp = GetComponent<Experience>();
         EntityType type = GetComponent<EntityType>();
 
         if (type.type == EntityTypes.Teammate)
@@ -219,8 +222,14 @@ public class Control : Photon.MonoBehaviour {
             coreControl.Revived();
         }
 
-		//revive allies
-		if (Input.GetKeyDown(KeyCode.G))
+        //cheat on experience
+        if (Input.GetKeyDown(KeyCode.Z))
+        {
+            exp.IncreaseBy(20);
+        }
+
+        //revive allies
+        if (Input.GetKeyDown(KeyCode.G))
 		{
 			if (coreControl.distance < 1.2f) {
 				if (!ani.GetCurrentAnimatorStateInfo (0).IsName ("Reviving")) {

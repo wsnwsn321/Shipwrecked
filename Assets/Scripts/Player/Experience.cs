@@ -17,10 +17,11 @@ public class Experience : MonoBehaviour {
     int nextLevelThreshold;
     int nextThresholdPosition;
 
+
     // Use this for initialization
     void Start () {
         core = GetComponent<CoreControl>();
-        characterType = GetComponent<Control>().characterType;
+        characterType = GetComponent<EntityType>().teammateType;
         experience = 0;
         level = 1;
         nextLevelThreshold = LevelThresholds.Thresholds[0];
@@ -33,14 +34,24 @@ public class Experience : MonoBehaviour {
         {
             experience += amount;
 
-            if (experience >= nextLevelThreshold)
+            while (experience >= nextLevelThreshold && level < LevelThresholds.Thresholds.Count + 1)
             {
                 level++;
-                nextLevelThreshold = LevelThresholds.Thresholds[nextThresholdPosition];
-                nextThresholdPosition++;
+                //level up func
+                levelUpAnimation();
+                if (nextThresholdPosition < LevelThresholds.Thresholds.Count)
+                {
+                    nextLevelThreshold = LevelThresholds.Thresholds[nextThresholdPosition];
+                    nextThresholdPosition++;
+                }
                 UpdateSkills();
             }
         }
+    }
+
+    private void levelUpAnimation()
+    {
+        core.LevelUp();
     }
 
     private void UpdateSkills()
@@ -122,24 +133,28 @@ public class Experience : MonoBehaviour {
                 control.healthPerSec = 2f;
                 break;
             case 3:
+                control.maxPills++;
                 break;
             case 4:
                 control.healthPerSec = 3f;
                 break;
             case 5:
                 control.researchBuff = 1.5f;
+                control.maxPills++;
                 break;
             case 6:
                 control.healthPerSec = 4f;
                 break;
             case 7:
                 control.researchBuff = 2.0f;
+                control.maxPills++;
                 break;
             case 8:
                 control.healthPerSec = 5f;
                 break;
             case 9:
                 control.researchBuff = 2.5f;
+                control.maxPills++;
                 break;
             case 10:
                 control.researchBuff = 3f;
