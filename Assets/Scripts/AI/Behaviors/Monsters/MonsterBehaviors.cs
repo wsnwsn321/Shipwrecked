@@ -176,4 +176,12 @@ public class MonsterBehaviors : GenericBehaviors
     }
 
     #endregion
+
+    void OnCollisionEnter(Collision collision)
+    {
+        if (collision.transform.CompareTag("MonsterSpawner"))
+        {
+            Physics.IgnoreCollision(GetComponent<Collider>(), collision.collider, ignore: true);
+        }
+    }
 }
