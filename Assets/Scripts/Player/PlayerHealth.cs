@@ -22,8 +22,8 @@ public class PlayerHealth : Photon.MonoBehaviour {
     public enum EnemyAttackType
     {
         NONE = 0,
-        CRAB_ALIEN = 20,
-        SPIDER_BRAIN = 10
+        CRAB_ALIEN = 10,
+        SPIDER_BRAIN = 20
     };
 
     // Update is called once per frame

@@ -24,11 +24,16 @@ public class DoctorControl : Photon.MonoBehaviour, IClassControl {
 	private Animator animator;
 	private PlayerHealth allieHP;
 
-    void Start()
+    void Update()
     {
-        heal = false;
-        pills = new List<GameObject>();
-		animator = GetComponent<CoreControl>().GetAnimator();
+		if (animator == null) {
+			heal = false;
+			pills = new List<GameObject> ();
+			animator = GetComponent<CoreControl> ().GetAnimator ();
+			if (animator == null) {
+				Debug.Log ("ERROR! Doctor cannot retrieve its animator");
+			}
+		}
     }
 
     void ThrowPill()
@@ -41,7 +46,9 @@ public class DoctorControl : Photon.MonoBehaviour, IClassControl {
                 animator.SetTrigger("Ability1");
             }
 			GameObject currentPill = PhotonNetwork.connected ? PhotonNetwork.Instantiate(pill.name, new Vector3(transform.position.x, transform.position.y + 1f, transform.position.z), Quaternion.identity, 0) :Instantiate(pill, new Vector3(transform.position.x, transform.position.y + 1f, transform.position.z), Quaternion.identity);
-            Physics.IgnoreCollision(this.GetComponent<BoxCollider>(), currentPill.GetComponent<CapsuleCollider>());
+			currentPill.GetComponent<Increase> ().player = PhotonNetwork.player;
+			currentPill.GetComponent<Increase> ().thrower = this.gameObject;
+			Physics.IgnoreCollision(this.GetComponent<BoxCollider>(), currentPill.GetComponent<CapsuleCollider>());
             currentPill.GetComponent<Rigidbody>().velocity = GetComponent<Control>().main_c.transform.forward * 10;
             pills.Add(currentPill);
 
