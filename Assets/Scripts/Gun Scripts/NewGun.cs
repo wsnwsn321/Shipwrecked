@@ -11,6 +11,10 @@ public class NewGun : PlayerManager {
 	private GameObject camera;
 	public LayerMask hitMask;
 
+    // Core Control Modifiers
+    private CoreControl core;
+    private float baseDamage;
+
 	private Vector3 charOffset = new Vector3 (-3.5f, -2f, 0f);
 
 	private float nextTimeToFire = 0f;
@@ -29,6 +33,23 @@ public class NewGun : PlayerManager {
 		crosshairPrefab = Instantiate (crosshairPrefab);
 		newCamSpot = this.GetComponentInParent<Control> ().main_c;
 
+        core = GetComponentInParent<CoreControl>();
+        TeammateTypes characterType = GetComponentInParent<EntityType>().teammateType;
+        switch (characterType)
+        {
+            case TeammateTypes.Captain:
+                baseDamage = 2f;
+                break;
+            case TeammateTypes.Doctor:
+                baseDamage = 2.5f;
+                break;
+            case TeammateTypes.Engineer:
+                baseDamage = 15f;
+                break;
+            case TeammateTypes.Sergeant:
+                baseDamage = 2.5f;
+                break;
+        }
 	}
 
 	void Update () {
@@ -83,7 +104,7 @@ public class NewGun : PlayerManager {
 			Debug.Log(hit.transform.name); //This will display what is hit by the raycast
 			Enemy enemy = hit.transform.GetComponent<Enemy> ();
 			if (enemy != null) {
-				enemy.TakeDamage (damage);
+				enemy.TakeDamage (baseDamage * core.damageModifier);
                 enemy.AddAttacker(transform.parent);
 			}
 			GameObject impactGO = Instantiate (impactEffect, hit.point, Quaternion.LookRotation (hit.normal));

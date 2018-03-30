@@ -367,6 +367,14 @@ public class CoreControl : MonoBehaviour {
 		}
 
 	}
+    public void LevelUp()
+    {
+        if (animator)
+        {
+            animator.SetTrigger("LevelUp");
+        }
+
+    }
 
     #endregion Actions
 
