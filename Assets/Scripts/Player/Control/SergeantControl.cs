@@ -149,6 +149,11 @@ public class SergeantControl : MonoBehaviour, IClassControl
 		return true;
 	}
 
+    public bool OverrideAbility2()
+    {
+        return false;
+    }
+
     public void FixedUpdateActions(float deltaTime)
     {
         if (healing)

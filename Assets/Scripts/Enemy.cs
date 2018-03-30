@@ -59,10 +59,12 @@ public class Enemy : Photon.MonoBehaviour {
 		if (stream.isWriting)
 		{
 			stream.SendNext (health);
+            stream.SendNext(isDead);
 		}
 		else
 		{
 			health = (float)stream.ReceiveNext();
+            isDead = (bool)stream.ReceiveNext();
 		}
 		if (health <= 0f && !isDead) {
 			print ("DIED");

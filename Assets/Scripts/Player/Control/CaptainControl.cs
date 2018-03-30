@@ -187,6 +187,11 @@ public class CaptainControl : Photon.MonoBehaviour, IClassControl
 		return true;
 	}
 
+    public bool OverrideAbility2()
+    {
+        return false;
+    }
+
     public void FixedUpdateActions(float deltaTime)
     {
         // TODO

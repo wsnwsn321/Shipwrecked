@@ -267,11 +267,21 @@ public class MechanicControl : MonoBehaviour, IClassControl {
 	{
 		if (currentPlaceableObject)
 		{
-			return true;
+			return false;
 		}
 
-		return false;
+		return true;
 	}
+
+    public bool OverrideAbility2()
+    {
+        if (currentPlaceableObject)
+        {
+            return true;
+        }
+
+        return false;
+    }
 
     public void FixedUpdateActions(float deltaTime)
     {

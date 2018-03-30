@@ -50,6 +50,8 @@ public interface IClassControl {
 
 	bool CanUseAbility2();
 
+    bool OverrideAbility2();
+
     void FixedUpdateActions(float deltaTime);
 
     void StopAction();

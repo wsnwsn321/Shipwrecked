@@ -188,11 +188,17 @@ public class Control : Photon.MonoBehaviour {
         }
 
 		// Activate Ability 2
-		if (Input.GetKeyDown(KeyCode.E) && !coreControl.IsAiming() && classControl.CanUseAbility2())
+		if (Input.GetKeyDown(KeyCode.E) && !coreControl.IsAiming())
 		{
-			classControl.Activate(SpecialAbility.HealingCircle);
-			classControl.Activate(SpecialAbility.Build);
-			classControl.Activate(SpecialAbility.KnockBack);
+            if (classControl.OverrideAbility2())
+            {
+                classControl.Activate(SpecialAbility.Build);
+            }
+            else if (coreControl.hasSpecialAbility && classControl.CanUseAbility2())
+            {
+                classControl.Activate(SpecialAbility.HealingCircle);
+                classControl.Activate(SpecialAbility.KnockBack);
+            }
 		}
 
         // Moving

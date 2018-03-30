@@ -182,6 +182,11 @@ public class DoctorControl : Photon.MonoBehaviour, IClassControl {
 		return !heal;
 	}
 
+    public bool OverrideAbility2()
+    {
+        return false;
+    }
+
     public void FixedUpdateActions(float deltaTime)
     {
         // TODO
