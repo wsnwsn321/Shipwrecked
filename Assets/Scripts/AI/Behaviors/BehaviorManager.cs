@@ -29,6 +29,14 @@ public class BehaviorManager : MonoBehaviour {
 
     void Awake()
     {
+        if (PhotonNetwork.connected)
+        {
+            if (!PhotonNetwork.isMasterClient)
+            {
+                return;
+            }
+        }
+
         if (!spaceship)
         {
             spaceship = GameObject.FindGameObjectWithTag("Spaceship").transform;
@@ -85,6 +93,14 @@ public class BehaviorManager : MonoBehaviour {
 
     void Update()
     {
+        if (PhotonNetwork.connected)
+        {
+            if (!PhotonNetwork.isMasterClient)
+            {
+                return;
+            }
+        }
+
         if (behavior.enabled)
         {
             behavior.Behave();
