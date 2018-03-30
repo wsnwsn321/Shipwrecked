@@ -84,6 +84,7 @@ public class NewGun : PlayerManager {
 			Enemy enemy = hit.transform.GetComponent<Enemy> ();
 			if (enemy != null) {
 				enemy.TakeDamage (damage);
+                enemy.AddAttacker(transform.parent);
 			}
 			GameObject impactGO = Instantiate (impactEffect, hit.point, Quaternion.LookRotation (hit.normal));
 			//impactGO.GetComponent<ParticleSystem> ().Play ();

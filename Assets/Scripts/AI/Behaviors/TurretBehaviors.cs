@@ -164,6 +164,7 @@ public class TurretBehaviors : GenericBehaviors
         {
             StartCoroutine(KickBack(gun));
             target.TakeDamage(damage);
+            target.AddAttacker(transform);
             yield return new WaitForSeconds(shootingDelay / guns.Count);
         }
 
@@ -212,6 +213,7 @@ public class TurretBehaviors : GenericBehaviors
             if (gunRotationSpeed >= 0.6 * maxGunRotationSpeed)
             {
                 target.TakeDamage(damage);
+                target.AddAttacker(transform);
             }
 
             yield return new WaitForSeconds(0.1f * (maxGunRotationSpeed / gunRotationSpeed));

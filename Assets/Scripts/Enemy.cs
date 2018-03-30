@@ -66,6 +66,7 @@ public class Enemy : Photon.MonoBehaviour {
 			health = (float)stream.ReceiveNext();
             isDead = (bool)stream.ReceiveNext();
 		}
+
 		if (health <= 0f && !isDead) {
 			print ("DIED");
 			Die ();
@@ -74,7 +75,14 @@ public class Enemy : Photon.MonoBehaviour {
 
     public void TakeDamage(float amount){
 		health -= amount;
-
+        if (!PhotonNetwork.connected)
+        {
+            if (health <= 0f && !isDead)
+            {
+                print("DIED");
+                Die();
+            }
+        }
 	}
 
     public void AddAttacker(Transform attacker)
@@ -120,6 +128,12 @@ public class Enemy : Photon.MonoBehaviour {
 
     void AllocateExp()
     {
+        print(characterAttackers.Count);
+        if (characterAttackers.Count > 0)
+        {
+            print(characterAttackers[0].gameObject.name);
+        }
+        
         int expToAllocate = 0;
         switch(monsterType)
         {
