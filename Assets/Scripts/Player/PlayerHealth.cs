@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class PlayerHealth : Photon.MonoBehaviour {
 
-    public int health = 100;
+    public float health = 100;
     public int earthDwellerDmg = 20;
 
     private Text healthText;
@@ -14,6 +14,7 @@ public class PlayerHealth : Photon.MonoBehaviour {
 	CoreControl corecontrol;
     private float timeColliding;
     public float timeThreshold = 1f;
+	private GameObject peace;
 
     public EnemyAttackType enemyAttackType = EnemyAttackType.NONE;
 
@@ -41,6 +42,14 @@ public class PlayerHealth : Photon.MonoBehaviour {
             enemyAttackType = EnemyAttackType.NONE;
         }
         checkHealth();
+
+		//for the second ability of doctor to use
+		peace = transform.GetChild(5).gameObject;
+		if (peace.activeSelf) {
+			health += 0.1025f;
+			updateHealthText();
+			updateHealthBar();
+		}
 	}
 
 	public void updateHealthText()
@@ -53,9 +62,9 @@ public class PlayerHealth : Photon.MonoBehaviour {
 		} else if (health > 100) {
 			health = 100;
 		}
-			PhotonNetwork.player.SetScore (health);
+		PhotonNetwork.player.SetScore ((int)health);
 			UIManager.updateUI = true;
-			healthText.text = health.ToString () + "/100";
+		healthText.text = Mathf.Floor (health).ToString () + "/100";
 		//}
     }
 
@@ -74,8 +83,6 @@ public class PlayerHealth : Photon.MonoBehaviour {
 			corecontrol.DieOnGround();
 			this.gameObject.layer = 16;
 		}
-
-	
-
     }
+		
 }

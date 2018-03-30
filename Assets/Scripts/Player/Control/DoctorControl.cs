@@ -22,6 +22,7 @@ public class DoctorControl : Photon.MonoBehaviour, IClassControl {
     private List<GameObject> pills;
     private bool heal;
 	private Animator animator;
+	private PlayerHealth allieHP;
 
     void Start()
     {
@@ -59,7 +60,6 @@ public class DoctorControl : Photon.MonoBehaviour, IClassControl {
 			Collider[] players = Physics.OverlapSphere (transform.position, 15f,layerMask, QueryTriggerInteraction.Collide);
 			Debug.Log (players.Length);
 			for(int i=0;i<players.Length;i++){
-				Debug.Log (players[i].name);
 				healEffect = players [i].transform.GetChild (5).gameObject;
 				healEffect.SetActive (true);
 				//healing = PhotonNetwork.connected? PhotonNetwork.Instantiate(healEffect.name, players[i].transform.position, Quaternion.identity,0) :Instantiate(healEffect,  players[i].transform.position, Quaternion.identity);
