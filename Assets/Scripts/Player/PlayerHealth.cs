@@ -55,15 +55,19 @@ public class PlayerHealth : Photon.MonoBehaviour {
 	public void updateHealthText()
     {
 		//if (photonView.isMine) {
-			health -= (int)enemyAttackType;
-			enemyAttackType = EnemyAttackType.NONE;
+		health -= (int)enemyAttackType;
+		enemyAttackType = EnemyAttackType.NONE;
+
 		if (health < 0) {
 			health = 0;
 		} else if (health > 100) {
 			health = 100;
 		}
-		PhotonNetwork.player.SetScore ((int)health);
+		if (PhotonNetwork.connected) {
+			// Only necessary in multiplayer
+			PhotonNetwork.player.SetScore ((int)health);
 			UIManager.updateUI = true;
+		}
 		healthText.text = Mathf.Floor (health).ToString () + "/100";
 		//}
     }
@@ -71,7 +75,7 @@ public class PlayerHealth : Photon.MonoBehaviour {
 	public void updateHealthBar()
     {
 		//if (photonView.isMine) {
-			healthBar.value = health;
+		healthBar.value = health;
 		//}
     }
 
