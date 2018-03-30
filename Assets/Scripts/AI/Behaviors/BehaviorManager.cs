@@ -19,7 +19,7 @@ public class BehaviorManager : MonoBehaviour {
 
     GenericBehaviors behavior;
 
-    public Transform spaceship;
+    public static Transform spaceship;
 
     public float wanderRandomlyRadius;
     public float wanderAheadRadius;
@@ -29,6 +29,10 @@ public class BehaviorManager : MonoBehaviour {
 
     void Awake()
     {
+        if (!spaceship)
+        {
+            spaceship = GameObject.FindGameObjectWithTag("Spaceship").transform;
+        }
         EntityType types = GetComponent<EntityType>();
         EntityTypes type = types.type;
         switch(type)

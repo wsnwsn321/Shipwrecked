@@ -110,9 +110,9 @@ public class MonsterBehaviors : GenericBehaviors
         }
         else
         {
-            if (bm.spaceship)
+            if (BehaviorManager.spaceship)
             {
-                Pursue.Target(bm.spaceship.position, ai, seeker, previousDestination, isPursuing);
+                Pursue.Target(BehaviorManager.spaceship.position, ai, seeker, previousDestination, isPursuing);
 
                 if (!isPursuing)
                 {

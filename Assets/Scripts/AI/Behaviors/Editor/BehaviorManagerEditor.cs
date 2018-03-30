@@ -16,7 +16,7 @@ public class BehaviorManagerEditor : Editor {
         if (entityType.type == EntityTypes.Monster)
         {
             EditorGUILayout.LabelField("Spaceship");
-            bm.spaceship = (Transform)EditorGUILayout.ObjectField(bm.spaceship, typeof(Transform), true);
+            BehaviorManager.spaceship = (Transform)EditorGUILayout.ObjectField(BehaviorManager.spaceship, typeof(Transform), true);
         }
 
         if (entityType.type == EntityTypes.Monster || entityType.type == EntityTypes.Teammate)
