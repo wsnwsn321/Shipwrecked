@@ -115,6 +115,14 @@ public class LobbyNetworkManager : Photon.MonoBehaviour {
 
 		// Only the host may start the game
 		if (PhotonNetwork.isMasterClient) {
+			/*
+			 * Prevent late join-in
+			 */
+			// Makes it so the lobby cannot be seen from the list of available rooms
+			PhotonNetwork.room.IsVisible = false;
+			// Makes it so that the lobby cannot be joined by others
+			PhotonNetwork.room.IsOpen = false;
+
 			PhotonNetwork.LoadLevel (GameObject.Find ("NavigationManager").GetComponent<NavigationManager> ().sceneOnStart);
 		} else {
 			// Tell everyone that the player is ready
@@ -142,9 +150,9 @@ public class LobbyNetworkManager : Photon.MonoBehaviour {
 			wrm.AddPlayerToList (other);
 			// Hide and close the room if it is full
 			if (playerCount == MaxPlayersPerRoom) {
-				PhotonNetwork.room.IsVisible = true;
+				PhotonNetwork.room.IsVisible = false;
 				PhotonNetwork.room.IsOpen = false;
-			}
+			} 
 		}
 	}
 
