@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NewPickupItem : MonoBehaviour {
+public class NewPickupItem : Photon.PunBehaviour {
 
 	void OnTriggerEnter(Collider collider){
 
@@ -19,8 +19,13 @@ public class NewPickupItem : MonoBehaviour {
 
 	}
 
+	[PunRPC]
 	void PickUp(Transform item) {
-		OnPickup (item);
+		if (PhotonNetwork.connected) {
+			photonView.RPC ("OnPickup", PhotonTargets.All, item);
+		} else {
+			OnPickup (item);
+		}
 	}
 
 }
