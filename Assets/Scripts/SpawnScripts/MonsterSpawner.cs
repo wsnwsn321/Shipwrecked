@@ -21,20 +21,24 @@ public class MonsterSpawner : MonoBehaviour {
         spawnPoint.y = 0;
         spawnPoint += transform.position;
 
-        if (monsters[index].monster)
-        {
-            GameObject monster;
+		if (monsters [index].monster) {
+			GameObject monster;
 			if (PhotonNetwork.connected) {
 				if (PhotonNetwork.isMasterClient) {
 					monster = PhotonNetwork.Instantiate (monsters [index].monster.name, spawnPoint, transform.rotation, 0);
-				} 
-			}else
-            {
-                monster = Instantiate(monsters[index].monster, spawnPoint, transform.rotation);
-            }
-
-            monster.transform.SetParent(monsterContainer.transform);
-			monster.GetComponent<Enemy>().spawnManager = gameObject.GetComponentInParent<MonsterSpawnManager>();
-        }
+				} else {
+					// This line is added to fix compiler errors "Use of unassigned monster". 
+					monster = null;
+				}
+			} else {
+				// Singleplayer case
+				monster = Instantiate (monsters [index].monster, spawnPoint, transform.rotation);
+			}
+			// This if-statement protects from the case where a non-master client player tries to spawn a monster
+			if (monster) {
+				monster.transform.SetParent (monsterContainer.transform);
+				monster.GetComponent<Enemy> ().spawnManager = gameObject.GetComponentInParent<MonsterSpawnManager> ();
+			}
+		}
     }
 }

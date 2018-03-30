@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using PlayerAbilities;
 using UnityEngine;
 
-public class CaptainControl : MonoBehaviour, IClassControl
+public class CaptainControl : Photon.MonoBehaviour, IClassControl
 {
 	[Range(0f, 10f)]
 	public float RampageCooldown = 10f;
@@ -33,7 +33,12 @@ public class CaptainControl : MonoBehaviour, IClassControl
 			if (animator) {
 				animator.SetTrigger("Ability1");
 			}
-			flaming = PhotonNetwork.connected? PhotonNetwork.Instantiate(flame.name, transform.position, Quaternion.identity,0) :Instantiate(flame, transform.position, Quaternion.identity);
+			if (PhotonNetwork.connected && photonView.isMine) {
+				// The player who activates the skill instantiates the flame over the network so everyone can see it
+				flaming = PhotonNetwork.Instantiate (flame.name, transform.position, Quaternion.identity, 0);
+			} else {
+				flaming = Instantiate (flame, transform.position, Quaternion.identity);
+			}
 			flaming.transform.parent = transform;
 			corecontrol.rampage = true;
 			StartCoroutine(HealForTime());
