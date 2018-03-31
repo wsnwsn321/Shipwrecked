@@ -35,21 +35,24 @@ public class NewGun : PlayerManager {
 
         core = GetComponentInParent<CoreControl>();
         TeammateTypes characterType = GetComponentInParent<EntityType>().teammateType;
+        print(characterType);
         switch (characterType)
         {
             case TeammateTypes.Captain:
-                baseDamage = 2f;
+                baseDamage = 3f;
                 break;
             case TeammateTypes.Doctor:
-                baseDamage = 2.5f;
+                baseDamage = 5f;
                 break;
             case TeammateTypes.Engineer:
-                baseDamage = 15f;
+                baseDamage = 30f;
                 break;
             case TeammateTypes.Sergeant:
-                baseDamage = 2.5f;
+                baseDamage = 5f;
                 break;
         }
+        print("Base damage = " + baseDamage);
+        print("Damage modifier = " + core.damageModifier);
 	}
 
 	void Update () {

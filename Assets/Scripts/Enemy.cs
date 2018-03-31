@@ -59,29 +59,22 @@ public class Enemy : Photon.MonoBehaviour {
 		if (stream.isWriting)
 		{
 			stream.SendNext (health);
-            stream.SendNext(isDead);
 		}
 		else
 		{
 			health = (float)stream.ReceiveNext();
-            isDead = (bool)stream.ReceiveNext();
 		}
 
 		if (health <= 0f && !isDead) {
-			print ("DIED");
 			Die ();
 		}
 	}
 
     public void TakeDamage(float amount){
 		health -= amount;
-        if (!PhotonNetwork.connected)
+        if (health <= 0f && !isDead)
         {
-            if (health <= 0f && !isDead)
-            {
-                print("DIED");
-                Die();
-            }
+            Die();
         }
 	}
 
@@ -118,9 +111,14 @@ public class Enemy : Photon.MonoBehaviour {
         return mostRecentCharacterAttacker;
     }
 
-	void Die(){
+	void Die() {
 		crab_ani.SetTrigger("die");
         isDead = true;
+        foreach (Transform child in transform)
+        {
+            child.gameObject.layer = LayerMask.NameToLayer("Dead");
+        }
+        
         Destroy (gameObject,2f);
 		UpdateMonsterAmount ();
         AllocateExp();
@@ -128,12 +126,6 @@ public class Enemy : Photon.MonoBehaviour {
 
     void AllocateExp()
     {
-        print(characterAttackers.Count);
-        if (characterAttackers.Count > 0)
-        {
-            print(characterAttackers[0].gameObject.name);
-        }
-        
         int expToAllocate = 0;
         switch(monsterType)
         {

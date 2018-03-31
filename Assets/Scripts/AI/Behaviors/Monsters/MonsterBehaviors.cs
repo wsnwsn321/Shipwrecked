@@ -63,18 +63,14 @@ public class MonsterBehaviors : GenericBehaviors
                 }
             }
 
-            Pursue.Target(nearestAttacker.position, ai, seeker, previousDestination, isPursuing);
+            Pursue.OverrideTarget(nearestAttacker.position, ai, seeker, previousDestination, isPursuing);
 
+            behaviors.Clear();
             if (!isPursuing)
             {
                 wanderTime = 0;
                 isPursuing = true;
-                behaviors.Add(Behaviors.PursueTarget);
-            }
-            else
-            {
-                behaviors.Remove(Behaviors.PursueNearest);
-                behaviors.Remove(Behaviors.PursueShip);
+                behaviors.Add(Behaviors.PursueAttacker);
             }
         }
         else if (fov.visibleTargets.Count > 0)
@@ -93,75 +89,48 @@ public class MonsterBehaviors : GenericBehaviors
             //        visibleTurrets.Add(fov.visibleTargets[i]);
             //    }
             //}
+            
+            if (IsPursuingShip() || IsPursuingNearest())
+            {
+                Pursue.Nearest(fov, ai, seeker, previousDestination, isPursuing, overridePath: true);
+            } else
+            {
+                Pursue.Nearest(fov, ai, seeker, previousDestination, isPursuing);
+            }
 
-            Pursue.Nearest(fov, ai, seeker, previousDestination, isPursuing);
-
+            behaviors.Clear();
             if (!isPursuing)
             {
                 wanderTime = 0;
                 isPursuing = true;
                 behaviors.Add(Behaviors.PursueNearest);
             }
-            else
-            {
-                behaviors.Remove(Behaviors.PursueShip);
-                behaviors.Remove(Behaviors.PursueTarget);
-            }
         }
         else
         {
-            if (BehaviorManager.spaceship)
+            if (BehaviorManager.spaceship && !IsPursuing())
             {
                 Pursue.Target(BehaviorManager.spaceship.position, ai, seeker, previousDestination, isPursuing);
 
+                behaviors.Clear();
                 if (!isPursuing)
                 {
                     wanderTime = 0;
                     isPursuing = true;
                     behaviors.Add(Behaviors.PursueShip);
                 }
-                else
-                {
-                    behaviors.Remove(Behaviors.PursueNearest);
-                    behaviors.Remove(Behaviors.PursueTarget);
-                }
             }
             else if (wanderTime > maxWanderTime)
             {
                 wanderTime -= maxWanderTime;
                 overridePath = true;
-            } else
+            }
+            else
             {
-                wanderTime += Time.deltaTime;
-
-                float wanderChance = UnityEngine.Random.Range(0, 1);
-
-                if (wanderChance <= bm.wanderAheadChance)
-                {
-                    if (overridePath)
-                    {
-                        Wander.OverrideAhead(ai, seeker, bm.wanderAheadAngle, bm.wanderAheadDistance, bm.wanderAheadRadius);
-                        overridePath = false;
-                    } else
-                    {
-                        Wander.Ahead(ai, seeker, bm.wanderAheadAngle, bm.wanderAheadDistance, bm.wanderAheadRadius);
-                    }
-                } else
-                {
-                    if (overridePath)
-                    {
-                        Wander.OverrideRandomly(ai, seeker, bm.wanderRandomlyRadius);
-                        overridePath = false;
-                    } else
-                    {
-                        Wander.Randomly(ai, seeker, bm.wanderRandomlyRadius);
-                    }
-                }
-                
+                behaviors.Clear();
                 if (isPursuing)
                 {
                     isPursuing = false;
-                    behaviors.Remove(Behaviors.PursueNearest);
                 }
             }
         }

@@ -8,7 +8,7 @@ public class CoreControl : MonoBehaviour {
     public float nextTimeToFire = 0f;
 
     [HideInInspector]
-    public float damageModifier = 1f;
+    public float damageModifier;
 
     public float fireRate = 15f;
 
@@ -28,6 +28,7 @@ public class CoreControl : MonoBehaviour {
 	private AmmoRemaining ammo;
 
     void Start () {
+        damageModifier = 1f;
         forwardMovement = 0;
         horizontalMovement = 0;
         turnLeft = false;

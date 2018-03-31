@@ -18,6 +18,16 @@ public abstract class GenericBehaviors : Photon.MonoBehaviour
         return behaviors.Contains(Behaviors.Idle);
     }
 
+    public bool IsPursuing()
+    {
+        return IsPursuingAttacker() || IsPursuingNearest() || IsPursuingShip() || IsPursuingTarget();
+    }
+
+    public bool IsPursuingAttacker()
+    {
+        return behaviors.Contains(Behaviors.PursueAttacker);
+    }
+
     public bool IsPursuingNearest()
     {
         return behaviors.Contains(Behaviors.PursueNearest);

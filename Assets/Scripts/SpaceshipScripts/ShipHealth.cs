@@ -8,6 +8,7 @@ public class ShipHealth : Photon.MonoBehaviour {
 	public int health = 1000;
 	public int earthDwellerDmg = 10;
 
+    private int maxHealth;
 	private Text healthText;
 	private Slider healthBar;
 	private bool tookDmg = false;
@@ -15,8 +16,13 @@ public class ShipHealth : Photon.MonoBehaviour {
 	private float timeColliding;
 	public float timeThreshold = 1f;
 
-	// Update is called once per frame
-	void Update () {
+    void Start()
+    {
+        maxHealth = 1000;
+    }
+
+    // Update is called once per frame
+    void Update () {
 		if (healthText == null) {
 			healthText = GameObject.FindGameObjectWithTag("ShipHealthText").GetComponent<Text>();
 			healthBar = GameObject.FindGameObjectWithTag("ShipHealthBar").GetComponent<Slider>();
@@ -47,7 +53,7 @@ public class ShipHealth : Photon.MonoBehaviour {
 
 	private void updateHealthText()
 	{
-		healthText.text = health.ToString() + "/1000";
+		healthText.text = health.ToString() + "/" + maxHealth;
 	}
 
 	private void updateHealthBar()

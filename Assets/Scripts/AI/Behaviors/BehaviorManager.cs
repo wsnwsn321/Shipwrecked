@@ -7,6 +7,7 @@ public enum Behaviors
 {
     Attack,
     Idle,
+    PursueAttacker,
     PursueNearest,
     PursueShip,
     PursueTarget,

@@ -12,7 +12,6 @@ public class Pursue {
             // Only find a path if the AI is currently not pursuing or if it is pursuing and hasn't reached its target. 
             if (!isPursuing || (isPursuing && !ai.reachedEndOfPath))
             {
-                seeker.CancelCurrentPathRequest();
                 ai.destination = targetPosition;
 
                 // Only update the path if the destination changes.
@@ -39,9 +38,28 @@ public class Pursue {
         }
     }
 
-    // Sets the path to pursue the nearest target.
-    public static void Nearest(FieldOfView fov, IAstarAI ai, Seeker seeker, Vector3 previousDestination, bool isPursuing)
+    // Set the path to pursue a target.
+    public static void OverrideTarget(Vector3 targetPosition, IAstarAI ai, Seeker seeker, Vector3 previousDestination, bool isPursuing)
     {
-        Target(fov.nearestTarget.position, ai, seeker, previousDestination, isPursuing);
+        ai.canSearch = true;
+        ai.destination = targetPosition;
+
+        // Only update the path if the destination changes.
+        if (!(ai.destination == previousDestination))
+        {
+            ai.SearchPath();
+        }
+    }
+
+    // Sets the path to pursue the nearest target.
+    public static void Nearest(FieldOfView fov, IAstarAI ai, Seeker seeker, Vector3 previousDestination, bool isPursuing, bool overridePath = false)
+    {
+        if (overridePath)
+        {
+            OverrideTarget(fov.nearestTarget.position, ai, seeker, previousDestination, isPursuing);
+        } else
+        {
+            Target(fov.nearestTarget.position, ai, seeker, previousDestination, isPursuing);
+        }
     }
 }
