@@ -19,6 +19,7 @@ public class CaptainControl : Photon.MonoBehaviour, IClassControl
 
 	private Animator animator;
 	private Animator enemy_animator;
+	private brain_control bc;
 	public GameObject flame;
 	private GameObject flaming;
 	private animation shoot;
@@ -70,6 +71,10 @@ public class CaptainControl : Photon.MonoBehaviour, IClassControl
 						enemy_animator = enemies [i].GetComponent<Animator> ();
 						enemy_animator.SetTrigger ("stunned");
 						StartCoroutine (WaitForStun ());
+					} else if (enemies [i].tag == "SpiderBrain") {
+						bc = enemies[i].GetComponentInChildren<brain_control> ();
+						bc.stunned = true;
+						StartCoroutine (WaitForStunBrain ());
 					}
 				}
 
@@ -116,6 +121,11 @@ public class CaptainControl : Photon.MonoBehaviour, IClassControl
 	{
 		yield return new WaitForSeconds(EnemyStunnedTime);
 		enemy_animator.SetTrigger ("getUp");
+	}
+	IEnumerator WaitForStunBrain()
+	{
+		yield return new WaitForSeconds(EnemyStunnedTime);
+		bc.stunned = false;
 	}
 
     #region Inherited Methods

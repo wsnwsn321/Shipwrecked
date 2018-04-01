@@ -14,6 +14,7 @@ public class brain_control : MonoBehaviour {
     private Animator Player_ani;
 	private GameObject player_hit;
 	private float nextAttack = 0f;
+	public bool stunned, dead;
 
 	public float attackCooldown = 2.5f;
     void Start () {
@@ -22,6 +23,8 @@ public class brain_control : MonoBehaviour {
         ap = GetComponentInParent<AIPath>();
         collide = false;
         distance = 10f;
+		stunned = false;
+		dead = false;
     }
 	
 	// Update is called once per frame
@@ -35,11 +38,6 @@ public class brain_control : MonoBehaviour {
 			an.Play("Walk");
             ap.maxSpeed = 1;
         }
-
-		if (an.IsPlaying("Die_3"))
-		{
-			ap.maxSpeed = 0;
-		}
 		if (player_hit != null) {
 			distance = Vector3.Distance(transform.position, player_hit.transform.position);
 
@@ -51,35 +49,52 @@ public class brain_control : MonoBehaviour {
 			Physics.IgnoreCollision (GetComponent<BoxCollider>(), player_hit.GetComponent<BoxCollider> ());
 		}
 
-		if (collide && fov.visibleTargets.Count > 0) {
-			if (!Player_ani.GetCurrentAnimatorStateInfo (0).IsName ("Die")) {
-				ap.maxSpeed = 0;
-				an.Play ("Attack_2");
-				setEnemyAttackType ();
-				if (!Player_ani.GetCurrentAnimatorStateInfo (0).IsName ("Hitted")) {
-
-					Player_ani.SetTrigger ("Hit");
-				}
-			} else {
-				an.Play ("Walk");
-				ap.maxSpeed = 1;
-			}
-
-
+		if (player_hit != null && player_hit.layer == 10) {
+			Physics.IgnoreCollision (GetComponent<BoxCollider>(), player_hit.GetComponent<BoxCollider> (),false);
 		}
 
-		else{
-            an.Play("Walk");
-            if (fov.visibleTargets.Count > 0)
-            {
-                ap.maxSpeed = 3;
-            }
-            else
-            {
-                ap.maxSpeed = 1;
-            }
-        }
+		if (stunned) {
+			an.Play ("Die_2");
+			StartCoroutine (StunTimer ());
+			ap.maxSpeed = 0;
+		} else if (dead) {
+			an.Play ("Die_3");
+			ap.maxSpeed = 0;
+		} else {
+
+			if (collide && fov.visibleTargets.Count > 0) {
+				if (!Player_ani.GetCurrentAnimatorStateInfo (0).IsName ("Die")) {
+					ap.maxSpeed = 0;
+					an.Play ("Attack_2");
+					setEnemyAttackType ();
+					if (!Player_ani.GetCurrentAnimatorStateInfo (0).IsName ("Hitted")) {
+
+						Player_ani.SetTrigger ("Hit");
+					}
+				} else {
+					an.Play ("Walk");
+					ap.maxSpeed = 1;
+				}
+
+
+			} else {
+				an.Play ("Walk");
+				if (fov.visibleTargets.Count > 0) {
+					ap.maxSpeed = 3;
+				} else {
+					ap.maxSpeed = 1;
+				}
+			}
+		}
+
+
     }
+
+	IEnumerator StunTimer()
+	{
+		yield return new WaitForSeconds(0.5f);
+		an.Stop ();
+	}
 
     void OnCollisionEnter(Collision collision)
     {
