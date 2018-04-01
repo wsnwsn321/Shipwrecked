@@ -115,8 +115,20 @@ public class MechanicControl : MonoBehaviour, IClassControl {
         isBuilding = true;
         Destroy(currentPlaceableObject);
         currentPlaceableObject = null;
-        currentTurret = Instantiate(turrets[currentTurretBuildLevel], buildPosition, Quaternion.identity);
+
+        if (PhotonNetwork.connected)
+        {
+            currentTurret = PhotonNetwork.Instantiate(turrets[currentTurretBuildLevel].name, buildPosition, Quaternion.identity, 0);
+        }
+        else
+        {
+            currentTurret = Instantiate(turrets[currentTurretBuildLevel], buildPosition, Quaternion.identity);
+        }
+        
+
+
         TurretBehaviors turretStats = currentTurret.GetComponent<TurretBehaviors>();
+        turretStats.engineer = gameObject;
         turretStats.damage = turretDamage;
         turretStats.health = turretHealth;
         turretStats.turretLevel = currentTurretBuildLevel;
@@ -147,7 +159,15 @@ public class MechanicControl : MonoBehaviour, IClassControl {
 
     void CreateTurretGhost()
     {
-        currentPlaceableObject = Instantiate(turretGhosts[currentTurretBuildLevel], buildPosition, Quaternion.identity);
+        if (PhotonNetwork.connected)
+        {
+            currentPlaceableObject = PhotonNetwork.Instantiate(turretGhosts[currentTurretBuildLevel].name, buildPosition, Quaternion.identity, 0);
+        }
+        else
+        {
+            currentPlaceableObject = Instantiate(turretGhosts[currentTurretBuildLevel], buildPosition, Quaternion.identity);
+        }
+
         currentPlaceableObject.GetComponent<Placement>().builderCoreControl = gameObject.GetComponent<CoreControl>();
     }
 

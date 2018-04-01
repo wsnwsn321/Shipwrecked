@@ -15,6 +15,8 @@ public class TurretBehaviors : GenericBehaviors
     public float health = 20f;
     [HideInInspector]
     public int turretLevel;
+    [HideInInspector]
+    public GameObject engineer;
 
     private bool isGatling;
     private FieldOfView fov;
@@ -158,13 +160,12 @@ public class TurretBehaviors : GenericBehaviors
             target = fov.nearestTarget.GetComponentInParent<Enemy>();
         }
 
-        target.AddAttacker(transform);
-
         foreach (Transform gun in guns)
         {
             StartCoroutine(KickBack(gun));
             target.TakeDamage(damage);
             target.AddAttacker(transform);
+            target.AddCharacterAttacker(engineer.transform);
             yield return new WaitForSeconds(shootingDelay / guns.Count);
         }
 
@@ -214,9 +215,10 @@ public class TurretBehaviors : GenericBehaviors
             {
                 target.TakeDamage(damage);
                 target.AddAttacker(transform);
+                target.AddCharacterAttacker(engineer.transform);
             }
 
-            yield return new WaitForSeconds(0.1f * (maxGunRotationSpeed / gunRotationSpeed));
+            yield return new WaitForSeconds(0.0833f * (maxGunRotationSpeed / gunRotationSpeed));
         }
 
         isShooting = false;

@@ -92,12 +92,19 @@ public class Enemy : Photon.MonoBehaviour {
 
         if (attacker.gameObject.layer == LayerMask.NameToLayer("Character"))
         {
+            AddCharacterAttacker(attacker);
+            mostRecentCharacterAttacker = attacker;
+        }
+    }
+
+    public void AddCharacterAttacker(Transform attacker)
+    {
+        if (attacker.gameObject.layer == LayerMask.NameToLayer("Character"))
+        {
             if (!characterAttackers.Contains(attacker))
             {
                 characterAttackers.Add(attacker);
             }
-
-            mostRecentCharacterAttacker = attacker;
         }
     }
 
