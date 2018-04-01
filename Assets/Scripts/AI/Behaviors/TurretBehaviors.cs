@@ -321,19 +321,4 @@ public class TurretBehaviors : GenericBehaviors
     {
         RotateTurret();
     }
-
-	// This method is responsible for synchronizing the health of the enemy
-	void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
-	{
-		if (stream.isWriting)
-		{
-			stream.SendNext (health);
-		}
-		else
-		{
-			health = (float)stream.ReceiveNext();
-		}
-	}
-
-
 }

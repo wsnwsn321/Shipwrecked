@@ -28,7 +28,6 @@ public class Placement : MonoBehaviour {
         {
             SetMaterial(transform, goodPlacementMaterial);
             canBeBuilt = true;
-            
         } else
         {
             SetMaterial(transform, badPlacementMaterial);
@@ -41,7 +40,6 @@ public class Placement : MonoBehaviour {
 		{
 			SetMaterial(transform, badPlacementMaterial);
 			canBeBuilt = false;
-
 		}
 	}
 

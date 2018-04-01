@@ -30,14 +30,6 @@ public class BehaviorManager : MonoBehaviour {
 
     void Awake()
     {
-        if (PhotonNetwork.connected)
-        {
-            if (!PhotonNetwork.isMasterClient)
-            {
-                return;
-            }
-        }
-
         if (!spaceship)
         {
             spaceship = GameObject.FindGameObjectWithTag("Spaceship").transform;
@@ -87,21 +79,12 @@ public class BehaviorManager : MonoBehaviour {
 			case EntityTypes.Turret:
 				behavior = gameObject.AddComponent<TurretBehaviors> ();
 				behavior.enabled = false;
-				GetComponent<PhotonView> ().ObservedComponents.Add (behavior);
                 break;
         }
     }
 
     void Update()
     {
-        if (PhotonNetwork.connected)
-        {
-            if (!PhotonNetwork.isMasterClient)
-            {
-                return;
-            }
-        }
-
         if (behavior.enabled)
         {
             behavior.Behave();

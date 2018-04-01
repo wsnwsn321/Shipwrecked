@@ -66,18 +66,20 @@ public class MechanicControl : MonoBehaviour, IClassControl {
         unfinishedBuildings = new Dictionary<GameObject, UnfinishedBuilding>();
         ani = GetComponent<Animator>();
     }
-
+    
     List<Transform> ActivateChildren(Transform t)
     {
         List<Transform> children = new List<Transform>();
         foreach (Transform child in t)
         {
             child.gameObject.SetActive(true);
+
             children.Add(child);
 
             // Stop at the prefab's "Gun" level.
             if (child.name.Equals("Gun") || child.name.Equals("RotatingGuns"))
             {
+                child.gameObject.SetActive(true);
                 isBuilding = false;
             }
 
@@ -124,8 +126,6 @@ public class MechanicControl : MonoBehaviour, IClassControl {
         {
             currentTurret = Instantiate(turrets[currentTurretBuildLevel], buildPosition, Quaternion.identity);
         }
-        
-
 
         TurretBehaviors turretStats = currentTurret.GetComponent<TurretBehaviors>();
         turretStats.engineer = gameObject;
@@ -159,14 +159,7 @@ public class MechanicControl : MonoBehaviour, IClassControl {
 
     void CreateTurretGhost()
     {
-        if (PhotonNetwork.connected)
-        {
-            currentPlaceableObject = PhotonNetwork.Instantiate(turretGhosts[currentTurretBuildLevel].name, buildPosition, Quaternion.identity, 0);
-        }
-        else
-        {
-            currentPlaceableObject = Instantiate(turretGhosts[currentTurretBuildLevel], buildPosition, Quaternion.identity);
-        }
+        currentPlaceableObject = Instantiate(turretGhosts[currentTurretBuildLevel], buildPosition, Quaternion.identity);
 
         currentPlaceableObject.GetComponent<Placement>().builderCoreControl = gameObject.GetComponent<CoreControl>();
     }
@@ -176,6 +169,7 @@ public class MechanicControl : MonoBehaviour, IClassControl {
         if (currentPlaceableObject)
         {
             Destroy(currentPlaceableObject);
+            
             currentPlaceableObject = null;
         }
 
@@ -224,7 +218,6 @@ public class MechanicControl : MonoBehaviour, IClassControl {
 
         if (ability == SpecialAbility.Build)
         {
-			Debug.Log ("What'sup");
             BuildTurret();
         }
     }
@@ -308,8 +301,15 @@ public class MechanicControl : MonoBehaviour, IClassControl {
         if (currentPlaceableObject)
         {
             buildPosition = transform.localPosition + transform.forward * buildPositionOffset;
-            Collider[] nearbyTurrets = Physics.OverlapSphere(buildPosition, 0.5f, LayerMask.GetMask("TurretParent"), QueryTriggerInteraction.Collide);
-            if (nearbyTurrets.Length > 0)
+            List<Collider> nearbyTurrets = new List<Collider>(Physics.OverlapSphere(buildPosition, 0.5f, LayerMask.GetMask("TurretParent"), QueryTriggerInteraction.Collide));
+            foreach (Collider turret in nearbyTurrets)
+            {
+                if (!turret.GetComponent<TurretBehaviors>().engineer.Equals(gameObject))
+                {
+                    nearbyTurrets.Remove(turret);
+                }
+            }
+            if (nearbyTurrets.Count > 0)
             {
                 if (currentPlaceableObject.activeSelf)
                 {
@@ -318,7 +318,7 @@ public class MechanicControl : MonoBehaviour, IClassControl {
 
                 Collider nearestTurret = nearbyTurrets[0];
                 float nearestDistance = Vector3.Distance(buildPosition, nearestTurret.transform.position);
-                for (int i = 1; i < nearbyTurrets.Length; i++)
+                for (int i = 1; i < nearbyTurrets.Count; i++)
                 {
                     float distance = Vector3.Distance(buildPosition, nearbyTurrets[i].transform.position);
                     if (distance < nearestDistance)
