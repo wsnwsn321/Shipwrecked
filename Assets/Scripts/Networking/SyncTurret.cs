@@ -31,8 +31,6 @@ public class SyncTurret : MonoBehaviour {
                 for (int i = 0; i < descendants.Count; i++)
                 {
                     descendants[i].gameObject.SetActive((bool)stream.ReceiveNext());
-                    print(descendants[i].name);
-                    print(descendants[i].gameObject.activeSelf);
                     isActive = isActive && descendants[i].gameObject.activeSelf;
                 }
                 gameObject.GetComponent<TurretBehaviors>().enabled = (bool)stream.ReceiveNext();
