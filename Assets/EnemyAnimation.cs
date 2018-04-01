@@ -54,6 +54,10 @@ public class EnemyAnimation : MonoBehaviour {
                 ap.maxSpeed = 0;
             }
 
+		if (player_hit != null&&player_hit.layer==16) {
+			Physics.IgnoreCollision (GetComponent<BoxCollider> (), player_hit.GetComponent<BoxCollider> ());
+		}
+
 		if (collide&&fov.visibleTargets.Count > 0)
             {
                 if (!Player_ani.GetCurrentAnimatorStateInfo(0).IsName("Die"))
@@ -69,7 +73,6 @@ public class EnemyAnimation : MonoBehaviour {
                 }
             else
             {
-				Physics.IgnoreCollision (GetComponent<CapsuleCollider> (), player_hit.GetComponent<BoxCollider> ());
                 //remove the player from the fov
                 run = false;
                 ap.maxSpeed = 1;

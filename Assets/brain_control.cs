@@ -47,6 +47,9 @@ public class brain_control : MonoBehaviour {
 		if (distance>1.8f) {
 			collide = false;
 		}
+		if (player_hit != null&&player_hit.layer==16) {
+			Physics.IgnoreCollision (GetComponent<BoxCollider>(), player_hit.GetComponent<BoxCollider> ());
+		}
 
 		if (collide && fov.visibleTargets.Count > 0) {
 			if (!Player_ani.GetCurrentAnimatorStateInfo (0).IsName ("Die")) {
@@ -58,7 +61,6 @@ public class brain_control : MonoBehaviour {
 					Player_ani.SetTrigger ("Hit");
 				}
 			} else {
-				Physics.IgnoreCollision (GetComponent<BoxCollider> (), player_hit.GetComponent<BoxCollider> ());
 				an.Play ("Walk");
 				ap.maxSpeed = 1;
 			}

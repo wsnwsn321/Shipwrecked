@@ -26,7 +26,6 @@ public class CoreControl : MonoBehaviour {
     private Rigidbody rb;
 	private PlayerHealth myhp;
 	private AmmoRemaining ammo;
-
     void Start () {
         damageModifier = 1f;
         forwardMovement = 0;
