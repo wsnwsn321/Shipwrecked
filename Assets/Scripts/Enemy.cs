@@ -8,7 +8,7 @@ public class Enemy : Photon.MonoBehaviour {
     private MonsterTypes monsterType;
 	private Animator crab_ani;
     private bool isDead;
-
+	private brain_control bc;
 	// We want Photon to sync this value, so we will serialize it
 	[SerializeField]
 	public float health = 50f;
@@ -33,7 +33,12 @@ public class Enemy : Photon.MonoBehaviour {
         {
             monsterType = type.monsterType;
         }
-		crab_ani = GetComponent<Animator>();
+		if (this.tag == "CrabAlien") {
+			crab_ani = GetComponent<Animator> ();
+		} else if (this.tag == "SpiderBrain") {
+			bc = GetComponentInChildren<brain_control> ();
+		}
+
         isDead = false;
         attackers = new List<Transform>();
         characterAttackers = new List<Transform>();
@@ -74,6 +79,7 @@ public class Enemy : Photon.MonoBehaviour {
 		health -= amount;
         if (health <= 0f && !isDead)
         {
+			print ("DIED");
             Die();
         }
 	}
@@ -119,7 +125,11 @@ public class Enemy : Photon.MonoBehaviour {
     }
 
 	void Die() {
-		crab_ani.SetTrigger("die");
+		if (this.tag == "CrabAlien") {
+			crab_ani.SetTrigger("die");
+		} else if (this.tag == "SpiderBrain") {
+			bc.dead = true;
+		}
         isDead = true;
         foreach (Transform child in transform)
         {
