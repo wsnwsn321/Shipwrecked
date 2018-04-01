@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using PlayerAbilities;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class CaptainControl : Photon.MonoBehaviour, IClassControl
 {
@@ -25,9 +26,15 @@ public class CaptainControl : Photon.MonoBehaviour, IClassControl
 	private bool canRampage,canKnockBack;
 	private CoreControl corecontrol;
 	public LayerMask layerMask;
+    private CooldownTimerUI timer;
+    public float skillTimeStamp;
+   
     void Start()
     {
-		StunDistance = 3f;
+        timer = new CooldownTimerUI(GameObject.FindGameObjectWithTag("Skill1").GetComponent<Image>(), GameObject.FindGameObjectWithTag("Skill2").GetComponent<Image>());
+        timer.CooldownStart();
+
+        StunDistance = 3f;
 		StunCooldown = 5f;
 		EnemyStunnedTime = 2f;
         // TODO
@@ -36,6 +43,11 @@ public class CaptainControl : Photon.MonoBehaviour, IClassControl
 		canKnockBack = true;
 		corecontrol = GetComponent<CoreControl> ();
 
+    }
+
+    void Update()
+    {
+        timer.CooldownUpdate(RampageCooldown, skillTimeStamp);
     }
 
 	void Rampage(){
@@ -87,8 +99,13 @@ public class CaptainControl : Photon.MonoBehaviour, IClassControl
 			Destroy (flaming);
 		}
 		flaming = null;
-		corecontrol.rampage = false;
-		StartCoroutine(WaitAbility1Use());
+		corecontrol.rampage = false;    
+        
+        // Start cooldown animation for UI skill image
+        timer.startCooldownTimerUI(1);
+        skillTimeStamp = Time.time + RampageCooldown;
+
+        StartCoroutine(WaitAbility1Use());
 	}
 
 	IEnumerator RampageForTime()
