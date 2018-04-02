@@ -4,12 +4,12 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
-public class PartPickup : NewPickupItem {
+public class PartPickup : Photon.PunBehaviour {
 
     public Sprite shipPartImage;
     private static int slot = 0;
 
-	public override void OnPickup (Transform item)
+	public void OnPickup (Transform item)
 	{
         switch (slot)
         {
@@ -39,5 +39,27 @@ public class PartPickup : NewPickupItem {
         {
 			SceneManager.LoadScene("EndScene");
         }
+		Destroy (gameObject);
 	}
+
+
+	void OnTriggerEnter(Collider collider){
+
+		if (collider.gameObject.layer != 10) //Character layer
+			return;
+
+		PickUp (collider.transform);
+
+	}
+
+
+	[PunRPC]
+	void PickUp(Transform item) {
+		if (PhotonNetwork.connected) {
+			photonView.RPC ("OnPickup", PhotonTargets.All, item);
+		} else {
+			OnPickup (item);
+		}
+	}
+
 }

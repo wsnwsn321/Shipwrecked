@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class UIManager : Photon.PunBehaviour {
 
 	private PhotonPlayer[] teammates;
+	private int initialTeammateCount = 0;
 
 	[HideInInspector]
 	public static bool updateUI = false;
@@ -23,8 +24,18 @@ public class UIManager : Photon.PunBehaviour {
 		// Need to consider if otherPlayers will exist w/ connected check
 		if (teammates == null && PhotonNetwork.connected) {
 			teammates = PhotonNetwork.otherPlayers;
+			initialTeammateCount = teammates.Length;
+			InitializeUI ();
+		} else if(!PhotonNetwork.connected){
+			teammates = new PhotonPlayer[0];
 			InitializeUI ();
 		}
+		if (teammates.Length != initialTeammateCount) {
+			initialTeammateCount = teammates.Length;
+			InitializeUI ();
+		}
+
+
 		// It will never enter this statement 
 		if (updateUI) {
 			HealthChanged ();
@@ -89,7 +100,7 @@ public class UIManager : Photon.PunBehaviour {
 	private void UpdateUI () {
 		// Updates the UI for other teammates, aka "Teammate Health bars"
 		teammates = PhotonNetwork.otherPlayers;
-		int numberOfTeammates = teammates.Length;
+		int numberOfTeammates = teammates != null ? teammates.Length : 0;
 		switch (numberOfTeammates) {
 		case 3:
 			teammateThreeName.text = teammates [2].NickName;
