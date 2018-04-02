@@ -37,7 +37,7 @@ public class PartPickup : NewPickupItem {
         slot++;
         if (slot >= 5)
         {
-			SceneManager.LoadScene("RegularCredits");
+			SceneManager.LoadScene("EndScene");
         }
 	}
 }
