@@ -1,0 +1,4 @@
+sceneSetups:
+- path: C:/Users/benac/Documents/shipwrecked5912/Assets/Scenes/DrakesScene-test.unity
+  isLoaded: 1
+  isActive: 1
