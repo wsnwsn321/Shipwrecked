@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using PlayerAbilities;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class MechanicControl : MonoBehaviour, IClassControl {
 
@@ -31,6 +32,11 @@ public class MechanicControl : MonoBehaviour, IClassControl {
     private Material previousTurretMaterial;
     private Dictionary<GameObject, UnfinishedBuilding> unfinishedBuildings;
     private Animator ani;
+
+    private bool canBuild = true;
+    public float buildTurretCooldown = 20f;
+    private CooldownTimerUI timer;
+    public float skillTimeStamp;
 
     class UnfinishedBuilding
     {
@@ -61,10 +67,22 @@ public class MechanicControl : MonoBehaviour, IClassControl {
     }
 
     void Start () {
+        timer = new CooldownTimerUI(GameObject.FindGameObjectWithTag("Skill1").GetComponent<Image>(), GameObject.FindGameObjectWithTag("Skill2").GetComponent<Image>());
+        timer.CooldownStart();
+
         isBuilding = false;
         currentBuildingChildren = new List<Transform>();
         unfinishedBuildings = new Dictionary<GameObject, UnfinishedBuilding>();
         ani = GetComponent<Animator>();
+    }
+
+    void Update()
+    {
+        if (canBuild == false && Time.time >= skillTimeStamp)
+        {
+            canBuild = true;
+        }
+        timer.CooldownUpdate(buildTurretCooldown, skillTimeStamp);
     }
     
     List<Transform> ActivateChildren(Transform t)
@@ -213,12 +231,19 @@ public class MechanicControl : MonoBehaviour, IClassControl {
     {
 		if (ability == SpecialAbility.MakeGhostTurret)
 		{
-			CreateTurretGhost();
+            if (canBuild)
+            {
+                CreateTurretGhost();
+            }
 		}
 
         if (ability == SpecialAbility.Build)
-        {
+        {            
             BuildTurret();
+            canBuild = false;
+            // Start cooldown animation for UI skill image
+            timer.startCooldownTimerUI(1);
+            skillTimeStamp = Time.time + buildTurretCooldown;
         }
     }
 

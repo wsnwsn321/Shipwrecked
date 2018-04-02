@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using PlayerAbilities;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class SergeantControl : MonoBehaviour, IClassControl
 {
@@ -19,14 +20,24 @@ public class SergeantControl : MonoBehaviour, IClassControl
     private GameObject healing;
     private bool canHeal;
 	private PlayerHealth myhp;
+    private CooldownTimerUI timer;
+    public float skillTimeStamp;
 
     void Start()
     {
+        timer = new CooldownTimerUI(GameObject.FindGameObjectWithTag("Skill1").GetComponent<Image>(), GameObject.FindGameObjectWithTag("Skill2").GetComponent<Image>());
+        timer.CooldownStart();
+
         currentHealTime = 0;
         healDelay = healTime / healDivisions;
         canHeal = true;
         ani = GetComponent<Animator>();
 		myhp = GetComponent<PlayerHealth> ();
+    }
+
+    void Update()
+    {
+        timer.CooldownUpdate(healCooldown, skillTimeStamp);
     }
 
     void HealSelf()
@@ -61,7 +72,11 @@ public class SergeantControl : MonoBehaviour, IClassControl
 			PhotonNetwork.Destroy (healing);
 		} else {
 			Destroy (healing);
-		}
+            // Start cooldown animation for UI skill image
+            timer.startCooldownTimerUI(1);
+            skillTimeStamp = Time.time + healCooldown;
+        
+        }
         healing = null;
         StartCoroutine(WaitAbilityUse());
     }

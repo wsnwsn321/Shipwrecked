@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using PlayerAbilities;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class DoctorControl : Photon.MonoBehaviour, IClassControl {
 
@@ -24,6 +25,16 @@ public class DoctorControl : Photon.MonoBehaviour, IClassControl {
 	private Animator animator;
 	private PlayerHealth allieHP;
 
+    private CooldownTimerUI timer;
+    public float skillTimeStamp;
+    private float healingCooldown = 5f;
+
+    void Start()
+    {
+        timer = new CooldownTimerUI(GameObject.FindGameObjectWithTag("Skill1").GetComponent<Image>(), GameObject.FindGameObjectWithTag("Skill2").GetComponent<Image>());
+        timer.CooldownStart();
+    }
+
     void Update()
     {
 		if (animator == null) {
@@ -34,6 +45,7 @@ public class DoctorControl : Photon.MonoBehaviour, IClassControl {
 				Debug.Log ("ERROR! Doctor cannot retrieve its animator");
 			}
 		}
+        timer.CooldownUpdate(healingCooldown, skillTimeStamp);
     }
 
     void ThrowPill()
@@ -102,12 +114,15 @@ public class DoctorControl : Photon.MonoBehaviour, IClassControl {
 
     IEnumerator waitPillDie()
     {
+        // Start cooldown animation for UI skill image
+        timer.startCooldownTimerUI(1);
+        skillTimeStamp = Time.time + healingCooldown;
         yield return new WaitForSeconds(5f);
 		if (PhotonNetwork.connected) {
 			PhotonNetwork.Destroy (pills [0]);
 		} else {
 			Destroy (pills [0]);
-		}
+        }
         pills.RemoveAt(0);
     }
 		
