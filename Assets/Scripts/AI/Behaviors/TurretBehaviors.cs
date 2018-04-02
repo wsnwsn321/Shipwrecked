@@ -59,9 +59,22 @@ public class TurretBehaviors : GenericBehaviors
         health -= damage;
         if (health < 0)
         {
-            Destroy(gameObject, 1f);
+			StartCoroutine(Die);
         }
     }
+
+	public IEnumerator Die() 
+	{
+		yield return new WaitForSeconds (1f);
+		if (PhotonNetwork.connected) 
+		{
+			PhotonNetwork.Destroy(gameObject);
+		} 
+		else 
+		{
+			Destroy(gameObject);
+		}
+	}
 
     // Assumes that the format of the turret is:
     // Turret --> Base --> (BaseElement, Pylon) --> PylonElement

@@ -77,9 +77,9 @@ public class Enemy : Photon.MonoBehaviour {
 
     public void TakeDamage(float amount){
 		health -= amount;
+		print (gameObject.name + " took damage.");
         if (health <= 0f && !isDead)
         {
-			print ("DIED");
             Die();
         }
 	}

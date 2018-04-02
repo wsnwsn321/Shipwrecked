@@ -2,15 +2,26 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SyncTurret : MonoBehaviour {
+public class SyncTurret : Photon.MonoBehaviour {
 
     private bool isFullyActive = false;
+	private TurretBehaviors stats;
 
     // This method is responsible for synchronizing the health of the enemy
     void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
+		if (!stats) 
+		{
+			stats = GetComponent<TurretBehaviors>();
+		}
+
         if (stream.isWriting)
         {
+			if (stats) 
+			{
+				stream.SendNext(stats.health);
+			}
+
             if (!isFullyActive)
             {
                 
@@ -24,6 +35,14 @@ public class SyncTurret : MonoBehaviour {
         }
         else
         {
+			if (stats) 
+			{
+				stats.health = (float)stream.ReceiveNext();
+				if (stats.health <= 0) {
+					stats.Die ();
+				}
+			}
+
             if (!isFullyActive)
             {
                 bool isActive = true;

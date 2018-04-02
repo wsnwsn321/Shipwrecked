@@ -5,10 +5,10 @@ using UnityEngine.UI;
 
 public class ShipHealth : Photon.MonoBehaviour {
 
-	public int health = 1000;
+	public float health = 1000;
 	public int earthDwellerDmg = 10;
 
-    private int maxHealth;
+    private float maxHealth;
 	private Text healthText;
 	private Slider healthBar;
 	private bool tookDmg = false;
@@ -18,7 +18,7 @@ public class ShipHealth : Photon.MonoBehaviour {
 
     void Start()
     {
-        maxHealth = 1000;
+        maxHealth = health;
     }
 
     // Update is called once per frame
@@ -59,7 +59,7 @@ public class ShipHealth : Photon.MonoBehaviour {
 
 	private void updateHealthBar()
 	{
-		healthBar.value = health;
+		healthBar.value = Mathf.RoundToInt((health / maxHealth) * 100);
 	}
 
 	private void loseGame()

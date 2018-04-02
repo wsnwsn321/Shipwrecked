@@ -106,6 +106,9 @@ public class NewGun : PlayerManager {
 			//Debug.DrawRay(charLocation.transform.position + charOffset, cameraLocation.transform.forward, Color.green);
 			Debug.Log(hit.transform.name); //This will display what is hit by the raycast
 			Enemy enemy = hit.transform.GetComponent<Enemy> ();
+			if (!enemy) {
+				enemy = hit.transform.GetComponentInParent<Enemy> ();
+			}
 			if (enemy != null) {
 				enemy.TakeDamage (baseDamage * core.damageModifier);
                 enemy.AddAttacker(transform.parent);
