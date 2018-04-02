@@ -62,7 +62,7 @@ public class NewGun : PlayerManager {
 			//add GetButton to fire automatically on click and hold
 
 			//this if checks if the player has remaining ammo
-		if (!gameObject.GetComponentInParent<CoreControl> ().IsReloading ()) {
+		if (!gameObject.GetComponentInParent<CoreControl> ().IsReloading ()&& !gameObject.GetComponentInParent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("Die")) {
 			if (gameObject.GetComponentInParent<AmmoRemaining> ().ammo > 0 && gameObject.GetComponentInParent<AmmoRemaining>().playerType.Equals("Sergeant")) {
 				if (Input.GetButtonDown ("Fire1") && Time.time >= nextTimeToFire) {
 					nextTimeToFire = Time.time + 2f / fireRate;
