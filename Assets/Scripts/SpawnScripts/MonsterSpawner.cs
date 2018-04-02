@@ -35,7 +35,7 @@ public class MonsterSpawner : MonoBehaviour {
 				monster = Instantiate (monsters [index].monster, spawnPoint, transform.rotation);
 			}
 			// This if-statement protects from the case where a non-master client player tries to spawn a monster
-			if (monster) {
+			if (monster != null) {
 				monster.transform.SetParent (monsterContainer.transform);
 				monster.GetComponent<Enemy> ().spawnManager = gameObject.GetComponentInParent<MonsterSpawnManager> ();
 			}
