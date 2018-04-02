@@ -12,9 +12,9 @@ public class CoreControl : MonoBehaviour {
 
     public float fireRate = 15f;
 
-    float forwardMovement, horizontalMovement, timeScale;
-    float forwardSpeed, horizontalSpeed;
-	bool aiming, turnLeft, turnRight, sprint, isGrounded, turn;
+    public float forwardMovement, horizontalMovement, timeScale;
+    public float forwardSpeed, horizontalSpeed;
+	public bool aiming, turnLeft, turnRight, sprint, isGrounded, turn, isMoving;
 	public float distance;
 
     [HideInInspector]
@@ -22,10 +22,13 @@ public class CoreControl : MonoBehaviour {
 	private CoreControl allie_core;
 	private PlayerHealth allie_health;
 	public bool dead, hasSpecialAbility,rampage;
-    private Animator animator;
+	public Animator animator;
     private Rigidbody rb;
 	private PlayerHealth myhp;
 	private AmmoRemaining ammo;
+
+	public AudioClip footstepAudio;
+
     void Start () {
         damageModifier = 1f;
         forwardMovement = 0;
@@ -322,6 +325,12 @@ public class CoreControl : MonoBehaviour {
     {
         sprint = false;
         forwardSpeed = 1.5f;
+		if (isGrounded) {
+			//AudioSource.PlayClipAtPoint (footstepAudio, transform.position, 1);
+		}
+		//if (footstepAudio) {
+		//	AudioSource.PlayClipAtPoint (footstepAudio, transform.position, 1);
+		//}
     }
 
     public void DieOnGround()
