@@ -55,10 +55,10 @@ public class EnemyAnimation : MonoBehaviour {
             }
 
 		if (player_hit != null&&player_hit.layer==16) {
-			Physics.IgnoreCollision (GetComponent<BoxCollider> (), player_hit.GetComponent<BoxCollider> ());
+			Physics.IgnoreCollision (GetComponent<CapsuleCollider> (), player_hit.GetComponent<BoxCollider> ());
 		}
 		if (player_hit != null&&player_hit.layer==10) {
-			Physics.IgnoreCollision (GetComponent<BoxCollider> (), player_hit.GetComponent<BoxCollider> (),false);
+			Physics.IgnoreCollision (GetComponent<CapsuleCollider> (), player_hit.GetComponent<BoxCollider> (),false);
 		}
 
 		if (collide&&fov.visibleTargets.Count > 0)
