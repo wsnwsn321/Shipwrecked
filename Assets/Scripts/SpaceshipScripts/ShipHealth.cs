@@ -32,6 +32,7 @@ public class ShipHealth : Photon.MonoBehaviour {
 			updateHealthText();
 			updateHealthBar();
 		}
+		loseGame ();
 	}
 
 	public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info) {
@@ -63,6 +64,9 @@ public class ShipHealth : Photon.MonoBehaviour {
 
 	private void loseGame()
 	{
-
+		if (Input.GetKeyDown(KeyCode.L))
+		{
+			health = 0;
+		}
 	}
 }
