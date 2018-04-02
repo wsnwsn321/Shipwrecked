@@ -14,7 +14,7 @@ public class EnemyAnimation : MonoBehaviour {
     private AIPath ap;
     private float distance, spaceshipDistance;
 	private float nextAttack = 0f;
-	public GameObject Spaceship;
+	private GameObject Spaceship;
 
 	public float attackCooldown = 2.5f;
     bool run, attack, collide, hitted, spaceship;
@@ -29,6 +29,7 @@ public class EnemyAnimation : MonoBehaviour {
         fov = GetComponent<FieldOfView>();
         ap = GetComponent<AIPath>();
         ani = GetComponent<Animator>();
+		Spaceship = GameObject.Find("SpaceshipZone");
     }
 	
 	// Update is called once per frame
@@ -98,7 +99,6 @@ public class EnemyAnimation : MonoBehaviour {
 		if (spaceshipDistance<3.5f) {
 			ap.maxSpeed = 0;
 			ani.SetTrigger("attack");
-			setEnemyAttackType();
 			setEnemyAttackTypeForSpaceship ();
 		}
         
@@ -147,6 +147,7 @@ public class EnemyAnimation : MonoBehaviour {
 			default:
 				break;
 			}
+			player_hit = null;
 		}
     }
 
@@ -161,7 +162,7 @@ public class EnemyAnimation : MonoBehaviour {
 				// Otherwise, this will hit every player.
 				ph.TakeDamage((int)PlayerHealth.EnemyAttackType.CRAB_ALIEN);
 				break;
-			case "SpiderBrain":
+			case "SpidserBrain":
 				ph.TakeDamage((int)PlayerHealth.EnemyAttackType.SPIDER_BRAIN);
 				break;
 			default:
