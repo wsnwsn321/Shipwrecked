@@ -98,7 +98,6 @@ public class NewGun : PlayerManager {
 		
 
 	void Shoot(){
-		if (photonView.isMine) {
 			//Call shot fired in AmmoRemaining script
 			gameObject.GetComponent<AmmoRemaining> ().shotFired ();
 
@@ -124,7 +123,6 @@ public class NewGun : PlayerManager {
 				Destroy (impactGO, 1f);
 		
 			}
-		}
 			
 
 	}

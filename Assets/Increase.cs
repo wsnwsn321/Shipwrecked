@@ -15,7 +15,7 @@ public class Increase : Photon.MonoBehaviour {
 
     void OnCollisionEnter (Collision other)
 	{
-		if (PlayerManager.LocalPlayerInstance.Equals (player)) {
+		if (PlayerManager.LocalPlayerInstance.Equals (thrower)) {
 			if (!activated && other.gameObject != thrower && other.gameObject.layer == LayerMask.NameToLayer ("Character")) {
 				activated = true;
 				if (!PhotonNetwork.connected) {
