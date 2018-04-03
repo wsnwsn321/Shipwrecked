@@ -68,6 +68,7 @@ public class ShipHealth : Photon.MonoBehaviour {
 
 	private void loseGame()
 	{
+		PhotonNetwork.Destroy (PlayerManager.LocalPlayerInstance);
 		SceneManager.LoadScene ("QuitCredits");
 	}
 }
