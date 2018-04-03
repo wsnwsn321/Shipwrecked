@@ -30,14 +30,9 @@ public class Increase : Photon.MonoBehaviour {
 					}
 					Destroy (gameObject);
 				} else if (photonView.isMine) {
-					cc = other.gameObject.GetComponent<CoreControl> ();
-					an = other.gameObject.GetComponent<Animator> ();
-					allieHP = other.gameObject.GetComponent<PlayerHealth> ();
+					this.gameObject.GetComponent<CoreControl> ().PillThrown(other.gameObject);
 					h = PhotonNetwork.Instantiate (healedEffect.name, other.transform.position, Quaternion.identity, 0);
-					allieHP.health += 40;
-					if (cc.dead || an.GetCurrentAnimatorStateInfo (0).IsName ("Die")) {
-						an.SetTrigger ("Revived");
-					}
+
 					StartCoroutine (WaitDestroyHealEffect ());
 				}
 
