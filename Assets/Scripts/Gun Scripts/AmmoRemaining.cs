@@ -17,6 +17,7 @@ public class AmmoRemaining : MonoBehaviour {
     [HideInInspector]
     public bool isReloading;
 	private bool isFlaming;
+	private bool isCaptain = false;
 
 	public AudioClip shootingAudio;
 	public AudioClip reloadAudio;
@@ -24,7 +25,7 @@ public class AmmoRemaining : MonoBehaviour {
 
 	// Use this for initialization
 	void LateStart () {
-		ammoText = GameObject.FindGameObjectWithTag("AmmoText").GetComponent<Text>();
+		//ammoText = GameObject.FindGameObjectWithTag("AmmoText").GetComponent<Text>();
 	
 	}
 
@@ -50,6 +51,7 @@ public class AmmoRemaining : MonoBehaviour {
 			ammo = 20;
 			playerType = "Captain";
 			reloadTime = 2f;
+			isCaptain = true;
 			break;
 		default:
 			print ("Ope");
@@ -62,7 +64,9 @@ public class AmmoRemaining : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		updateAmmoText();
-		isFlaming = gameObject.GetComponentInParent<CaptainControl> ().isFlaming;
+		if (isCaptain) {
+			isFlaming = gameObject.GetComponentInParent<CaptainControl> ().isFlaming;
+		}
 		//checkAmmo();
 	}
 
@@ -80,8 +84,13 @@ public class AmmoRemaining : MonoBehaviour {
 		if (ammoText != null) {
 			ammoText.text = ammo.ToString () + "/" + originalAmmo.ToString ();
 		} else {
-			ammoText = GameObject.FindGameObjectWithTag("AmmoText").GetComponent<Text>();
+			SetAmmoText ();
+			//ammoText = GameObject.FindGameObjectWithTag("AmmoText").GetComponent<Text>();
 		}
+	}
+
+	private void SetAmmoText() {
+		GameObject.FindGameObjectWithTag ("AmmoText").GetComponent<Text>();
 	}
 
 	private void checkAmmo()
