@@ -59,7 +59,7 @@ public class TurretBehaviors : GenericBehaviors
         health -= damage;
         if (health < 0)
         {
-			StartCoroutine(Die);
+			StartCoroutine(Die());
         }
     }
 
