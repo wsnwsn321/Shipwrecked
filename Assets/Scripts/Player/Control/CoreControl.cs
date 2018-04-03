@@ -365,8 +365,9 @@ public class CoreControl : Photon.PunBehaviour {
 	}
 
 	[PunRPC]
-	public void CheckForPillTarget(GameObject healedPlayer) {
-		if (PlayerManager.LocalPlayerInstance.Equals (healedPlayer)) {
+	public void CheckForPillTarget(Vector3 pillPos) {
+		// Physics can be faster instead of Vector distance!
+		if (Vector3.Distance(PlayerManager.LocalPlayerInstance.transform.position, pillPos) < 3f) {
 			// This means that this player is revived. Call Revived
 			if (this.gameObject.GetComponent<PlayerHealth> ().health == 0) {
 				// Player is dead, revive them
@@ -380,8 +381,8 @@ public class CoreControl : Photon.PunBehaviour {
 		}
 	}
 
-	public void PillThrown(GameObject targetPlayer) {
-		photonView.RPC ("CheckForPillTarget", PhotonTargets.Others, targetPlayer);
+	public void PillThrown(Vector3 pillPos) {
+		photonView.RPC ("CheckForPillTarget", PhotonTargets.Others, pillPos);
 	}
 
 

@@ -30,7 +30,7 @@ public class Increase : Photon.MonoBehaviour {
 					}
 					Destroy (gameObject);
 				} else if (photonView.isMine) {
-					PlayerManager.LocalPlayerInstance.GetComponent<CoreControl> ().PillThrown(other.gameObject);
+					PlayerManager.LocalPlayerInstance.GetComponent<CoreControl> ().PillThrown(this.gameObject.transform.position);
 					h = PhotonNetwork.Instantiate (healedEffect.name, other.transform.position, Quaternion.identity, 0);
 
 					StartCoroutine (WaitDestroyHealEffect ());
