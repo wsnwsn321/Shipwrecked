@@ -16,9 +16,11 @@ public class AmmoRemaining : MonoBehaviour {
 	private Text ammoText;
     [HideInInspector]
     public bool isReloading;
+	private bool isFlaming;
 
 	public AudioClip shootingAudio;
 	public AudioClip reloadAudio;
+	public AudioClip captainShootingAudio;
 
 	// Use this for initialization
 	void LateStart () {
@@ -60,14 +62,16 @@ public class AmmoRemaining : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		updateAmmoText();
+		isFlaming = gameObject.GetComponentInParent<CaptainControl> ().isFlaming;
 		//checkAmmo();
 	}
 
 	public void shotFired(){
 		ammo -= 1;
-		if (shootingAudio)
-		{
-			AudioSource.PlayClipAtPoint(shootingAudio, transform.position, 1);
+		if (isFlaming) {
+			AudioSource.PlayClipAtPoint (captainShootingAudio, transform.position, 1);
+		} else if (shootingAudio) {
+			AudioSource.PlayClipAtPoint (shootingAudio, transform.position, 1);
 		}
 	}
 
