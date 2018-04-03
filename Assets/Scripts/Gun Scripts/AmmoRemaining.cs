@@ -90,7 +90,7 @@ public class AmmoRemaining : MonoBehaviour {
 	}
 
 	private void SetAmmoText() {
-		GameObject.FindGameObjectWithTag ("AmmoText").GetComponent<Text>();
+		ammoText = GameObject.FindGameObjectWithTag ("AmmoText").GetComponent<Text>();
 	}
 
 	private void checkAmmo()

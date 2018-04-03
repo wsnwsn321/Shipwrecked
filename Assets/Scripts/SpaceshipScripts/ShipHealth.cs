@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-
+using UnityEngine.SceneManagement;
 public class ShipHealth : Photon.MonoBehaviour {
 
 	public float health = 1000;
@@ -32,7 +32,10 @@ public class ShipHealth : Photon.MonoBehaviour {
 			updateHealthText();
 			updateHealthBar();
 		}
-		loseGame ();
+		if (Input.GetKeyDown(KeyCode.L))
+		{
+			TakeDamage(1000);
+		}
 	}
 
 	public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info) {
@@ -65,9 +68,6 @@ public class ShipHealth : Photon.MonoBehaviour {
 
 	private void loseGame()
 	{
-		if (Input.GetKeyDown(KeyCode.L))
-		{
-			health = 0;
-		}
+		SceneManager.LoadScene ("EndScene");
 	}
 }

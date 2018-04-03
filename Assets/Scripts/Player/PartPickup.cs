@@ -37,7 +37,7 @@ public class PartPickup : Photon.PunBehaviour {
         slot++;
         if (slot >= 5)
         {
-			SceneManager.LoadScene("EndScene");
+			SceneManager.LoadScene("QuitCredits");
         }
 		Destroy (gameObject);
 	}
