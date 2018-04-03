@@ -44,11 +44,13 @@ public class PlayerHealth : Photon.MonoBehaviour {
         checkHealth();
 
 		//for the second ability of doctor to use
-		peace = transform.GetChild(5).gameObject;
-		if (peace.activeSelf) {
-			health += 0.1025f;
-			updateHealthText();
-			updateHealthBar();
+		if (PlayerManager.LocalPlayerInstance.Equals (this.gameObject)) {
+			peace = transform.GetChild (5).gameObject;
+			if (peace.activeSelf) {
+				health += 0.1025f;
+				updateHealthText ();
+				updateHealthBar ();
+			}
 		}
 	}
 

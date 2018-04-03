@@ -68,6 +68,6 @@ public class ShipHealth : Photon.MonoBehaviour {
 
 	private void loseGame()
 	{
-		SceneManager.LoadScene ("EndScene");
+		SceneManager.LoadScene ("QuitCredits");
 	}
 }

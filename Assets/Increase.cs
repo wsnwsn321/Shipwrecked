@@ -32,7 +32,7 @@ public class Increase : Photon.MonoBehaviour {
 				} else if (photonView.isMine) {
 					PlayerManager.LocalPlayerInstance.GetComponent<CoreControl> ().PillThrown(this.gameObject.transform.position);
 					h = PhotonNetwork.Instantiate (healedEffect.name, other.transform.position, Quaternion.identity, 0);
-
+					this.gameObject.GetComponent<CapsuleCollider> ().enabled = false;
 					StartCoroutine (WaitDestroyHealEffect ());
 				}
 
@@ -43,7 +43,7 @@ public class Increase : Photon.MonoBehaviour {
 
 	IEnumerator WaitDestroyHealEffect()
 	{
-		gameObject.transform.localScale.Set(0f, 0f, 0f);
+		gameObject.transform.localScale.Set (0f, 0f, 0f);
 		yield return new WaitForSeconds(1f);
 		PhotonNetwork.Destroy (h);
 		PhotonNetwork.Destroy (gameObject);

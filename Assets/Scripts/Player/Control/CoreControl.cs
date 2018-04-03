@@ -47,10 +47,12 @@ public class CoreControl : Photon.PunBehaviour {
         horizontalSpeed = 1.5f;
         timeScale = 0.3f * Time.deltaTime;
 
-        animator = GetComponent<Animator>();
-        rb = GetComponent<Rigidbody>();
-		myhp = GetComponent<PlayerHealth> ();
-		ammo = GetComponentInChildren<AmmoRemaining> ();
+		if (this.gameObject.Equals (PlayerManager.LocalPlayerInstance)) {
+			animator = GetComponent<Animator> ();
+			rb = GetComponent<Rigidbody> ();
+			myhp = GetComponent<PlayerHealth> ();
+			ammo = GetComponentInChildren<AmmoRemaining> ();
+		}
     }
 
     public bool IsJumping()
