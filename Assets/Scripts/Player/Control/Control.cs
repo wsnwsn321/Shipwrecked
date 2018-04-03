@@ -119,37 +119,25 @@ public class Control : Photon.MonoBehaviour {
 
         // Shoot
 		if (this.tag == "Captain") {
-			if (Input.GetMouseButton (0)) {
-                if (coreControl.CanShoot() && classControl.CanShoot())
-                {
-                    coreControl.Shoot();
-                } else
-                {
-                    coreControl.StopShooting();
-                }
-
-                if (coreControl.ammo.ammo <= 0 && coreControl.CanReload() && classControl.CanReload())
-                {
-                    coreControl.Reload();
-                }
+			if (Input.GetMouseButton (0) && coreControl.CanShoot() && classControl.CanShoot()) {
+                coreControl.Shoot();
+            } else
+            {
+                coreControl.StopShooting();
             }
 		} else {
-			if (Input.GetMouseButtonDown (0)) {
-                if (coreControl.CanShoot() && classControl.CanShoot())
-                {
-                    coreControl.Shoot();
-                } else
-                {
-                    coreControl.StopShooting();
-                }
-
-                if (coreControl.ammo.ammo <= 0 && coreControl.CanReload() && classControl.CanReload())
-                {
-                    coreControl.Reload();
-                }
+			if (Input.GetMouseButtonDown (0) && coreControl.CanShoot() && classControl.CanShoot()) {
+                coreControl.Shoot();
+            } else
+            {
+                coreControl.StopShooting();
             }
 		}
 
+        if (Input.GetMouseButton(0) && coreControl.ammo.ammo <= 0 && coreControl.CanReload() && classControl.CanReload())
+        {
+            coreControl.Reload();
+        }
 
         // Reload
         if (Input.GetKeyDown(KeyCode.R) && coreControl.CanReload() && classControl.CanReload())
