@@ -40,17 +40,23 @@ public class NewGun : PlayerManager {
         {
             case TeammateTypes.Captain:
                 baseDamage = 3f;
+                fireRate = 15f;
                 break;
             case TeammateTypes.Doctor:
                 baseDamage = 5f;
+                fireRate = 5f;
                 break;
             case TeammateTypes.Engineer:
                 baseDamage = 30f;
+                fireRate = 1f;
                 break;
             case TeammateTypes.Sergeant:
                 baseDamage = 5f;
+                fireRate = 10f;
                 break;
         }
+
+        core.fireRate = fireRate;
         print("Base damage = " + baseDamage);
         print("Damage modifier = " + core.damageModifier);
 	}

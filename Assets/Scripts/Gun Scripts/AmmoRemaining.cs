@@ -14,6 +14,8 @@ public class AmmoRemaining : MonoBehaviour {
 	public string playerType;
 	public float reloadTime;
 	private Text ammoText;
+    [HideInInspector]
+    public bool isReloading;
 
 	public AudioClip shootingAudio;
 	public AudioClip reloadAudio;
@@ -52,6 +54,7 @@ public class AmmoRemaining : MonoBehaviour {
 			break;
 		}
 		originalAmmo = ammo;
+        isReloading = false;
 	}
 
 	// Update is called once per frame
@@ -94,7 +97,9 @@ public class AmmoRemaining : MonoBehaviour {
 
 	IEnumerator WaitForReload()
 	{
+        isReloading = true;
 		yield return new WaitForSeconds(reloadTime);
+        isReloading = false;
 		ammo = originalAmmo;
 	}
 }

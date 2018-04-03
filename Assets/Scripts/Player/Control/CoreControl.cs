@@ -25,7 +25,9 @@ public class CoreControl : MonoBehaviour {
 	public Animator animator;
     private Rigidbody rb;
 	private PlayerHealth myhp;
-	private AmmoRemaining ammo;
+
+    [HideInInspector]
+	public AmmoRemaining ammo;
 
 	public AudioClip footstepAudio;
 
@@ -96,7 +98,7 @@ public class CoreControl : MonoBehaviour {
 
     public bool CanReload()
     {
-        return !CurrentStateNameIs(0, "Sprint");
+        return !CurrentStateNameIs(0, "Sprint") && !IsReloading();
     }
 
     public bool CanShoot()
@@ -126,7 +128,7 @@ public class CoreControl : MonoBehaviour {
 
     public bool IsReloading()
     {
-        return CurrentStateTagIs(1, "RELOAD");
+        return ammo.isReloading;
     }
 
     public bool IsShooting()
@@ -219,7 +221,7 @@ public class CoreControl : MonoBehaviour {
         {
             animator.SetTrigger("Reload");
         }
-		gameObject.GetComponentInChildren<AmmoRemaining> ().reload ();
+		ammo.reload ();
     }
 
     public void Roll()
@@ -241,14 +243,19 @@ public class CoreControl : MonoBehaviour {
                 AudioSource.PlayClipAtPoint(shootingAudio, transform.position, 1);
             }*/
 
-			if (animator&&ammo.ammo!=0)
+			if (animator)
             {
-				if (rampage) {
-					animator.SetTrigger ("Rampageshoot");
-				} else {
-					animator.SetTrigger("Shoot");
-				}
-                
+                if (ammo.ammo != 0)
+                {
+                    if (rampage)
+                    {
+                        animator.SetTrigger("Rampageshoot");
+                    }
+                    else
+                    {
+                        animator.SetTrigger("Shoot");
+                    }
+                }
             }
         }
         
