@@ -12,13 +12,16 @@ public class buff_script : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        if (Vector3.Distance(this.transform.position, buffCylinder.transform.position) < 8f)
-        {
-            buffCylinder.SetActive(true);
-        }
-        else
-        {
-            buffCylinder.SetActive(false);
-        }
+		if (buffCylinder != null) {
+			if (Vector3.Distance(this.transform.position, buffCylinder.transform.position) < 8f)
+			{
+				buffCylinder.SetActive(true);
+			}
+			else
+			{
+				buffCylinder.SetActive(false);
+			}
+		}
+       
 	}
 }
