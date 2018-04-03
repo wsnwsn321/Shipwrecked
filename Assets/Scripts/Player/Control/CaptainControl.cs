@@ -22,9 +22,9 @@ public class CaptainControl : Photon.MonoBehaviour, IClassControl
 	private Animator enemy_animator;
 	private brain_control bc;
 	public GameObject flame;
-	private GameObject flaming;
+	public GameObject flaming;
 	private animation shoot;
-	private bool canRampage,canKnockBack;
+	public bool canRampage,canKnockBack, isFlaming;
 	private CoreControl corecontrol;
 	public LayerMask layerMask;
     private CooldownTimerUI timer;
@@ -43,7 +43,7 @@ public class CaptainControl : Photon.MonoBehaviour, IClassControl
 		canRampage = true;
 		canKnockBack = true;
 		corecontrol = GetComponent<CoreControl> ();
-
+		isFlaming = false;
     }
 
     void Update()
@@ -52,6 +52,7 @@ public class CaptainControl : Photon.MonoBehaviour, IClassControl
     }
 
 	void Rampage(){
+		isFlaming = true;
 		if (canRampage&&!animator.GetCurrentAnimatorStateInfo (0).IsName ("AB1")&&!animator.GetCurrentAnimatorStateInfo(0).IsName("Die")) {
 			canRampage = false;
 			if (animator) {
@@ -119,6 +120,7 @@ public class CaptainControl : Photon.MonoBehaviour, IClassControl
 		if (flaming)
 		{
 			StopRampage();
+			isFlaming = false;
 		}
 	}
 		
