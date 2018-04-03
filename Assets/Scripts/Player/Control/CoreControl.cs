@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CoreControl : MonoBehaviour {
+public class CoreControl : Photon.PunBehaviour {
 
     [HideInInspector]
     public float nextTimeToFire = 0f;
@@ -356,6 +356,33 @@ public class CoreControl : MonoBehaviour {
         }
     }
 
+	[PunRPC]
+	public void CheckForRevival(GameObject revivedPlayer) {
+		if (PlayerManager.LocalPlayerInstance.Equals (revivedPlayer)) {
+			// This means that this player is revived. Call Revived
+			Revived();
+		}
+	}
+
+	[PunRPC]
+	public void CheckForPillTarget(GameObject healedPlayer) {
+		if (PlayerManager.LocalPlayerInstance.Equals (healedPlayer)) {
+			// This means that this player is revived. Call Revived
+			if (this.gameObject.GetComponent<PlayerHealth> ().health == 0) {
+				// Player is dead, revive them
+				Revived();
+			} else {
+				// Player is alive, heal them
+				this.gameObject.GetComponent<PlayerHealth> ().health += 40;
+			}
+		}
+	}
+
+	public void PillThrown(GameObject targetPlayer) {
+		photonView.RPC ("CheckForPillTarget", PhotonTargets.Others, targetPlayer);
+	}
+
+
     public void Revived()
     {
         if (animator)
@@ -433,8 +460,7 @@ public class CoreControl : MonoBehaviour {
 	IEnumerator animationDelay( )
 	{
 		yield return new WaitForSeconds(5f);
-			allie_core.Revived ();
-			//allie_health.health = 10;
+		photonView.RPC("CheckForRevival", PhotonTargets.Others, allie_core.gameObject);
 		animator.SetTrigger ("FinishRevive");
 	}
 }

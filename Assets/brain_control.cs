@@ -83,11 +83,17 @@ public class brain_control : MonoBehaviour {
 		}
 		else{
 			if (collideSpace) {
-				print (spaceDistance);
 				ap.maxSpeed = 0;
 				an.Play ("Attack_1");
 				setEnemyAttackTypeForSpaceship ();
-			} else {
+			} 
+			else if(turrets!=null){
+				ap.maxSpeed = 0;
+				an.Play ("Attack_1");
+			}
+
+
+			else {
 				if (collide && fov.visibleTargets.Count > 0) {
 					if (!Player_ani.GetCurrentAnimatorStateInfo (0).IsName ("Die")) {
 						ap.maxSpeed = 0;
@@ -134,11 +140,6 @@ public class brain_control : MonoBehaviour {
 
         }
 
-		else if (collision.gameObject.tag == "Turret") {
-			turrets = collision.gameObject;
-
-		}
-
 
     }
     void OnCollisionExit(Collision collisionInfo)
@@ -148,6 +149,14 @@ public class brain_control : MonoBehaviour {
             distance = Vector3.Distance(transform.position, collisionInfo.gameObject.transform.position);
         }
     }
+
+	void OnTriggerEnter(Collider other)
+	{
+		if (other.CompareTag("Turret"))
+		{
+			turrets = other.gameObject;
+		}
+	}
 
 	void setEnemyAttackType()
 	{
