@@ -131,13 +131,9 @@ public class EnemyAnimation : MonoBehaviour {
 		} else if (collision.gameObject.tag == "Spaceship") {
 			spaceship = true;
 			print ("with spaceship");
-		} else if (collision.gameObject.tag == "Turret") {
-			print ("collided");
-			turrets = collision.gameObject;
-
 		}
-           
     }
+
     void OnCollisionExit(Collision collisionInfo)
     {
 		if ((collisionInfo.gameObject.tag == "Sarge" || collisionInfo.gameObject.tag == "Mechanic" || collisionInfo.gameObject.tag == "Doctor"|| collisionInfo.gameObject.tag == "Captain" ))
@@ -147,6 +143,19 @@ public class EnemyAnimation : MonoBehaviour {
             //hitted = false;
             //Player_ani.SetBool("hit", false);
         }
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Turret"))
+        {
+            turrets = other.gameObject;
+        }
+    }
+
+    void OnTriggerExit(Collider other)
+    {
+        
     }
 
     void setEnemyAttackType()
