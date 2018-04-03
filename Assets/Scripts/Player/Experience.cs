@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class LevelThresholds
 {
@@ -16,7 +17,7 @@ public class Experience : MonoBehaviour {
     public int level;
     int nextLevelThreshold;
     int nextThresholdPosition;
-
+    private Text levelText;
 
     // Use this for initialization
     void Start () {
@@ -26,6 +27,14 @@ public class Experience : MonoBehaviour {
         level = 1;
         nextLevelThreshold = LevelThresholds.Thresholds[0];
         nextThresholdPosition = 1;
+        Text[] textArr = GetComponentsInChildren<Text>();
+        foreach (Text text in textArr)
+        {
+            if (text.name.Equals("LevelText"))
+            {
+                levelText = text;
+            }
+        }
     }
 
     public void IncreaseBy(int amount)
@@ -37,6 +46,7 @@ public class Experience : MonoBehaviour {
             while (experience >= nextLevelThreshold && level < LevelThresholds.Thresholds.Count + 1)
             {
                 level++;
+                levelText.text = "Player Level: " + level.ToString();
                 //level up func
                 levelUpAnimation();
                 if (nextThresholdPosition < LevelThresholds.Thresholds.Count)
