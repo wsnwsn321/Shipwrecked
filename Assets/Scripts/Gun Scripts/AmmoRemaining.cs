@@ -59,6 +59,7 @@ public class AmmoRemaining : MonoBehaviour {
 		}
 		originalAmmo = ammo;
         isReloading = false;
+		SetAmmoText ();
 	}
 
 	// Update is called once per frame

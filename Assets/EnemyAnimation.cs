@@ -109,7 +109,7 @@ public class EnemyAnimation : MonoBehaviour {
 		if (turrets != null) {
 			
 			turretDistance = Vector3.Distance (transform.position, turrets.transform.position);
-			print (turretDistance);
+			//print (turretDistance);
 			if (turretDistance < 2f) {
 				ap.maxSpeed = 0;
 				ani.SetTrigger("attack");

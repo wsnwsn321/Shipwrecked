@@ -9,7 +9,7 @@ public class PartPickup : Photon.PunBehaviour {
     public Sprite shipPartImage;
     private static int slot = 0;
 
-	public void OnPickup (Transform item)
+	public void OnPickup ()
 	{
         switch (slot)
         {
@@ -56,9 +56,9 @@ public class PartPickup : Photon.PunBehaviour {
 	[PunRPC]
 	void PickUp(Transform item) {
 		if (PhotonNetwork.connected) {
-			photonView.RPC ("OnPickup", PhotonTargets.All, item);
+			photonView.RPC ("OnPickup", PhotonTargets.All, null);
 		} else {
-			OnPickup (item);
+			OnPickup ();
 		}
 	}
 

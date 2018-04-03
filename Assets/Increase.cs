@@ -15,7 +15,7 @@ public class Increase : Photon.MonoBehaviour {
 
     void OnCollisionEnter (Collision other)
 	{
-		if (PhotonNetwork.player.Equals (player)) {
+		if (PlayerManager.LocalPlayerInstance.Equals (player)) {
 			if (!activated && other.gameObject != thrower && other.gameObject.layer == LayerMask.NameToLayer ("Character")) {
 				activated = true;
 				if (!PhotonNetwork.connected) {
@@ -30,7 +30,7 @@ public class Increase : Photon.MonoBehaviour {
 					}
 					Destroy (gameObject);
 				} else if (photonView.isMine) {
-					this.gameObject.GetComponent<CoreControl> ().PillThrown(other.gameObject);
+					PlayerManager.LocalPlayerInstance.GetComponent<CoreControl> ().PillThrown(other.gameObject);
 					h = PhotonNetwork.Instantiate (healedEffect.name, other.transform.position, Quaternion.identity, 0);
 
 					StartCoroutine (WaitDestroyHealEffect ());

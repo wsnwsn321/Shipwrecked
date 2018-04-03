@@ -374,6 +374,8 @@ public class CoreControl : Photon.PunBehaviour {
 			} else {
 				// Player is alive, heal them
 				this.gameObject.GetComponent<PlayerHealth> ().health += 40;
+				this.gameObject.GetComponent<PlayerHealth> ().updateHealthBar ();
+				this.gameObject.GetComponent<PlayerHealth> ().updateHealthText ();
 			}
 		}
 	}
