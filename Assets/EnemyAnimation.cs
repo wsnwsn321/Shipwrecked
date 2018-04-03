@@ -12,11 +12,12 @@ public class EnemyAnimation : MonoBehaviour {
 	private GameObject player_hit;
     private FieldOfView fov;
     private AIPath ap;
-    private float distance, spaceshipDistance;
+    private float distance, spaceshipDistance, turretDistance;
 	private float nextAttack = 0f;
 	private GameObject Spaceship;
+	private GameObject turrets;
 
-	public float attackCooldown = 2.5f;
+	public float attackCooldown = 1.5f;
     bool run, attack, collide, hitted, spaceship;
 
 	void Start () {
@@ -96,11 +97,23 @@ public class EnemyAnimation : MonoBehaviour {
                 }
             }
 		spaceshipDistance = Vector3.Distance (transform.position, Spaceship.transform.position);
+
+		//colliding with spaceship
 		if (spaceshipDistance<3.5f) {
 			ap.maxSpeed = 0;
 			ani.SetTrigger("attack");
 			setEnemyAttackTypeForSpaceship ();
 		}
+
+		//colliding with turret
+		if (turrets != null) {
+			turretDistance = Vector3.Distance (transform.position, turrets.transform.position);
+			if (turretDistance < 2f) {
+				ap.maxSpeed = 0;
+				ani.SetTrigger("attack");
+			}
+		}
+
         
         
     }
@@ -116,6 +129,9 @@ public class EnemyAnimation : MonoBehaviour {
 		} else if (collision.gameObject.tag == "Spaceship") {
 			spaceship = true;
 			print ("with spaceship");
+		} else if (collision.gameObject.tag == "Turret") {
+			turrets = collision.gameObject;
+
 		}
            
     }

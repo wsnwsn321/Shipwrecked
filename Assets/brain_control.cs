@@ -9,22 +9,27 @@ public class brain_control : MonoBehaviour {
     private Animation an;
     private FieldOfView fov;
     private AIPath ap;
-    private float distance;
+    private float distance, turretDistance, spaceDistance;
     private bool collide;
     private Animator Player_ani;
 	private GameObject player_hit;
+	private GameObject turrets;
+	private GameObject spaceship;
 	private float nextAttack = 0f;
-	public bool stunned, dead;
+	public bool stunned, dead, collideSpace;
 
 	public float attackCooldown = 2.5f;
     void Start () {
         an = GetComponent<Animation>();
         fov = GetComponentInParent<FieldOfView>();
         ap = GetComponentInParent<AIPath>();
+		spaceship = GameObject.Find("SpaceshipZone");
         collide = false;
         distance = 10f;
 		stunned = false;
 		dead = false;
+		collideSpace = false;
+
     }
 	
 	// Update is called once per frame
@@ -42,8 +47,24 @@ public class brain_control : MonoBehaviour {
 			distance = Vector3.Distance(transform.position, player_hit.transform.position);
 
 		}
+		if (turrets != null) {
+			turretDistance = Vector3.Distance(transform.position, turrets.transform.position);
+
+		}
+		if (spaceship != null) {
+			spaceDistance = Vector3.Distance(transform.position, spaceship.transform.position);
+			print (spaceDistance);
+
+		}
 		if (distance>1.8f) {
 			collide = false;
+		}
+
+		//colliding with spaceship
+		if (spaceDistance > 4f) {
+			collideSpace = false;
+		} else {
+			collideSpace = true;
 		}
 		if (player_hit != null&&player_hit.layer==16) {
 			Physics.IgnoreCollision (GetComponent<BoxCollider>(), player_hit.GetComponent<BoxCollider> ());
@@ -60,8 +81,13 @@ public class brain_control : MonoBehaviour {
 		} else if (dead) {
 			an.Play ("Die_3");
 			ap.maxSpeed = 0;
-		} else {
-
+		} else if (collideSpace) {
+			print ("attack space");
+			ap.maxSpeed = 0;
+			an.Play ("Attack_2");
+			setEnemyAttackTypeForSpaceship ();
+		}
+		else{
 			if (collide && fov.visibleTargets.Count > 0) {
 				if (!Player_ani.GetCurrentAnimatorStateInfo (0).IsName ("Die")) {
 					ap.maxSpeed = 0;
@@ -88,6 +114,8 @@ public class brain_control : MonoBehaviour {
 		}
 
 
+
+
     }
 
 	IEnumerator StunTimer()
@@ -106,6 +134,15 @@ public class brain_control : MonoBehaviour {
             collide = true;
 
         }
+
+		else if (collision.gameObject.tag == "Turret") {
+			turrets = collision.gameObject;
+
+		}
+		//else if (collision.gameObject.tag == "Spaceship") {
+		//	collideSpace = true;
+
+		//}
 
     }
     void OnCollisionExit(Collision collisionInfo)
@@ -129,6 +166,26 @@ public class brain_control : MonoBehaviour {
 				break;
 			case "SpiderBrain":
 				ph.enemyAttackType = PlayerHealth.EnemyAttackType.SPIDER_BRAIN;
+				break;
+			default:
+				break;
+			}
+		}
+	}
+
+	void setEnemyAttackTypeForSpaceship()
+	{
+		if (Time.time > nextAttack) {
+			nextAttack = attackCooldown + Time.time;
+			ShipHealth ph = spaceship.GetComponent<ShipHealth> ();
+			switch (transform.gameObject.tag) {
+			case "CrabAlien":
+				// make this access the specific player that got hit instead of all instances of PlayerHealth
+				// Otherwise, this will hit every player.
+				ph.TakeDamage((int)PlayerHealth.EnemyAttackType.CRAB_ALIEN);
+				break;
+			case "SpidserBrain":
+				ph.TakeDamage((int)PlayerHealth.EnemyAttackType.SPIDER_BRAIN);
 				break;
 			default:
 				break;
