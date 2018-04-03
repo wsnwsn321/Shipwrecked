@@ -128,7 +128,12 @@ public class CoreControl : MonoBehaviour {
 
     public bool IsReloading()
     {
-        return ammo.isReloading;
+		if (ammo) {
+			return ammo.isReloading;
+
+		} else {
+			return false;
+		}
     }
 
     public bool IsShooting()

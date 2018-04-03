@@ -40,8 +40,11 @@ public class brain_control : MonoBehaviour {
         }
         else
         {
-			an.Play("Walk");
-            ap.maxSpeed = 1;
+
+				an.Play("Walk");
+				ap.maxSpeed = 1;
+
+
         }
 		if (player_hit != null) {
 			distance = Vector3.Distance(transform.position, player_hit.transform.position);
@@ -51,15 +54,10 @@ public class brain_control : MonoBehaviour {
 			turretDistance = Vector3.Distance(transform.position, turrets.transform.position);
 
 		}
-		if (spaceship != null) {
-			spaceDistance = Vector3.Distance(transform.position, spaceship.transform.position);
-			print (spaceDistance);
-
-		}
 		if (distance>1.8f) {
 			collide = false;
 		}
-
+		spaceDistance = Vector3.Distance(transform.position, spaceship.transform.position);
 		//colliding with spaceship
 		if (spaceDistance > 4f) {
 			collideSpace = false;
@@ -74,6 +72,7 @@ public class brain_control : MonoBehaviour {
 			Physics.IgnoreCollision (GetComponent<BoxCollider>(), player_hit.GetComponent<BoxCollider> (),false);
 		}
 
+
 		if (stunned) {
 			an.Play ("Die_2");
 			StartCoroutine (StunTimer ());
@@ -81,40 +80,40 @@ public class brain_control : MonoBehaviour {
 		} else if (dead) {
 			an.Play ("Die_3");
 			ap.maxSpeed = 0;
-		} else if (collideSpace) {
-			print ("attack space");
-			ap.maxSpeed = 0;
-			an.Play ("Attack_2");
-			setEnemyAttackTypeForSpaceship ();
 		}
 		else{
-			if (collide && fov.visibleTargets.Count > 0) {
-				if (!Player_ani.GetCurrentAnimatorStateInfo (0).IsName ("Die")) {
-					ap.maxSpeed = 0;
-					an.Play ("Attack_2");
-					setEnemyAttackType ();
-					if (!Player_ani.GetCurrentAnimatorStateInfo (0).IsName ("Hitted")) {
+			if (collideSpace) {
+				print (spaceDistance);
+				ap.maxSpeed = 0;
+				an.Play ("Attack_1");
+				setEnemyAttackTypeForSpaceship ();
+			} else {
+				if (collide && fov.visibleTargets.Count > 0) {
+					if (!Player_ani.GetCurrentAnimatorStateInfo (0).IsName ("Die")) {
+						ap.maxSpeed = 0;
+						an.Play ("Attack_2");
+						setEnemyAttackType ();
+						if (!Player_ani.GetCurrentAnimatorStateInfo (0).IsName ("Hitted")) {
 
-						Player_ani.SetTrigger ("Hit");
+							Player_ani.SetTrigger ("Hit");
+						}
+					} else {
+						an.Play ("Walk");
+						ap.maxSpeed = 1;
 					}
+
+
 				} else {
 					an.Play ("Walk");
-					ap.maxSpeed = 1;
-				}
-
-
-			} else {
-				an.Play ("Walk");
-				if (fov.visibleTargets.Count > 0) {
-					ap.maxSpeed = 3;
-				} else {
-					ap.maxSpeed = 1;
+					if (fov.visibleTargets.Count > 0) {
+						ap.maxSpeed = 3;
+					} else {
+						ap.maxSpeed = 1;
+					}
 				}
 			}
+
 		}
-
-
-
 
     }
 
@@ -139,10 +138,7 @@ public class brain_control : MonoBehaviour {
 			turrets = collision.gameObject;
 
 		}
-		//else if (collision.gameObject.tag == "Spaceship") {
-		//	collideSpace = true;
 
-		//}
 
     }
     void OnCollisionExit(Collision collisionInfo)

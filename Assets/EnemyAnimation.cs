@@ -97,9 +97,9 @@ public class EnemyAnimation : MonoBehaviour {
                 }
             }
 		spaceshipDistance = Vector3.Distance (transform.position, Spaceship.transform.position);
-
 		//colliding with spaceship
-		if (spaceshipDistance<3.5f) {
+		if (spaceshipDistance<3.7f) {
+			print (spaceshipDistance);
 			ap.maxSpeed = 0;
 			ani.SetTrigger("attack");
 			setEnemyAttackTypeForSpaceship ();
@@ -107,7 +107,9 @@ public class EnemyAnimation : MonoBehaviour {
 
 		//colliding with turret
 		if (turrets != null) {
+			
 			turretDistance = Vector3.Distance (transform.position, turrets.transform.position);
+			print (turretDistance);
 			if (turretDistance < 2f) {
 				ap.maxSpeed = 0;
 				ani.SetTrigger("attack");
@@ -130,6 +132,7 @@ public class EnemyAnimation : MonoBehaviour {
 			spaceship = true;
 			print ("with spaceship");
 		} else if (collision.gameObject.tag == "Turret") {
+			print ("collided");
 			turrets = collision.gameObject;
 
 		}

@@ -32,7 +32,8 @@ public class BehaviorManager : MonoBehaviour {
     {
         if (!spaceship)
         {
-            spaceship = GameObject.FindGameObjectWithTag("Spaceship").transform;
+           // spaceship = GameObject.FindGameObjectWithTag("Spaceship").transform;
+			spaceship = GameObject.Find("SpaceshipZone").transform;
         }
         EntityType types = GetComponent<EntityType>();
         EntityTypes type = types.type;
