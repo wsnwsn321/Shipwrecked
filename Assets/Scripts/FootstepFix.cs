@@ -4,61 +4,40 @@ using UnityEngine;
 
 public class FootstepFix : MonoBehaviour {
 
-	public AudioClip footstepAudio;
-	CoreControl cc;
-	private float time;
-	private float newTime;
 	public Animator animator;
-	private float footTime = .470f;
-
+	AudioSource audio;
 
 	void Start(){
-		time = Time.deltaTime;
-		newTime = Time.deltaTime;
 		animator = GetComponent<Animator>();
+		audio = GetComponent<AudioSource> ();
 	}
 
-	/*void Update(){
-		time = newTime;
-		newTime = Time.deltaTime;
-	}*/
-
 	public void FootR(){
-		//if (cc.isGrounded == true && (cc.forwardMovement != 0  || cc.horizontalMovement != 0)) {
-			AudioSource.PlayClipAtPoint (footstepAudio, transform.position, 1);
-			//audioSource.Play();
-		//}
+		audio.volume = Random.Range (0.20f, 0.32f);
+		audio.pitch = Random.Range (0.7f, 0.9f);
+		audio.Play();
 	}
 
 	public void FootL(){
-		//if (cc.isGrounded == true && (cc.forwardMovement != 0  || cc.horizontalMovement != 0)) {
-			AudioSource.PlayClipAtPoint (footstepAudio, transform.position, 1);
-		//}
+		audio.volume = Random.Range (0.20f, 0.32f);
+		audio.pitch = Random.Range (0.7f, 0.9f);
+		audio.Play();
 	}
 
 	public void FootStep(){
-		//if (cc.isGrounded == true && (cc.forwardMovement != 0  || cc.horizontalMovement != 0)) {
-			AudioSource.PlayClipAtPoint (footstepAudio, transform.position, 1);
-		//}
+		audio.volume = Random.Range (0.20f, 0.32f);
+		audio.pitch = Random.Range (0.7f, 0.9f);
+		audio.Play();
 	}
 
 	void Update(){
-		newTime = Time.deltaTime;
-		if (animator.GetCurrentAnimatorStateInfo (0).IsName ("Sprint") && (newTime > (time + footTime))) {
-			AudioSource.PlayClipAtPoint (footstepAudio, transform.position, 1);
-			time = Time.deltaTime;
+		if (animator.GetCurrentAnimatorStateInfo (0).IsName ("Sprint") && audio.isPlaying == false) {
+			audio.volume = Random.Range (0.20f, 0.32f);
+			audio.pitch = Random.Range (0.7f, 0.9f);
+			audio.Play();
+			//AudioSource.PlayClipAtPoint (footstepAudio, transform.position, 1);
 		}
-			
 	}
 
-	/*void Sprint(){
-		//if(cc.animator.GetCurrentAnimatorStateInfo(0).IsName("Sprint")){
-		if (time != newTime) {
-			AudioSource.PlayClipAtPoint (footstepAudio, transform.position, 1);
-		}
-		//}
-
-
-	}*/
 
 }
