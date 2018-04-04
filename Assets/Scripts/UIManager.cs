@@ -48,7 +48,11 @@ public class UIManager : Photon.PunBehaviour {
 		if(teammates != null) {
 			numberOfTeammates = teammates.Length;
 		}
-		Debug.Log ("Teammate Count: " + numberOfTeammates);
+        if (PhotonNetwork.connected)
+        {
+            Debug.Log("Teammate Count: " + numberOfTeammates);
+        }
+		
 		switch (numberOfTeammates) {
 		case 3:
 			// Three teammates, view 3 total teammate health bars

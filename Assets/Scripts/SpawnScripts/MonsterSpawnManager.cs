@@ -26,7 +26,7 @@ public class MonsterSpawnManager : MonoBehaviour {
     public float timeBetweenSpawns = 5f;
     [Range(1, 10)]
     public float spawnRate = 1;
-    [Range(10, 200)]
+    [Range(0, 200)]
     public int maxNumberMonsters = 10;
     public List<MonsterChance> monsters;
 

@@ -6,7 +6,7 @@ using System.Collections.Generic;
 public class MonsterBehaviors : GenericBehaviors
 {
     // Reference scripts attached to the AI.
-    IAstarAI ai;
+    AIPath ai;
     FieldOfView fov;
     Seeker seeker;
     BehaviorManager bm;
@@ -29,7 +29,7 @@ public class MonsterBehaviors : GenericBehaviors
 
     void Start()
     {
-        ai = GetComponent<IAstarAI>();
+        ai = GetComponent<AIPath>();
         fov = GetComponent<FieldOfView>();
         seeker = GetComponent<Seeker>();
         bm = GetComponent<BehaviorManager>();
@@ -51,6 +51,10 @@ public class MonsterBehaviors : GenericBehaviors
     {
         if (enemy.Attackers.Count > 0)
         {
+            if (ai.repathRate != 0.2f)
+            {
+                ai.repathRate = 0.2f;
+            }
             Transform nearestAttacker = enemy.Attackers[0];
             float nearestDistance = Vector3.Distance(fov.transform.position, enemy.Attackers[0].position);
             for (int i = 1; i < enemy.Attackers.Count; i++)
@@ -89,7 +93,12 @@ public class MonsterBehaviors : GenericBehaviors
             //        visibleTurrets.Add(fov.visibleTargets[i]);
             //    }
             //}
-            
+
+            if (ai.repathRate != 0.2f)
+            {
+                ai.repathRate = 0.2f;
+            }
+
             if (IsPursuingShip() || IsPursuingNearest())
             {
                 Pursue.Nearest(fov, ai, seeker, previousDestination, isPursuing, overridePath: true);
@@ -110,6 +119,11 @@ public class MonsterBehaviors : GenericBehaviors
         {
             if (BehaviorManager.spaceship && !IsPursuing())
             {
+                if (ai.repathRate != 100f)
+                {
+                    ai.repathRate = 100f;
+                }
+
                 Pursue.Target(BehaviorManager.spaceship.position, ai, seeker, previousDestination, isPursuing);
 
                 behaviors.Clear();

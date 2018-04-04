@@ -12,11 +12,10 @@ public class Pursue {
             // Only find a path if the AI is currently not pursuing or if it is pursuing and hasn't reached its target. 
             if (!isPursuing || (isPursuing && !ai.reachedEndOfPath))
             {
-                ai.destination = targetPosition;
-
                 // Only update the path if the destination changes.
-                if (!(ai.destination == previousDestination))
+                if (!(targetPosition == previousDestination))
                 {
+                    ai.destination = targetPosition;
                     ai.SearchPath();
                 }
             }
@@ -42,11 +41,11 @@ public class Pursue {
     public static void OverrideTarget(Vector3 targetPosition, IAstarAI ai, Seeker seeker, Vector3 previousDestination, bool isPursuing)
     {
         ai.canSearch = true;
-        ai.destination = targetPosition;
 
         // Only update the path if the destination changes.
-        if (!(ai.destination == previousDestination))
+        if (!(targetPosition == previousDestination))
         {
+            ai.destination = targetPosition;
             ai.SearchPath();
         }
     }
