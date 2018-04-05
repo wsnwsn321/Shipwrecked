@@ -28,7 +28,7 @@ public class PlayerManager : Photon.MonoBehaviour {
 	void Start () {
 		//#Important
 		// Do this only for the local player
-		if (photonView.isMine || !PhotonNetwork.connected) {
+		if ( !PhotonNetwork.connected || photonView.isMine) {
 			PlayerManager.LocalPlayerInstance = this.gameObject;
 			// Instantiate the player camera
 			cam = GameObject.Instantiate(cameraObject, this.gameObject.transform);
@@ -43,7 +43,7 @@ public class PlayerManager : Photon.MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		// We only want to update our character! Added on 2/6/18
-		if (photonView.isMine == false && PhotonNetwork.connected) {
+		if (PhotonNetwork.connected && photonView.isMine == false) {
 			return;
 		}
 	}

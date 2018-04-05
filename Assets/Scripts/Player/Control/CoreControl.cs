@@ -47,12 +47,24 @@ public class CoreControl : Photon.PunBehaviour {
         horizontalSpeed = 1.5f;
         timeScale = 0.3f * Time.deltaTime;
 
-		if (this.gameObject.Equals (PlayerManager.LocalPlayerInstance)) {
+		if (PlayerManager.LocalPlayerInstance == null) {
+			Debug.Log ("ERROR in CoreControl! Local player instance not set!");
+		}
+
+		if (PhotonNetwork.connected && this.gameObject.Equals (PlayerManager.LocalPlayerInstance)) {
 			animator = GetComponent<Animator> ();
 			rb = GetComponent<Rigidbody> ();
 			myhp = GetComponent<PlayerHealth> ();
 			ammo = GetComponentInChildren<AmmoRemaining> ();
+		} else if (!PhotonNetwork.connected) {
+			animator = GetComponent<Animator> ();
+			rb = GetComponent<Rigidbody> ();
+			myhp = GetComponent<PlayerHealth> ();
+			ammo = GetComponentInChildren<AmmoRemaining> ();
+		} else {
+			Debug.Log ("ERROR! Cannot get important components in CoreControl!");
 		}
+			
     }
 
     public bool IsJumping()

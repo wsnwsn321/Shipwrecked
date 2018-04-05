@@ -83,9 +83,11 @@ public class PlayerSpawnManager : Photon.MonoBehaviour {
 		if (spawnIndex > -1) {
 			if (PhotonNetwork.connected) {
 				// Multiplayer instantiate
+				Debug.Log("Spawning in multiplayer... ");
 				player = PhotonNetwork.Instantiate (prefabName, spawnPoints [spawnIndex].transform.position, spawnPoints [spawnIndex].transform.rotation, 0);
 			} else {
 				// Singleplayer instantiate
+				Debug.Log("Spawning in singleplayer... ");
 				player = Instantiate(Resources.Load (prefabName, typeof(GameObject)) as GameObject, 
 					spawnPoints [0].transform.position, spawnPoints [0].transform.rotation);
 			}
