@@ -20,8 +20,9 @@ public class MechanicControl : MonoBehaviour, IClassControl {
     public float turretHealth = 20f;
     [HideInInspector]
     public float turretDamage = 2f;
+	public bool isReparing;
 
-    private bool isBuilding;
+	private bool isBuilding;
     private Vector3 buildPosition;
     private float currentBuildingTime = 0;
     private int currentBuildingIteration = 0;
@@ -32,6 +33,8 @@ public class MechanicControl : MonoBehaviour, IClassControl {
     private Material previousTurretMaterial;
     private Dictionary<GameObject, UnfinishedBuilding> unfinishedBuildings;
     private Animator ani;
+	private GameObject spaceship;
+	private float distanceWithSpace;
 
     private bool canBuild = true;
     public float buildTurretCooldown = 20f;
@@ -71,9 +74,11 @@ public class MechanicControl : MonoBehaviour, IClassControl {
         timer.CooldownStart();
 
         isBuilding = false;
+		isReparing = false;
         currentBuildingChildren = new List<Transform>();
         unfinishedBuildings = new Dictionary<GameObject, UnfinishedBuilding>();
         ani = GetComponent<Animator>();
+		spaceship = GameObject.Find("SpaceshipZone");
     }
 
     void Update()
@@ -83,6 +88,7 @@ public class MechanicControl : MonoBehaviour, IClassControl {
             canBuild = true;
         }
         timer.CooldownUpdate(buildTurretCooldown, skillTimeStamp);
+		distanceWithSpace = Vector3.Distance (transform.position, spaceship.transform.position);
     }
     
     List<Transform> ActivateChildren(Transform t)
@@ -225,6 +231,22 @@ public class MechanicControl : MonoBehaviour, IClassControl {
         currentPlaceableObject.transform.position = buildPosition;
     }
 
+
+	void RepairShip(){
+		print (distanceWithSpace);
+		ShipHealth shp = spaceship.GetComponent<ShipHealth> ();
+		if (distanceWithSpace < 4f) {
+			isReparing = true;
+		}
+	}
+
+	IEnumerator RepairTimer( )
+	{
+		yield return new WaitForSeconds(5f);
+		isReparing = false;
+
+	}
+
     #region Inherited Methods
 
     public void Activate(SpecialAbility ability)
@@ -245,6 +267,10 @@ public class MechanicControl : MonoBehaviour, IClassControl {
             timer.startCooldownTimerUI(1);
             skillTimeStamp = Time.time + buildTurretCooldown;
         }
+		if (ability == SpecialAbility.RepairShip) {
+
+			RepairShip ();
+		}
     }
 
     public bool CanAim()

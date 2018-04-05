@@ -20,7 +20,8 @@ namespace PlayerAbilities
         // Ability 2
 		Build,
         HealingCircle,
-		KnockBack
+		KnockBack,
+		RepairShip
     }
 }
 

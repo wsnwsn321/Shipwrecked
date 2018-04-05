@@ -207,6 +207,7 @@ public class Control : Photon.MonoBehaviour {
             {
                 classControl.Activate(SpecialAbility.HealingCircle);
                 classControl.Activate(SpecialAbility.KnockBack);
+				classControl.Activate(SpecialAbility.RepairShip);
             }
 		}
 

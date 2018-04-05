@@ -12,7 +12,6 @@ public class ShipHealth : Photon.MonoBehaviour {
 	private Text healthText;
 	private Slider healthBar;
 	private bool tookDmg = false;
-
 	private float timeColliding;
 	public float timeThreshold = 1f;
 
@@ -34,7 +33,7 @@ public class ShipHealth : Photon.MonoBehaviour {
 		}
 		if (Input.GetKeyDown(KeyCode.L))
 		{
-			TakeDamage(1000);
+			TakeDamage(200);
 		}
 	}
 
@@ -53,6 +52,8 @@ public class ShipHealth : Photon.MonoBehaviour {
 			health = 0;
 			loseGame ();
 		}
+
+		if()
 		tookDmg = true;
 	}
 
