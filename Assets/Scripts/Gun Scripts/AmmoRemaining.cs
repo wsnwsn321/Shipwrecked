@@ -31,7 +31,7 @@ public class AmmoRemaining : Photon.MonoBehaviour {
 	}
 
 	void Start(){
-		if (photonView.isMine) {
+		if (photonView.isMine || !PhotonNetwork.connected) {
 			updateAmmo = true;
 			string type = gameObject.tag;
 			switch (type) {

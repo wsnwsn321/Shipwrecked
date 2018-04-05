@@ -53,7 +53,7 @@ public class ShipHealth : Photon.MonoBehaviour {
 			loseGame ();
 		}
 
-		if()
+
 		tookDmg = true;
 	}
 
