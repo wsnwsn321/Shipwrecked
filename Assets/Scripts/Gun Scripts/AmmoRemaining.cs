@@ -38,22 +38,22 @@ public class AmmoRemaining : Photon.MonoBehaviour {
 			case "SargeGun":
 				ammo = 15;
 				playerType = "Sergeant";
-				reloadTime = 1.5f;
+				reloadTime = 2f;
 				break;
 			case "DoctorGun":
 				ammo = 12;
 				playerType = "Doctor";
-				reloadTime = 1f;
+				reloadTime = 2f;
 				break;
 			case "MechanicGun":
 				ammo = 2;
 				playerType = "Mechanic";
-				reloadTime = 3f;
+				reloadTime = 4f;
 				break;
 			case "CaptainGun":
 				ammo = 20;
 				playerType = "Captain";
-				reloadTime = 2f;
+				reloadTime = 3f;
 				isCaptain = true;
 				break;
 			default:

@@ -117,7 +117,7 @@ public class CoreControl : Photon.PunBehaviour {
 
     public bool CanShoot()
     {
-        bool canShoot = !CurrentStateNameIs(0, "Sprint") && !CurrentStateNameIs(0, "Roll") && !CurrentStateNameIs(0, "PickupObject");
+		bool canShoot = !CurrentStateNameIs(0, "Sprint") && !CurrentStateNameIs(0, "Roll") && !CurrentStateNameIs(0, "PickupObject")&&!CurrentStateNameIs(0,"AB2");
         return canShoot && Time.time >= nextTimeToFire;
     }
 

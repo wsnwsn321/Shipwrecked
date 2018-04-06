@@ -14,10 +14,11 @@ public class ShipHealth : Photon.MonoBehaviour {
 	private bool tookDmg = false;
 	private float timeColliding;
 	public float timeThreshold = 1f;
-
+	public bool isReparing;
     void Start()
     {
         maxHealth = health;
+		isReparing = false;
     }
 
     // Update is called once per frame
@@ -34,6 +35,12 @@ public class ShipHealth : Photon.MonoBehaviour {
 		if (Input.GetKeyDown(KeyCode.L))
 		{
 			TakeDamage(200);
+		}
+
+		if (isReparing) {
+			health += 0.1025f;
+			updateHealthText ();
+			updateHealthBar ();
 		}
 	}
 
@@ -57,9 +64,10 @@ public class ShipHealth : Photon.MonoBehaviour {
 		tookDmg = true;
 	}
 
+
 	private void updateHealthText()
 	{
-		healthText.text = health.ToString() + "/" + maxHealth;
+		healthText.text = Mathf.Floor (health).ToString() + "/" + maxHealth;
 	}
 
 	private void updateHealthBar()

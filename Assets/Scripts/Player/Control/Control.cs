@@ -130,7 +130,8 @@ public class Control : Photon.MonoBehaviour {
                 coreControl.Shoot();
             } else
             {
-                coreControl.StopShooting();
+					coreControl.StopShooting();
+
             }
 		}
 

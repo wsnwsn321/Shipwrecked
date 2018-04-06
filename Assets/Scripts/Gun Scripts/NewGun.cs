@@ -40,11 +40,11 @@ public class NewGun : PlayerManager {
         {
             case TeammateTypes.Captain:
                 baseDamage = 3f;
-                fireRate = 15f;
+                fireRate = 20f;
                 break;
             case TeammateTypes.Doctor:
                 baseDamage = 5f;
-                fireRate = 5f;
+                fireRate = 15f;
                 break;
             case TeammateTypes.Engineer:
                 baseDamage = 30f;
@@ -52,7 +52,7 @@ public class NewGun : PlayerManager {
                 break;
             case TeammateTypes.Sergeant:
                 baseDamage = 5f;
-                fireRate = 10f;
+                fireRate = 15f;
                 break;
         }
 
@@ -68,7 +68,7 @@ public class NewGun : PlayerManager {
 			//add GetButton to fire automatically on click and hold
 
 			//this if checks if the player has remaining ammo
-		if (!gameObject.GetComponentInParent<CoreControl> ().IsReloading ()&& !gameObject.GetComponentInParent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("Die")) {
+		if (!gameObject.GetComponentInParent<CoreControl> ().IsReloading ()&& !gameObject.GetComponentInParent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("Die")&& !gameObject.GetComponentInParent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("AB2")&&!gameObject.GetComponentInParent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("Shoot")) {
 			if (gameObject.GetComponent<AmmoRemaining> ().ammo > 0 && gameObject.GetComponent<AmmoRemaining>().playerType.Equals("Sergeant")) {
 				if (Input.GetButtonDown ("Fire1") && Time.time >= nextTimeToFire) {
 					nextTimeToFire = Time.time + 2f / fireRate;

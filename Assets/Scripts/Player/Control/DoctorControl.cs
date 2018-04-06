@@ -22,17 +22,20 @@ public class DoctorControl : Photon.MonoBehaviour, IClassControl {
     private GameObject healing;
     private List<GameObject> pills;
     private bool heal;
+	private bool canBuff;
 	private Animator animator;
 	private PlayerHealth allieHP;
 
     private CooldownTimerUI timer;
     public float skillTimeStamp;
     private float healingCooldown = 5f;
+	private float healBuffCooldown =10f;
 
     void Start()
     {
         timer = new CooldownTimerUI(GameObject.FindGameObjectWithTag("Skill1").GetComponent<Image>(), GameObject.FindGameObjectWithTag("Skill2").GetComponent<Image>());
         timer.CooldownStart();
+		canBuff = true;
     }
 
     void Update()
@@ -69,12 +72,14 @@ public class DoctorControl : Photon.MonoBehaviour, IClassControl {
     }
 
 	void HealingCircle(){
-		if (animator&&!animator.GetCurrentAnimatorStateInfo(0).IsName("Die"))
+		if (animator&&!animator.GetCurrentAnimatorStateInfo(0).IsName("Die")&&canBuff)
 		{
 			if (!animator.GetCurrentAnimatorStateInfo (0).IsName ("AB2")) {
+				canBuff = false;
 				animator.SetTrigger("Ability2");
 				healBuff.SetActive (true);
 				StartCoroutine(HealBuff());
+				StartCoroutine(WaitAbilityUse());
 			}
 			Collider[] players = Physics.OverlapSphere (transform.position, 15f,layerMask, QueryTriggerInteraction.Collide);
 			Debug.Log (players.Length);
@@ -125,6 +130,12 @@ public class DoctorControl : Photon.MonoBehaviour, IClassControl {
         }
         pills.RemoveAt(0);
     }
+
+	IEnumerator WaitAbilityUse()
+	{
+		yield return new WaitForSeconds(healBuffCooldown);
+		canBuff = true;
+	}
 		
 
 

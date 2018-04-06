@@ -20,6 +20,8 @@ public class MechanicControl : MonoBehaviour, IClassControl {
     public float turretHealth = 20f;
     [HideInInspector]
     public float turretDamage = 2f;
+	public float hpPerSec;
+	public float totalHp;
 	public bool isReparing;
 
 	private bool isBuilding;
@@ -34,10 +36,13 @@ public class MechanicControl : MonoBehaviour, IClassControl {
     private Dictionary<GameObject, UnfinishedBuilding> unfinishedBuildings;
     private Animator ani;
 	private GameObject spaceship;
+	private ShipHealth shp;
 	private float distanceWithSpace;
 
     private bool canBuild = true;
+	private bool canRepair;
     public float buildTurretCooldown = 20f;
+	public float repairSpaceShipCooldown = 10f;
     private CooldownTimerUI timer;
     public float skillTimeStamp;
 
@@ -72,13 +77,16 @@ public class MechanicControl : MonoBehaviour, IClassControl {
     void Start () {
         timer = new CooldownTimerUI(GameObject.FindGameObjectWithTag("Skill1").GetComponent<Image>(), GameObject.FindGameObjectWithTag("Skill2").GetComponent<Image>());
         timer.CooldownStart();
-
+		hpPerSec = 0.1025f;
+		totalHp = 50;
         isBuilding = false;
 		isReparing = false;
+		canRepair = true;
         currentBuildingChildren = new List<Transform>();
         unfinishedBuildings = new Dictionary<GameObject, UnfinishedBuilding>();
         ani = GetComponent<Animator>();
 		spaceship = GameObject.Find("SpaceshipZone");
+		shp = spaceship.GetComponent<ShipHealth> ();
     }
 
     void Update()
@@ -234,17 +242,31 @@ public class MechanicControl : MonoBehaviour, IClassControl {
 
 	void RepairShip(){
 		print (distanceWithSpace);
-		ShipHealth shp = spaceship.GetComponent<ShipHealth> ();
-		if (distanceWithSpace < 4f) {
-			isReparing = true;
+
+		if (ani && !ani.GetCurrentAnimatorStateInfo (0).IsName ("Die")&&canRepair) {
+			if (!ani.GetCurrentAnimatorStateInfo (0).IsName ("AB2")&&distanceWithSpace < 4f) {
+				canRepair = false;
+				ani.SetTrigger ("Repairing");
+				shp.isReparing = true;
+				StartCoroutine (RepairTimer ());
+				StartCoroutine (WaitAbilityUse ());
+			}
 		}
+
 	}
 
 	IEnumerator RepairTimer( )
 	{
 		yield return new WaitForSeconds(5f);
-		isReparing = false;
+		shp.isReparing = false;
+		ani.SetTrigger ("FinishRepair");
 
+	}
+
+	IEnumerator WaitAbilityUse()
+	{
+		yield return new WaitForSeconds(repairSpaceShipCooldown);
+		canRepair = true;
 	}
 
     #region Inherited Methods
