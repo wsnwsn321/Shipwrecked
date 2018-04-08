@@ -61,6 +61,8 @@ public class CoreControl : Photon.PunBehaviour {
 			rb = GetComponent<Rigidbody> ();
 			myhp = GetComponent<PlayerHealth> ();
 			ammo = GetComponentInChildren<AmmoRemaining> ();
+		} else {
+			
 		}
 			
     }
@@ -369,8 +371,8 @@ public class CoreControl : Photon.PunBehaviour {
     }
 
 	[PunRPC]
-	public void CheckForRevival(GameObject revivedPlayer) {
-		if (PlayerManager.LocalPlayerInstance.Equals (revivedPlayer)) {
+	public void CheckForRevival(Vector3 revPos) {
+		if (Vector3.Distance(PlayerManager.LocalPlayerInstance.transform.position, revPos) < 3f) {
 			// This means that this player is revived. Call Revived
 			Revived();
 		}
@@ -475,7 +477,7 @@ public class CoreControl : Photon.PunBehaviour {
 	IEnumerator animationDelay( )
 	{
 		yield return new WaitForSeconds(5f);
-		photonView.RPC("CheckForRevival", PhotonTargets.Others, allie_core.gameObject);
+		photonView.RPC("CheckForRevival", PhotonTargets.Others, PlayerManager.LocalPlayerInstance.transform.position);
 		animator.SetTrigger ("FinishRevive");
 	}
 }
