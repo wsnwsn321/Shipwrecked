@@ -93,9 +93,10 @@ public class EnemyAnimation : MonoBehaviour {
 		}
 
 		spaceshipDistance = Vector3.Distance (transform.position, Spaceship.transform.position);
+		print (spaceshipDistance);
+
 		//colliding with spaceship
-		if (spaceshipDistance<3.8f) {
-			//print (spaceshipDistance);
+		if (spaceshipDistance<6f) {
 			ap.maxSpeed = 0;
 			ani.SetTrigger("attack");
 			setEnemyAttackTypeForSpaceship ();
@@ -186,7 +187,7 @@ public class EnemyAnimation : MonoBehaviour {
 				// Otherwise, this will hit every player.
 				ph.TakeDamage((int)PlayerHealth.EnemyAttackType.CRAB_ALIEN);
 				break;
-			case "SpidserBrain":
+			case "SpiderBrain":
 				ph.TakeDamage((int)PlayerHealth.EnemyAttackType.SPIDER_BRAIN);
 				break;
 			default:
