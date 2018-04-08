@@ -70,12 +70,7 @@ public class MonsterBehaviors : GenericBehaviors
             Pursue.OverrideTarget(nearestAttacker.position, ai, seeker, previousDestination, isPursuing);
 
             behaviors.Clear();
-            if (!isPursuing)
-            {
-                wanderTime = 0;
-                isPursuing = true;
-                behaviors.Add(Behaviors.PursueAttacker);
-            }
+            behaviors.Add(Behaviors.PursueAttacker);
         }
         else if (fov.visibleTargets.Count > 0)
         {
@@ -108,16 +103,11 @@ public class MonsterBehaviors : GenericBehaviors
             }
 
             behaviors.Clear();
-            if (!isPursuing)
-            {
-                wanderTime = 0;
-                isPursuing = true;
-                behaviors.Add(Behaviors.PursueNearest);
-            }
+            behaviors.Add(Behaviors.PursueNearest);
         }
         else
         {
-            if (BehaviorManager.spaceship && !IsPursuing())
+            if (BehaviorManager.spaceship)
             {
                 if (ai.repathRate != 100f)
                 {
@@ -127,25 +117,7 @@ public class MonsterBehaviors : GenericBehaviors
                 Pursue.Target(BehaviorManager.spaceship.position, ai, seeker, previousDestination, isPursuing);
 
                 behaviors.Clear();
-                if (!isPursuing)
-                {
-                    wanderTime = 0;
-                    isPursuing = true;
-                    behaviors.Add(Behaviors.PursueShip);
-                }
-            }
-            else if (wanderTime > maxWanderTime)
-            {
-                wanderTime -= maxWanderTime;
-                overridePath = true;
-            }
-            else
-            {
-                behaviors.Clear();
-                if (isPursuing)
-                {
-                    isPursuing = false;
-                }
+                behaviors.Add(Behaviors.PursueShip);
             }
         }
 
