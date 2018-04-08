@@ -61,8 +61,6 @@ public class CoreControl : Photon.PunBehaviour {
 			rb = GetComponent<Rigidbody> ();
 			myhp = GetComponent<PlayerHealth> ();
 			ammo = GetComponentInChildren<AmmoRemaining> ();
-		} else {
-			Debug.Log ("ERROR! Cannot get important components in CoreControl!");
 		}
 			
     }
