@@ -76,8 +76,6 @@ public class PlayerSpawnManager : Photon.MonoBehaviour {
 		/// player prefab is. In respawn, we will use the prefab associated with the PlayerManager
 		/// 
 		/// 
-		Debug.Log("You spawned as: " + prefabName);
-		Debug.Log ("SpawnIndex: " + spawnIndex);
 
 		// Spawn the player using their prefab name
 		if (spawnIndex > -1) {

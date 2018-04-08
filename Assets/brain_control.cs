@@ -67,7 +67,6 @@ public class brain_control : MonoBehaviour {
 			collideSpace = true;
 		}
 		if (player_hit != null&&player_hit.layer==16) {
-			print ("called");
 			Physics.IgnoreCollision (GetComponent<BoxCollider>(), player_hit.GetComponent<BoxCollider> ());
 		}
 
@@ -86,7 +85,6 @@ public class brain_control : MonoBehaviour {
 		}
 		else{
 			if (collideSpace&& fov.visibleTargets.Count ==0) {
-				print("spaceship at");
 				ap.maxSpeed = 0;
 				an.Play ("Attack_1");
 				setEnemyAttackTypeForSpaceship ();

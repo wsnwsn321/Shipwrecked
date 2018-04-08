@@ -35,7 +35,6 @@ public class NewGun : PlayerManager {
 
         core = GetComponentInParent<CoreControl>();
         TeammateTypes characterType = GetComponentInParent<EntityType>().teammateType;
-        print(characterType);
         switch (characterType)
         {
             case TeammateTypes.Captain:
@@ -57,8 +56,6 @@ public class NewGun : PlayerManager {
         }
 
         core.fireRate = fireRate;
-        print("Base damage = " + baseDamage);
-        print("Damage modifier = " + core.damageModifier);
 	}
 
 	void Update () {
