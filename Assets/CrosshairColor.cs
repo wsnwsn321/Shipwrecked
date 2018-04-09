@@ -5,16 +5,23 @@ using UnityEngine;
 public class CrosshairColor : MonoBehaviour {
 
 	private Camera newCamSpot;
-
+	//public GameObject impactEffect;
+	private float range = 100f;
+	private LayerMask hitMask;
+	public Renderer rend;
+	
 
 	// Use this for initialization
 	void Start () {
 		newCamSpot = this.GetComponentInParent<Control> ().main_c;
+		hitMask = this.GetComponentInParent<NewGun> ().hitMask;
+		rend = GetComponent<Renderer>();
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		ShootCast ();
+		print (Time.time);
 	}
 
 	void ShootCast(){
@@ -29,16 +36,15 @@ public class CrosshairColor : MonoBehaviour {
 			//Debug.DrawRay(charLocation.transform.position + charOffset, cameraLocation.transform.forward, Color.green);
 			Debug.Log (hit.transform.name); //This will display what is hit by the raycast
 			Enemy enemy = hit.transform.GetComponent<Enemy> ();
-			if (!enemy) {
-				enemy = hit.transform.GetComponentInParent<Enemy> ();
+			if (hit.transform.name.Equals("Spider_Brain")) {
+				rend.material.color = Color.red;
+				print ("Color is red");
+			} else {
+				rend.material.color = Color.grey;
+				print ("Color is grey");
 			}
-			if (enemy != null) {
-				enemy.TakeDamage (baseDamage * core.damageModifier);
-				enemy.AddAttacker (transform.parent);
-			}
-			GameObject impactGO = Instantiate (impactEffect, hit.point, Quaternion.LookRotation (hit.normal));
-			//impactGO.GetComponent<ParticleSystem> ().Play ();
-			Destroy (impactGO, 1f);
+			//GameObject impactGO = Instantiate (impactEffect, hit.point, Quaternion.LookRotation (hit.normal));
+			//Destroy (impactGO, 1f);
 
 		}
 
