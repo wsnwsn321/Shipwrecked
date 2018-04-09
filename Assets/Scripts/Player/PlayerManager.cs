@@ -21,7 +21,7 @@ public class PlayerManager : Photon.MonoBehaviour {
 
 		// #Critical
 		// we flag as don't destroy on load so that instance survives level sync
-		DontDestroyOnLoad(this.gameObject);
+		//DontDestroyOnLoad(this.gameObject);
 	}
 
 	// Use this for initialization
