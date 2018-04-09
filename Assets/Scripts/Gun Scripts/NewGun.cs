@@ -35,7 +35,6 @@ public class NewGun : PlayerManager {
 
         core = GetComponentInParent<CoreControl>();
         TeammateTypes characterType = GetComponentInParent<EntityType>().teammateType;
-        print(characterType);
         switch (characterType)
         {
             case TeammateTypes.Captain:
@@ -57,8 +56,6 @@ public class NewGun : PlayerManager {
         }
 
         core.fireRate = fireRate;
-        print("Base damage = " + baseDamage);
-        print("Damage modifier = " + core.damageModifier);
 	}
 
 	void Update () {
@@ -68,7 +65,7 @@ public class NewGun : PlayerManager {
 			//add GetButton to fire automatically on click and hold
 
 			//this if checks if the player has remaining ammo
-		if (!gameObject.GetComponentInParent<CoreControl> ().IsReloading ()&& !gameObject.GetComponentInParent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("Die")&& !gameObject.GetComponentInParent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("AB2")&&!gameObject.GetComponentInParent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("Shoot")) {
+		if (!gameObject.GetComponentInParent<CoreControl> ().IsReloading ()&& !gameObject.GetComponentInParent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("Die")&& !gameObject.GetComponentInParent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("AB2")) {
 			if (gameObject.GetComponent<AmmoRemaining> ().ammo > 0 && gameObject.GetComponent<AmmoRemaining>().playerType.Equals("Sergeant")) {
 				if (Input.GetButtonDown ("Fire1") && Time.time >= nextTimeToFire) {
 					nextTimeToFire = Time.time + 2f / fireRate;

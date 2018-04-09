@@ -12,10 +12,12 @@ public class PartPickup : Photon.PunBehaviour {
 	[PunRPC]
 	public void OnPickup ()
 	{
+		GameObject.Find ("MissionText").GetComponent<missionText> ().partNo = slot+1;
+		GameObject.Find ("MissionText").GetComponent<missionText> ().hasMission = true;
         switch (slot)
         {
-            case 0:
-                Image slotImage = GameObject.Find("Slot0").GetComponent<Image>();
+		case 0:
+			Image slotImage = GameObject.Find ("Slot0").GetComponent<Image> ();
                 slotImage.sprite = shipPartImage;
                 break;
             case 1:
@@ -38,7 +40,7 @@ public class PartPickup : Photon.PunBehaviour {
         slot++;
         if (slot >= 5)
         {
-			SceneManager.LoadScene("QuitCredits");
+			SceneManager.LoadScene("EndScene");
         }
 		Destroy (gameObject);
 	}

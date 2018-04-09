@@ -63,43 +63,39 @@ public class EnemyAnimation : MonoBehaviour {
 			Physics.IgnoreCollision (GetComponent<CapsuleCollider> (), player_hit.GetComponent<BoxCollider> (),false);
 		}
 
-		if (collide&&fov.visibleTargets.Count > 0)
-            {
-                if (!Player_ani.GetCurrentAnimatorStateInfo(0).IsName("Die"))
-                {
-                    ap.maxSpeed = 0;
-                    ani.SetTrigger("attack");
-                    setEnemyAttackType();
+		if (collide && fov.visibleTargets.Count > 0) {
+			if (!Player_ani.GetCurrentAnimatorStateInfo (0).IsName ("Die")) {
+				ap.maxSpeed = 0;
+				ani.SetTrigger ("attack");
+				setEnemyAttackType ();
 
-                    if (!Player_ani.GetCurrentAnimatorStateInfo(0).IsName("Hitted"))
-                    {
-                        Player_ani.SetTrigger("Hit");
-                    }
-                }
-            else
-            {
-                //remove the player from the fov
-                run = false;
-                ap.maxSpeed = 1;
-            }
+				if (!Player_ani.GetCurrentAnimatorStateInfo (0).IsName ("Hitted")) {
+					Player_ani.SetTrigger ("Hit");
+				}
+			} else {
+				//remove the player from the fov
+				run = false;
+				ap.maxSpeed = 1;
+			}
                
-            }
-            else if (distance > 1.4f)
-            {
-                if (fov.visibleTargets.Count > 0)
-                {
-                    ap.maxSpeed = 3;
-                }
-                else
-                {
-                run = false;
-                ap.maxSpeed = 1;
-                }
-            }
+		} else if (distance > 1.4f) {
+			if (fov.visibleTargets.Count > 0) {
+				ap.maxSpeed = 3;
+			} else {
+				run = false;
+				ap.maxSpeed = 1;
+			}
+		}
+
+		if (Player_ani!=null&&Player_ani.GetCurrentAnimatorStateInfo (0).IsName ("Die")) {
+			run = false;
+			ap.maxSpeed = 1;
+		}
+
 		spaceshipDistance = Vector3.Distance (transform.position, Spaceship.transform.position);
+
 		//colliding with spaceship
-		if (spaceshipDistance<3.7f) {
-			//print (spaceshipDistance);
+		if (spaceshipDistance<6f) {
 			ap.maxSpeed = 0;
 			ani.SetTrigger("attack");
 			setEnemyAttackTypeForSpaceship ();
@@ -109,7 +105,6 @@ public class EnemyAnimation : MonoBehaviour {
 		if (turrets != null) {
 			
 			turretDistance = Vector3.Distance (transform.position, turrets.transform.position);
-			//print (turretDistance);
 			if (turretDistance < 2f) {
 				ap.maxSpeed = 0;
 				ani.SetTrigger("attack");
@@ -130,7 +125,6 @@ public class EnemyAnimation : MonoBehaviour {
 
 		} else if (collision.gameObject.tag == "Spaceship") {
 			spaceship = true;
-			print ("with spaceship");
 		}
     }
 
@@ -190,7 +184,7 @@ public class EnemyAnimation : MonoBehaviour {
 				// Otherwise, this will hit every player.
 				ph.TakeDamage((int)PlayerHealth.EnemyAttackType.CRAB_ALIEN);
 				break;
-			case "SpidserBrain":
+			case "SpiderBrain":
 				ph.TakeDamage((int)PlayerHealth.EnemyAttackType.SPIDER_BRAIN);
 				break;
 			default:

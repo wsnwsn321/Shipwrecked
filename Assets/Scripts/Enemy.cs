@@ -7,7 +7,6 @@ public class Enemy : Photon.MonoBehaviour {
 	public MonsterSpawnManager spawnManager;
     private MonsterTypes monsterType;
 	private Animator crab_ani;
-    private bool isDead;
 	private brain_control bc;
 	// We want Photon to sync this value, so we will serialize it
 	[SerializeField]
@@ -15,6 +14,7 @@ public class Enemy : Photon.MonoBehaviour {
 
     // Variables to keep track of recent attackers.
     [HideInInspector]
+	public bool isDead;
     List<Transform> attackers;
     List<Transform> characterAttackers;
     List<float> times;
@@ -77,7 +77,6 @@ public class Enemy : Photon.MonoBehaviour {
 
     public void TakeDamage(float amount){
 		health -= amount;
-		print (gameObject.name + " took damage.");
         if (health <= 0f && !isDead)
         {
             Die();
