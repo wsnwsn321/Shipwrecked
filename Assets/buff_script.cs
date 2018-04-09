@@ -11,12 +11,14 @@ public class buff_script : MonoBehaviour {
 	private bool brainNearby;
 	void Start () {
 		buffc = this.transform.GetChild (1).gameObject;
-		en = this.GetComponent<Enemy> ();
 		brainNearby = false;
 	}
 
 	// Update is called once per frame
 	void Update () {
+		if (en == null) {
+			en = this.GetComponent<Enemy> ();
+		}
 		if (!en.isDead) {
 			Collider[] enemies = Physics.OverlapSphere (this.transform.position, 8f, layerMask, QueryTriggerInteraction.Collide);
 			if (enemies != null) {

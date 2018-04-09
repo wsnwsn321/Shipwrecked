@@ -93,9 +93,9 @@ public class EnemyAnimation : MonoBehaviour {
 		}
 
 		spaceshipDistance = Vector3.Distance (transform.position, Spaceship.transform.position);
+
 		//colliding with spaceship
-		if (spaceshipDistance<3.8f) {
-			//print (spaceshipDistance);
+		if (spaceshipDistance<6f) {
 			ap.maxSpeed = 0;
 			ani.SetTrigger("attack");
 			setEnemyAttackTypeForSpaceship ();
@@ -105,7 +105,6 @@ public class EnemyAnimation : MonoBehaviour {
 		if (turrets != null) {
 			
 			turretDistance = Vector3.Distance (transform.position, turrets.transform.position);
-			//print (turretDistance);
 			if (turretDistance < 2f) {
 				ap.maxSpeed = 0;
 				ani.SetTrigger("attack");
@@ -126,7 +125,6 @@ public class EnemyAnimation : MonoBehaviour {
 
 		} else if (collision.gameObject.tag == "Spaceship") {
 			spaceship = true;
-			print ("with spaceship");
 		}
     }
 
@@ -186,7 +184,7 @@ public class EnemyAnimation : MonoBehaviour {
 				// Otherwise, this will hit every player.
 				ph.TakeDamage((int)PlayerHealth.EnemyAttackType.CRAB_ALIEN);
 				break;
-			case "SpidserBrain":
+			case "SpiderBrain":
 				ph.TakeDamage((int)PlayerHealth.EnemyAttackType.SPIDER_BRAIN);
 				break;
 			default:

@@ -40,9 +40,11 @@ public class brain_control : MonoBehaviour {
         }
         else
         {
-
+			if (!collideSpace) {
 				an.Play("Walk");
 				ap.maxSpeed = 1;
+			}
+				
 
 
         }
@@ -59,13 +61,12 @@ public class brain_control : MonoBehaviour {
 		}
 		spaceDistance = Vector3.Distance(transform.position, spaceship.transform.position);
 		//colliding with spaceship
-		if (spaceDistance > 4f) {
+		if (spaceDistance > 6f) {
 			collideSpace = false;
 		} else {
 			collideSpace = true;
 		}
 		if (player_hit != null&&player_hit.layer==16) {
-			print ("called");
 			Physics.IgnoreCollision (GetComponent<BoxCollider>(), player_hit.GetComponent<BoxCollider> ());
 		}
 
@@ -83,8 +84,8 @@ public class brain_control : MonoBehaviour {
 			ap.maxSpeed = 0;
 		}
 		else{
-			if (collideSpace) {
-				//ap.maxSpeed = 0;
+			if (collideSpace&& fov.visibleTargets.Count ==0) {
+				ap.maxSpeed = 0;
 				an.Play ("Attack_1");
 				setEnemyAttackTypeForSpaceship ();
 			} 
@@ -179,6 +180,7 @@ public class brain_control : MonoBehaviour {
 
 	void setEnemyAttackTypeForSpaceship()
 	{
+		
 		if (Time.time > nextAttack) {
 			nextAttack = attackCooldown + Time.time;
 			ShipHealth ph = spaceship.GetComponent<ShipHealth> ();
@@ -188,7 +190,7 @@ public class brain_control : MonoBehaviour {
 				// Otherwise, this will hit every player.
 				ph.TakeDamage((int)PlayerHealth.EnemyAttackType.CRAB_ALIEN);
 				break;
-			case "SpidserBrain":
+			case "SpiderBrain":
 				ph.TakeDamage((int)PlayerHealth.EnemyAttackType.SPIDER_BRAIN);
 				break;
 			default:
