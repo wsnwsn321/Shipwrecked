@@ -32,8 +32,7 @@ public class ShipPartsSpawnManager : MonoBehaviour {
         {
             int random = Random.Range(0, spawnPoints.Count);
             Transform spawnPoint = spawnPoints[random];
-
-            GameObject part = null;
+            
             if (PhotonNetwork.connected)
             {
                 PhotonNetwork.Instantiate(parts[i].name, spawnPoint.position, spawnPoint.rotation, 0);
