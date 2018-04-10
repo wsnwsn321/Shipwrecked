@@ -16,7 +16,7 @@ public class AmmoRemaining : Photon.MonoBehaviour {
 	private Text ammoText;
     [HideInInspector]
     public bool isReloading;
-	private bool isFlaming;
+	public bool isFlaming;
 	private bool isCaptain = false;
 	private bool updateAmmo = false;
 

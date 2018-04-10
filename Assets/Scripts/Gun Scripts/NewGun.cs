@@ -101,9 +101,30 @@ public class NewGun : PlayerManager {
 			//gets camera for center of screen
 			Vector3 rayOrigin = this.GetComponentInParent<Control> ().main_c.ViewportToWorldPoint (new Vector3 (0.5f, 0.5f, 3.3f));
 
-			//Debug.DrawRay(rayOrigin, newCamSpot.transform.forward, Color.red);
-			RaycastHit hit;
-			//if (Physics.Raycast (charLocation.transform.position + charOffset, camera.transform.forward, out hit, range, hitMask)) {
+		//Debug.DrawRay(rayOrigin, newCamSpot.transform.forward, Color.red);
+		RaycastHit hit;
+		//if (Physics.Raycast (charLocation.transform.position + charOffset, camera.transform.forward, out hit, range, hitMask)) {
+		if (gameObject.GetComponent<AmmoRemaining> ().playerType.Equals ("Captain") && !gameObject.GetComponent<AmmoRemaining>().isFlaming) {
+			float xOffset = Random.Range (-0.05f, 0.05f);
+			float yOffset = Random.Range (-0.05f, 0.05f);
+			float zOffset = Random.Range (-0.05f, 0.05f);
+			rayOrigin = this.GetComponentInParent<Control> ().main_c.ViewportToWorldPoint (new Vector3 (0.5f + xOffset, 0.5f + yOffset, 3.3f + zOffset));
+			if (Physics.Raycast (rayOrigin, newCamSpot.transform.forward, out hit, range, hitMask)) {	
+				//Debug.DrawRay(charLocation.transform.position + charOffset, cameraLocation.transform.forward, Color.green);
+				Debug.Log (hit.transform.name); //This will display what is hit by the raycast
+				Enemy enemy = hit.transform.GetComponent<Enemy> ();
+				if (!enemy) {
+					enemy = hit.transform.GetComponentInParent<Enemy> ();
+				}
+				if (enemy != null) {
+					enemy.TakeDamage (baseDamage * core.damageModifier);
+					enemy.AddAttacker (transform.parent);
+				}
+				GameObject impactGO = Instantiate (impactEffect, hit.point, Quaternion.LookRotation (hit.normal));
+				//impactGO.GetComponent<ParticleSystem> ().Play ();
+				Destroy (impactGO, 1f);
+			}
+		} else {
 			if (Physics.Raycast (rayOrigin, newCamSpot.transform.forward, out hit, range, hitMask)) {	
 				//Debug.DrawRay(charLocation.transform.position + charOffset, cameraLocation.transform.forward, Color.green);
 				Debug.Log (hit.transform.name); //This will display what is hit by the raycast
@@ -120,6 +141,8 @@ public class NewGun : PlayerManager {
 				Destroy (impactGO, 1f);
 		
 			}
+		}
+
 			
 
 	}
