@@ -167,7 +167,13 @@ Oliver Wu: Character abilities, character animations
 ##Resources
 Course website: https://web.cse.ohio-state.edu/~crawfis.3/cse786/index.html
 
-Assets used: https://www.assetstore.unity3d.com/en/#!/content/25468
+Assets used: 	https://assetstore.unity.com/packages/vfx/particles/sci-fi-arsenal-60519
+		https://assetstore.unity.com/packages/2d/gui/complete-sci-fi-gui-psd-files-76123
+		https://assetstore.unity.com/packages/2d/gui/icons/sci-fi-skill-icon-pack-52852
+		https://assetstore.unity.com/packages/3d/environments/industrial/the-wasteland-48802
+		https://assetstore.unity.com/packages/3d/characters/creatures/crab-alien-67506
+		https://www.assetstore.unity3d.com/en/#!/content/25468
+
 
 Team website: https://sites.google.com/site/smallroomproductionsllc/
 
