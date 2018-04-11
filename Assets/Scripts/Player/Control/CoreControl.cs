@@ -372,6 +372,7 @@ public class CoreControl : Photon.PunBehaviour {
 	public void CheckForRevival(Vector3 revPos) {
 		if (Vector3.Distance(PlayerManager.LocalPlayerInstance.transform.position, revPos) < 3f) {
 			// This means that this player is revived. Call Revived
+			print("I'm revived!");
 			Revived();
 		}
 	}
@@ -477,5 +478,6 @@ public class CoreControl : Photon.PunBehaviour {
 		yield return new WaitForSeconds(5f);
 		photonView.RPC("CheckForRevival", PhotonTargets.Others, PlayerManager.LocalPlayerInstance.transform.position);
 		animator.SetTrigger ("FinishRevive");
+		//allie_core.Revived ();
 	}
 }
