@@ -49,6 +49,7 @@ public class ShipHealth : Photon.MonoBehaviour {
 			stream.SendNext (health);
 		} else if (stream.isReading) {
 			health = (int)stream.ReceiveNext ();
+			tookDmg = true;
 		}
 	}
 
