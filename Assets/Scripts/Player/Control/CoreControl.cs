@@ -54,8 +54,9 @@ public class CoreControl : Photon.PunBehaviour {
 		animator = GetComponent<Animator> ();
 		rb = GetComponent<Rigidbody> ();
 		ammo = GetComponentInChildren<AmmoRemaining> ();
+		myhp = GetComponent<PlayerHealth> ();
 		if (PhotonNetwork.connected && this.gameObject.Equals (PlayerManager.LocalPlayerInstance)) {
-			myhp = GetComponent<PlayerHealth> ();
+			//myhp = GetComponent<PlayerHealth> ();
 			//ammo = GetComponentInChildren<AmmoRemaining> ();
 		} else if (!PhotonNetwork.connected) {
 			myhp = GetComponent<PlayerHealth> ();
