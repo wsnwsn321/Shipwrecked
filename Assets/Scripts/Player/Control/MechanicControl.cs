@@ -241,10 +241,9 @@ public class MechanicControl : MonoBehaviour, IClassControl {
 
 
 	void RepairShip(){
-		print (distanceWithSpace);
 
 		if (ani && !ani.GetCurrentAnimatorStateInfo (0).IsName ("Die")&&canRepair) {
-			if (!ani.GetCurrentAnimatorStateInfo (0).IsName ("AB2")&&distanceWithSpace < 4f) {
+			if (!ani.GetCurrentAnimatorStateInfo (0).IsName ("AB2")&&distanceWithSpace < 9.5f) {
 				canRepair = false;
 				ani.SetTrigger ("Repairing");
 				shp.isReparing = true;
