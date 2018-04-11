@@ -20,11 +20,6 @@ public class NewGun : PlayerManager {
 	private float nextTimeToFire = 0f;
 	public GameObject crosshairPrefab;
 
-	//For dynamic crosshair
-	//private Ray ray = new Ray ();
-
-
-
 	private PlayerManager playerManager;
 
 
@@ -105,6 +100,26 @@ public class NewGun : PlayerManager {
 		RaycastHit hit;
 		//if (Physics.Raycast (charLocation.transform.position + charOffset, camera.transform.forward, out hit, range, hitMask)) {
 		if (gameObject.GetComponent<AmmoRemaining> ().playerType.Equals ("Captain") && !gameObject.GetComponent<AmmoRemaining> ().isFlaming) {
+			float xOffset = Random.Range (-0.07f, 0.07f);
+			float yOffset = Random.Range (-0.07f, 0.07f);
+			float zOffset = Random.Range (-0.07f, 0.07f);
+			rayOrigin = this.GetComponentInParent<Control> ().main_c.ViewportToWorldPoint (new Vector3 (0.5f + xOffset, 0.5f + yOffset, 3.3f + zOffset));
+			if (Physics.Raycast (rayOrigin, newCamSpot.transform.forward, out hit, range, hitMask)) {	
+				//Debug.DrawRay(charLocation.transform.position + charOffset, cameraLocation.transform.forward, Color.green);
+				Debug.Log (hit.transform.name); //This will display what is hit by the raycast
+				Enemy enemy = hit.transform.GetComponent<Enemy> ();
+				if (!enemy) {
+					enemy = hit.transform.GetComponentInParent<Enemy> ();
+				}
+				if (enemy != null) {
+					enemy.TakeDamage (baseDamage * core.damageModifier);
+					enemy.AddAttacker (transform.parent);
+				}
+				GameObject impactGO = Instantiate (impactEffect, hit.point, Quaternion.LookRotation (hit.normal));
+				//impactGO.GetComponent<ParticleSystem> ().Play ();
+				Destroy (impactGO, 1f);
+			}
+		} else if (gameObject.GetComponent<AmmoRemaining> ().playerType.Equals ("Sergeant") || gameObject.GetComponent<AmmoRemaining> ().playerType.Equals ("Doctor")) {
 			float xOffset = Random.Range (-0.05f, 0.05f);
 			float yOffset = Random.Range (-0.05f, 0.05f);
 			float zOffset = Random.Range (-0.05f, 0.05f);
@@ -124,11 +139,7 @@ public class NewGun : PlayerManager {
 				//impactGO.GetComponent<ParticleSystem> ().Play ();
 				Destroy (impactGO, 1f);
 			}
-		} else if (gameObject.GetComponent<AmmoRemaining> ().playerType.Equals ("Sergeant") || gameObject.GetComponent<AmmoRemaining> ().playerType.Equals ("Doctor")) {
-			float xOffset = Random.Range (-0.02f, 0.02f);
-			float yOffset = Random.Range (-0.02f, 0.02f);
-			float zOffset = Random.Range (-0.02f, 0.02f);
-			rayOrigin = this.GetComponentInParent<Control> ().main_c.ViewportToWorldPoint (new Vector3 (0.5f + xOffset, 0.5f + yOffset, 3.3f + zOffset));
+		} else if (gameObject.GetComponentInParent<CoreControl>().aiming) {
 			if (Physics.Raycast (rayOrigin, newCamSpot.transform.forward, out hit, range, hitMask)) {	
 				//Debug.DrawRay(charLocation.transform.position + charOffset, cameraLocation.transform.forward, Color.green);
 				Debug.Log (hit.transform.name); //This will display what is hit by the raycast
@@ -143,6 +154,7 @@ public class NewGun : PlayerManager {
 				GameObject impactGO = Instantiate (impactEffect, hit.point, Quaternion.LookRotation (hit.normal));
 				//impactGO.GetComponent<ParticleSystem> ().Play ();
 				Destroy (impactGO, 1f);
+		
 			}
 		} else {
 			if (Physics.Raycast (rayOrigin, newCamSpot.transform.forward, out hit, range, hitMask)) {	
@@ -159,7 +171,7 @@ public class NewGun : PlayerManager {
 				GameObject impactGO = Instantiate (impactEffect, hit.point, Quaternion.LookRotation (hit.normal));
 				//impactGO.GetComponent<ParticleSystem> ().Play ();
 				Destroy (impactGO, 1f);
-		
+
 			}
 		}
 
