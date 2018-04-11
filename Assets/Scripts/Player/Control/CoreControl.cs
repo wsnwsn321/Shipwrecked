@@ -51,18 +51,14 @@ public class CoreControl : Photon.PunBehaviour {
 			Debug.Log ("ERROR in CoreControl! Local player instance not set!");
 		}
 
+		animator = GetComponent<Animator> ();
+		rb = GetComponent<Rigidbody> ();
 		if (PhotonNetwork.connected && this.gameObject.Equals (PlayerManager.LocalPlayerInstance)) {
-			animator = GetComponent<Animator> ();
-			rb = GetComponent<Rigidbody> ();
 			myhp = GetComponent<PlayerHealth> ();
 			ammo = GetComponentInChildren<AmmoRemaining> ();
 		} else if (!PhotonNetwork.connected) {
-			animator = GetComponent<Animator> ();
-			rb = GetComponent<Rigidbody> ();
 			myhp = GetComponent<PlayerHealth> ();
 			ammo = GetComponentInChildren<AmmoRemaining> ();
-		} else {
-			
 		}
 			
     }

@@ -124,7 +124,9 @@ public class DoctorControl : Photon.MonoBehaviour, IClassControl {
         skillTimeStamp = Time.time + healingCooldown;
         yield return new WaitForSeconds(5f);
 		if (PhotonNetwork.connected) {
-			PhotonNetwork.Destroy (pills [0]);
+			if (pills [0] != null) {
+				PhotonNetwork.Destroy (pills [0]);
+			}
 		} else {
 			Destroy (pills [0]);
         }
