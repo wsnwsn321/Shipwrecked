@@ -21,7 +21,7 @@ public class CrosshairColor : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		ShootCast ();
-		print (Time.time);
+		//print (Time.time);
 	}
 
 	void ShootCast(){

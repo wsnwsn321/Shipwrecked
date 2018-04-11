@@ -26,6 +26,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.Rendering;
 using UnityEngine.VR;
+using UnityEngine.XR;
 
 namespace cakeslice
 {
@@ -316,7 +317,7 @@ namespace cakeslice
         }
 
         public void UpdateMaterialsPublicProperties()
-        {/*
+        {
             if(outlineShaderMaterial)
             {
                 float scalingFactor = 1;
@@ -372,7 +373,7 @@ namespace cakeslice
                     outlineShaderMaterial.SetInt("_CornerOutlines", 0);
 
                 Shader.SetGlobalFloat("_OutlineAlphaCutoff", alphaCutoff);
-            }*/
+            }
         }
 
         void UpdateOutlineCameraFromSource()
