@@ -65,10 +65,10 @@ public class Control : Photon.MonoBehaviour {
     private void Update()
     {
 		// We only want to update our character! Added on 2/6/18
-		if (photonView.isMine == false && PhotonNetwork.connected == true)
-		{
-			return;
-		}
+		//if (photonView.isMine == false && PhotonNetwork.connected == true)
+		//{
+			//return;
+		//}
 
         classControl.UpdateActions(Time.deltaTime);
     }
@@ -78,7 +78,7 @@ public class Control : Photon.MonoBehaviour {
 		// We only want to update our character! Added on 2/6/18
 		if (photonView.isMine == false && PhotonNetwork.connected == true)
         {
-			return;
+			//return;
 		}
 
         coreControl.GetMovement();
