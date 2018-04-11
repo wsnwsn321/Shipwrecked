@@ -19,14 +19,18 @@ public class ShipHealth : Photon.MonoBehaviour {
     {
         maxHealth = health;
 		isReparing = false;
+		if (healthText == null) {
+			healthText = GameObject.FindGameObjectWithTag("ShipHealthText").GetComponent<Text>();
+		}
+		if (healthBar == null) {
+			healthBar = GameObject.FindGameObjectWithTag("ShipHealthBar").GetComponent<Slider>();
+
+		}
     }
 
     // Update is called once per frame
     void Update () {
-		if (healthText == null) {
-			healthText = GameObject.FindGameObjectWithTag("ShipHealthText").GetComponent<Text>();
-			healthBar = GameObject.FindGameObjectWithTag("ShipHealthBar").GetComponent<Slider>();
-		}
+		
 		if (tookDmg)
 		{
 			updateHealthText();

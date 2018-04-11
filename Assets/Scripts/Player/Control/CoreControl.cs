@@ -403,6 +403,7 @@ public class CoreControl : Photon.PunBehaviour {
     {
         if (animator)
         {
+			print ("reviving!!!!!");
             dead = false;
             animator.SetTrigger("Revived");
 			this.gameObject.layer = 10;
