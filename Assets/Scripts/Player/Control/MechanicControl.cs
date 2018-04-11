@@ -96,7 +96,11 @@ public class MechanicControl : MonoBehaviour, IClassControl {
             canBuild = true;
         }
         timer.CooldownUpdate(buildTurretCooldown, skillTimeStamp);
-		distanceWithSpace = Vector3.Distance (transform.position, spaceship.transform.position);
+		if (spaceship != null) {
+			distanceWithSpace = Vector3.Distance (transform.position, spaceship.transform.position);
+		} else {
+			spaceship = GameObject.Find("SpaceshipZone");
+		}
     }
     
     List<Transform> ActivateChildren(Transform t)
