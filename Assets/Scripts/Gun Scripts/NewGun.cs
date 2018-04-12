@@ -10,7 +10,7 @@ public class NewGun : PlayerManager {
 	public GameObject charLocation;
 	private GameObject camera;
 	public LayerMask hitMask;
-
+	public GameObject bloodSplatter;
     // Core Control Modifiers
     private CoreControl core;
     private float baseDamage;
@@ -21,6 +21,7 @@ public class NewGun : PlayerManager {
 	public GameObject crosshairPrefab;
 
 	private PlayerManager playerManager;
+
 
 
 	void Start(){
@@ -115,9 +116,11 @@ public class NewGun : PlayerManager {
 					enemy.TakeDamage (baseDamage * core.damageModifier);
 					enemy.AddAttacker (transform.parent);
 				}
+				GameObject bloodImpact = GameObject.Instantiate (bloodSplatter, hit.point, Quaternion.identity);
 				GameObject impactGO = Instantiate (impactEffect, hit.point, Quaternion.LookRotation (hit.normal));
 				//impactGO.GetComponent<ParticleSystem> ().Play ();
 				Destroy (impactGO, 1f);
+				Destroy (bloodImpact, 1f);
 			}
 		} else if (gameObject.GetComponent<AmmoRemaining> ().playerType.Equals ("Sergeant") || gameObject.GetComponent<AmmoRemaining> ().playerType.Equals ("Doctor")) {
 			float xOffset = Random.Range (-0.05f, 0.05f);
