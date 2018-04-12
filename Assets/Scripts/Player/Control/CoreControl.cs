@@ -21,7 +21,7 @@ public class CoreControl : Photon.PunBehaviour {
     public  Animator allie_ani;
 	private CoreControl allie_core;
 	private PlayerHealth allie_health;
-	public bool dead, hasSpecialAbility,rampage;
+	public bool dead, hasSpecialAbility,rampage,autoRifle;
 	public Animator animator;
     private Rigidbody rb;
 	private PlayerHealth myhp;
@@ -41,6 +41,7 @@ public class CoreControl : Photon.PunBehaviour {
         isGrounded = true;
         turn = false;
         dead = false;
+		autoRifle = false;
         hasSpecialAbility = false;
 		rampage = false;
         forwardSpeed = 1f;
@@ -264,10 +265,11 @@ public class CoreControl : Photon.PunBehaviour {
             {
                 if (ammo.ammo != 0)
                 {
-                    if (rampage)
-                    {
-                        animator.SetTrigger("Rampageshoot");
-                    }
+					if (rampage) {
+						animator.SetTrigger ("Rampageshoot");
+					} else if (autoRifle) {
+						animator.SetTrigger ("Auto");
+					}
                     else
                     {
                         animator.SetTrigger("Shoot");

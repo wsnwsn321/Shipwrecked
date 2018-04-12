@@ -21,7 +21,8 @@ namespace PlayerAbilities
 		Build,
         HealingCircle,
 		KnockBack,
-		RepairShip
+		RepairShip,
+		AutoRifle
     }
 }
 

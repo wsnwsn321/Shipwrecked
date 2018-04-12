@@ -118,7 +118,7 @@ public class Control : Photon.MonoBehaviour {
         }
 
         // Shoot
-		if (this.tag == "Captain") {
+		if (this.tag == "Captain"||(coreControl.autoRifle)) {
 			if (Input.GetMouseButton (0) && coreControl.CanShoot() && classControl.CanShoot()) {
                 coreControl.Shoot();
             } else
@@ -209,6 +209,7 @@ public class Control : Photon.MonoBehaviour {
                 classControl.Activate(SpecialAbility.HealingCircle);
                 classControl.Activate(SpecialAbility.KnockBack);
 				classControl.Activate(SpecialAbility.RepairShip);
+				classControl.Activate (SpecialAbility.AutoRifle);
             }
 		}
 

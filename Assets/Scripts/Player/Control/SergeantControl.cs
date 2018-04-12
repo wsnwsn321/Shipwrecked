@@ -9,6 +9,7 @@ public class SergeantControl : MonoBehaviour, IClassControl
 {
     [Range(0f, 10f)]
     public float healCooldown = 5f;
+	public float autoCooldown = 8f;
     [Range(0f, 10f)]
     public float healTime = 5f;
     [Range(1, 100)]
@@ -18,11 +19,11 @@ public class SergeantControl : MonoBehaviour, IClassControl
     private float currentHealTime;
     private float healDelay;
     private GameObject healing;
-    private bool canHeal;
+    private bool canHeal,canAuto;
 	private PlayerHealth myhp;
     private CooldownTimerUI timer;
     public float skillTimeStamp;
-
+	private CoreControl cc;
     void Start()
     {
         timer = new CooldownTimerUI(GameObject.FindGameObjectWithTag("Skill1").GetComponent<Image>(), GameObject.FindGameObjectWithTag("Skill2").GetComponent<Image>());
@@ -31,8 +32,10 @@ public class SergeantControl : MonoBehaviour, IClassControl
         currentHealTime = 0;
         healDelay = healTime / healDivisions;
         canHeal = true;
+		canAuto = true;
         ani = GetComponent<Animator>();
 		myhp = GetComponent<PlayerHealth> ();
+		cc = GetComponent<CoreControl> ();
     }
 
     void Update()
@@ -55,6 +58,14 @@ public class SergeantControl : MonoBehaviour, IClassControl
 			StartCoroutine(HealForTime());
         }
     }
+
+	void AutoRifle(){
+		if (canAuto && !cc.autoRifle) {
+			print ("entered!");
+			cc.autoRifle = true;
+		}
+		StartCoroutine(WaitAbility2Use());
+	}
 
     void Heal()
     {
@@ -98,6 +109,12 @@ public class SergeantControl : MonoBehaviour, IClassControl
         yield return new WaitForSeconds(healCooldown);
         canHeal = true;
     }
+	IEnumerator WaitAbility2Use()
+	{
+		yield return new WaitForSeconds(autoCooldown);
+		canAuto = true;
+		cc.autoRifle = false;
+	}
 
     #region Inherited Methods
 
@@ -107,6 +124,10 @@ public class SergeantControl : MonoBehaviour, IClassControl
         {
             HealSelf();
         }
+
+		if (ability == SpecialAbility.AutoRifle) {
+			AutoRifle ();
+		}
     }
 
     public bool CanAim()
