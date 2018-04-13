@@ -56,7 +56,7 @@ public class PlayerHealth : Photon.MonoBehaviour {
 
 	public void updateHealthText()
     {
-		//if (photonView.isMine) {
+		if (photonView.isMine) {
 		health -= (int)enemyAttackType;
 		enemyAttackType = EnemyAttackType.NONE;
 
@@ -71,14 +71,14 @@ public class PlayerHealth : Photon.MonoBehaviour {
 			UIManager.updateUI = true;
 		}
 		healthText.text = Mathf.Floor (health).ToString () + "/100";
-		//}
+		}
     }
 
 	public void updateHealthBar()
     {
-		//if (photonView.isMine) {
+		if (photonView.isMine) {
 		healthBar.value = health;
-		//}
+		}
     }
 
     private void checkHealth()
