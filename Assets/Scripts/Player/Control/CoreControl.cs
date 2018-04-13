@@ -376,10 +376,11 @@ public class CoreControl : Photon.PunBehaviour {
 
 	[PunRPC]
 	public void CheckForRevival(Vector3 revPos) {
-		if (Vector3.Distance(PlayerManager.LocalPlayerInstance.transform.position, revPos) < 3f) {
+		if (Vector3.Distance(PlayerManager.LocalPlayerInstance.transform.position, revPos) < 5f) {
 			// This means that this player is revived. Call Revived
 			print("I'm revived!");
-			canReviveSelf = true;
+			//canReviveSelf = true;
+			Revived();
 		}
 	}
 
@@ -411,7 +412,9 @@ public class CoreControl : Photon.PunBehaviour {
         {
 			print ("reviving!!!!!");
             dead = false;
+
             animator.SetTrigger("Revived");
+
 			this.gameObject.layer = 10;
 			myhp.health = 10;
 			myhp.updateHealthBar ();
@@ -512,8 +515,12 @@ public class CoreControl : Photon.PunBehaviour {
 	IEnumerator animationDelay( )
 	{
 		yield return new WaitForSeconds(5f);
-		photonView.RPC("CheckForRevival", PhotonTargets.Others, PlayerManager.LocalPlayerInstance.transform.position);
+		allie_core.WillBeRevived ();
 		animator.SetTrigger ("FinishRevive");
-		//allie_core.Revived ();
+	}
+
+
+	public void WillBeRevived() {
+		photonView.RPC("CheckForRevival", PhotonTargets.Others, PlayerManager.LocalPlayerInstance.transform.position);
 	}
 }
