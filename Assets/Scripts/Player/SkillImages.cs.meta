@@ -3,8 +3,17 @@ guid: d698590d7a1582b4794f125282b447d6
 timeCreated: 1522262026
 licenseType: Free
 MonoImporter:
+  externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - sargeSkillOne: {fileID: 21300000, guid: 1864624d68b92894eac1ced8d8923174, type: 3}
+  - sargeSkillTwo: {fileID: 21300000, guid: c1c7c0c31d31f4b48868d8e2fe62b867, type: 3}
+  - doctorSkillOne: {fileID: 21300000, guid: 04482822f8cffa446b20c2ddae634f24, type: 3}
+  - doctorSkillTwo: {fileID: 21300000, guid: 7b3c229ed66bd234da2203c97f395750, type: 3}
+  - mechanicSkillOne: {fileID: 21300000, guid: 4dd08cc4787c6b140a19ba5e618725fb, type: 3}
+  - mechanicSkillTwo: {fileID: 21300000, guid: 7c6973f434e1d484eb85d94154708ce3, type: 3}
+  - captainSkillOne: {fileID: 21300000, guid: fe13ac2c69c2ca947a205c4d4a059a43, type: 3}
+  - captainSkillTwo: {fileID: 21300000, guid: f6170b48ed0941f4cafe847ad6dce2a7, type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
