@@ -459,7 +459,7 @@ public class CoreControl : Photon.PunBehaviour {
                 float ratio = (1 / fireRate) / state.length;
                 animator.speed = ratio;
             }
-            print(currentFireTime);
+            //print(currentFireTime);
             print(state.length * animator.speed);
             if (currentFireTime >= state.length * animator.speed)
             {
