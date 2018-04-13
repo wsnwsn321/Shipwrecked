@@ -6,6 +6,7 @@ public class CoreControl : Photon.PunBehaviour {
 
     [HideInInspector]
     public float nextTimeToFire = 0f;
+    private float currentFireTime = 0f;
 
     [HideInInspector]
     public float damageModifier;
@@ -61,9 +62,7 @@ public class CoreControl : Photon.PunBehaviour {
 			//ammo = GetComponentInChildren<AmmoRemaining> ();
 		} else if (!PhotonNetwork.connected) {
 			myhp = GetComponent<PlayerHealth> ();
-
 		}
-			
     }
 
     public bool IsJumping()
@@ -117,7 +116,12 @@ public class CoreControl : Photon.PunBehaviour {
     public bool CanShoot()
     {
 		bool canShoot = !CurrentStateNameIs(0, "Sprint") && !CurrentStateNameIs(0, "Roll") && !CurrentStateNameIs(0, "PickupObject")&&!CurrentStateNameIs(0,"AB2");
-        return canShoot && Time.time >= nextTimeToFire;
+        return canShoot && !animator.GetBool("Shoot") && Time.time >= nextTimeToFire;
+    }
+
+    public bool CanStopShooting()
+    {
+        return Time.time >= nextTimeToFire;
     }
 
     #endregion Can Action
@@ -273,6 +277,7 @@ public class CoreControl : Photon.PunBehaviour {
                     else
                     {
                         animator.SetTrigger("Shoot");
+                        currentFireTime = 0f;
                     }
                 }
             }
@@ -310,7 +315,6 @@ public class CoreControl : Photon.PunBehaviour {
             control.CamRef.transform.localPosition = new Vector3(0.6f, -1.1f, -1.2f);
             control.main_c.transform.localEulerAngles = new Vector3(0.04f, 9.667f, 0.2f);
         }
-        
     }
 
     public void StopAiming()
@@ -330,14 +334,13 @@ public class CoreControl : Photon.PunBehaviour {
             control.CamRef.transform.localPosition = new Vector3(0.71f, -0, -0.22f);
             control.main_c.transform.localEulerAngles = new Vector3(18.41f, 9.667f, 0.2f);
         }
-       
     }
 
     public void StopShooting()
     {
         if (animator)
         {
-			
+            print("Hit.");
 			if (rampage) {
 				animator.ResetTrigger ("Rampageshoot");
 			} else {
@@ -444,6 +447,35 @@ public class CoreControl : Photon.PunBehaviour {
     }
 
     #endregion Actions
+
+    private void Update()
+    {
+        if (CurrentStateNameIs(0, "Shoot"))
+        {
+            currentFireTime += Time.deltaTime;
+            AnimatorStateInfo state = animator.GetCurrentAnimatorStateInfo(0);
+            if (1 / fireRate < state.length)
+            {
+                float ratio = (1 / fireRate) / state.length;
+                animator.speed = ratio;
+            }
+            print(currentFireTime);
+            print(state.length * animator.speed);
+            if (currentFireTime >= state.length * animator.speed)
+            {
+                StopShooting();
+            }
+        }
+        else if (animator.speed != 1f)
+        {
+            animator.speed = 1f;
+        }
+
+        if (Time.time >= nextTimeToFire)
+        {
+            animator.SetBool("Shooting", false);
+        }
+    }
 
     public void UpdateAnimationStates()
     {
