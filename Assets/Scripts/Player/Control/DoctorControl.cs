@@ -5,7 +5,8 @@ using PlayerAbilities;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class DoctorControl : Photon.MonoBehaviour, IClassControl {
+[RequireComponent (typeof(PhotonView))]
+public class DoctorControl : Photon.PunBehaviour, IClassControl {
 
     public int maxPills = 1;
     public GameObject healParticle;
@@ -71,6 +72,7 @@ public class DoctorControl : Photon.MonoBehaviour, IClassControl {
         }
     }
 
+	[PunRPC]
 	void HealingCircle(){
 		if (animator&&!animator.GetCurrentAnimatorStateInfo(0).IsName("Die")&&canBuff)
 		{
@@ -158,7 +160,11 @@ public class DoctorControl : Photon.MonoBehaviour, IClassControl {
         }
 		if (ability == SpecialAbility.HealingCircle)
 		{
-			HealingCircle();
+			if (PhotonNetwork.connected) {
+				photonView.RPC ("HealingCircle", PhotonTargets.All, null);
+			} else {
+				HealingCircle ();
+			}
 		}
     }
 

@@ -341,7 +341,7 @@ public class CoreControl : Photon.PunBehaviour {
     {
         if (animator)
         {
-            print("Hit.");
+            //print("Hit.");
 			if (rampage) {
 				animator.ResetTrigger ("Rampageshoot");
 			} else {
@@ -454,6 +454,10 @@ public class CoreControl : Photon.PunBehaviour {
 
     private void Update()
     {
+		if (PhotonNetwork.connected && !photonView.isMine) {
+			return;
+		}
+
         if (CurrentStateNameIs(0, "Shoot"))
         {
             currentFireTime += Time.deltaTime;
@@ -464,7 +468,7 @@ public class CoreControl : Photon.PunBehaviour {
                 animator.speed = ratio;
             }
             //print(currentFireTime);
-            print(state.length * animator.speed);
+            //print(state.length * animator.speed);
             if (currentFireTime >= state.length * animator.speed)
             {
                 StopShooting();
