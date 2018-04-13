@@ -28,7 +28,8 @@ public class DoctorControl : Photon.PunBehaviour, IClassControl {
 	private PlayerHealth allieHP;
 
     private CooldownTimerUI timer;
-    public float skillTimeStamp;
+    public float skillTimeStamp1;
+    public float skillTimeStamp2;
     private float healingCooldown = 5f;
 	private float healBuffCooldown =10f;
 
@@ -49,7 +50,7 @@ public class DoctorControl : Photon.PunBehaviour, IClassControl {
 				Debug.Log ("ERROR! Doctor cannot retrieve its animator");
 			}
 		}
-        timer.CooldownUpdate(healingCooldown, skillTimeStamp);
+        timer.CooldownUpdate(healingCooldown, healBuffCooldown, skillTimeStamp1, skillTimeStamp2);
     }
 
     void ThrowPill()
@@ -123,7 +124,7 @@ public class DoctorControl : Photon.PunBehaviour, IClassControl {
     {
         // Start cooldown animation for UI skill image
         timer.startCooldownTimerUI(1);
-        skillTimeStamp = Time.time + healingCooldown;
+        skillTimeStamp1 = Time.time + healingCooldown;
         yield return new WaitForSeconds(5f);
 		if (PhotonNetwork.connected) {
 			if (pills [0] != null) {

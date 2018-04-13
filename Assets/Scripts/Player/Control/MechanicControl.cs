@@ -44,7 +44,8 @@ public class MechanicControl : MonoBehaviour, IClassControl {
     public float buildTurretCooldown = 20f;
 	public float repairSpaceShipCooldown = 10f;
     private CooldownTimerUI timer;
-    public float skillTimeStamp;
+    public float skillTimeStamp1;
+    public float skillTimeStamp2;
 
     class UnfinishedBuilding
     {
@@ -91,11 +92,11 @@ public class MechanicControl : MonoBehaviour, IClassControl {
 
     void Update()
     {
-        if (canBuild == false && Time.time >= skillTimeStamp)
+        if (canBuild == false && Time.time >= skillTimeStamp1)
         {
             canBuild = true;
         }
-        timer.CooldownUpdate(buildTurretCooldown, skillTimeStamp);
+        timer.CooldownUpdate(buildTurretCooldown, repairSpaceShipCooldown, skillTimeStamp1, skillTimeStamp2);
 		if (spaceship != null) {
 			distanceWithSpace = Vector3.Distance (transform.position, spaceship.transform.position);
 		} else {
@@ -290,7 +291,7 @@ public class MechanicControl : MonoBehaviour, IClassControl {
             canBuild = false;
             // Start cooldown animation for UI skill image
             timer.startCooldownTimerUI(1);
-            skillTimeStamp = Time.time + buildTurretCooldown;
+            skillTimeStamp1 = Time.time + buildTurretCooldown;
         }
 		if (ability == SpecialAbility.RepairShip) {
 

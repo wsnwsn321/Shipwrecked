@@ -22,8 +22,9 @@ public class SergeantControl : MonoBehaviour, IClassControl
     private bool canHeal,canAuto;
 	private PlayerHealth myhp;
     private CooldownTimerUI timer;
-    public float skillTimeStamp;
-	private CoreControl cc;
+    public float skillTimeStamp1;
+    public float skillTimeStamp2;
+    private CoreControl cc;
     void Start()
     {
         timer = new CooldownTimerUI(GameObject.FindGameObjectWithTag("Skill1").GetComponent<Image>(), GameObject.FindGameObjectWithTag("Skill2").GetComponent<Image>());
@@ -40,7 +41,7 @@ public class SergeantControl : MonoBehaviour, IClassControl
 
     void Update()
     {
-        timer.CooldownUpdate(healCooldown, skillTimeStamp);
+        timer.CooldownUpdate(healCooldown, autoCooldown, skillTimeStamp1, skillTimeStamp2);
     }
 
     void HealSelf()
@@ -63,8 +64,11 @@ public class SergeantControl : MonoBehaviour, IClassControl
 		if (canAuto && !cc.autoRifle) {
 			print ("entered!");
 			cc.autoRifle = true;
-		}
-		StartCoroutine(WaitAbility2Use());
+            // Start cooldown animation for UI skill image
+            timer.startCooldownTimerUI(2);
+            skillTimeStamp2 = Time.time + autoCooldown;
+        }
+        StartCoroutine(WaitAbility2Use());
 	}
 
     void Heal()
@@ -85,7 +89,7 @@ public class SergeantControl : MonoBehaviour, IClassControl
 			Destroy (healing);
             // Start cooldown animation for UI skill image
             timer.startCooldownTimerUI(1);
-            skillTimeStamp = Time.time + healCooldown;
+            skillTimeStamp1 = Time.time + healCooldown;
         
         }
         healing = null;

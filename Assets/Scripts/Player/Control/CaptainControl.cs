@@ -28,8 +28,9 @@ public class CaptainControl : Photon.MonoBehaviour, IClassControl
 	private CoreControl corecontrol;
 	public LayerMask layerMask;
     private CooldownTimerUI timer;
-    public float skillTimeStamp;
-   
+    public float skillTimeStamp1;
+    public float skillTimeStamp2;
+
     void Start()
     {
         timer = new CooldownTimerUI(GameObject.FindGameObjectWithTag("Skill1").GetComponent<Image>(), GameObject.FindGameObjectWithTag("Skill2").GetComponent<Image>());
@@ -48,7 +49,7 @@ public class CaptainControl : Photon.MonoBehaviour, IClassControl
 
     void Update()
     {
-        timer.CooldownUpdate(RampageCooldown, skillTimeStamp);
+        timer.CooldownUpdate(RampageCooldown, StunCooldown, skillTimeStamp1, skillTimeStamp2);
     }
 
 	void Rampage(){
@@ -109,7 +110,7 @@ public class CaptainControl : Photon.MonoBehaviour, IClassControl
         
         // Start cooldown animation for UI skill image
         timer.startCooldownTimerUI(1);
-        skillTimeStamp = Time.time + RampageCooldown;
+        skillTimeStamp1 = Time.time + RampageCooldown;
 
         StartCoroutine(WaitAbility1Use());
 	}
