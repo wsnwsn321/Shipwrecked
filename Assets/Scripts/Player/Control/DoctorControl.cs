@@ -103,7 +103,10 @@ public class DoctorControl : Photon.PunBehaviour, IClassControl {
 
 	IEnumerator EndBuff(GameObject hE)
 	{
-		yield return new WaitForSeconds(5f);
+        // Start cooldown animation for UI skill image
+        timer.startCooldownTimerUI(2);
+        skillTimeStamp2 = Time.time + healBuffCooldown;
+        yield return new WaitForSeconds(5f);
 		hE.SetActive (false);
 		//StopHealing ();
 		healBuff.SetActive (false);

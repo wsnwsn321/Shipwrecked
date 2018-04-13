@@ -13,6 +13,7 @@ public class SkillImages : MonoBehaviour {
     public Sprite mechanicSkillTwo;
     public Sprite captainSkillOne;
     public Sprite captainSkillTwo;
+    public Sprite genericSkillSprite;
 
     // Use this for initialization
     void Start () {
