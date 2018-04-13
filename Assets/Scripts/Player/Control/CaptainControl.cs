@@ -93,7 +93,10 @@ public class CaptainControl : Photon.MonoBehaviour, IClassControl
 				}
 
 			}
-			StartCoroutine(WaitAbility2Use());
+            // Start cooldown animation for UI skill image
+            timer.startCooldownTimerUI(2);
+            skillTimeStamp2 = Time.time + StunCooldown;
+            StartCoroutine(WaitAbility2Use());
 
 		}
 	}
