@@ -155,7 +155,7 @@ public class CoreControl : Photon.PunBehaviour {
 
     public bool IsShooting()
     {
-        return CurrentStateTagIs(1, "FIRE");
+		return CurrentStateNameIs(0, "Shoot")||CurrentStateNameIs(0, "RampageShoot")||CurrentStateNameIs(0, "AutoShoot");
     }
 
     #endregion Is Action
