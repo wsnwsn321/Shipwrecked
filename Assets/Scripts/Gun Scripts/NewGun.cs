@@ -39,7 +39,7 @@ public class NewGun : PlayerManager {
                 break;
             case TeammateTypes.Doctor:
                 baseDamage = 5f;
-                fireRate = 15f;
+                fireRate = 12f;
                 break;
             case TeammateTypes.Engineer:
                 baseDamage = 30f;

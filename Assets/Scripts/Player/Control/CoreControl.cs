@@ -122,7 +122,7 @@ public class CoreControl : Photon.PunBehaviour {
 
     public bool CanStopShooting()
     {
-        return Time.time >= nextTimeToFire;
+		return !IsShooting();
     }
 
     #endregion Can Action
@@ -270,16 +270,19 @@ public class CoreControl : Photon.PunBehaviour {
             {
                 if (ammo.ammo != 0)
                 {
-					if (rampage) {
-						animator.SetTrigger ("Rampageshoot");
-					} else if (autoRifle) {
-						animator.SetTrigger ("Auto");
+					if (((CompareTag ("Captain") || autoRifle) && Input.GetMouseButton (0)) || Input.GetMouseButtonDown (0)) {
+						if (rampage) {
+							animator.SetTrigger ("Rampageshoot");
+						} else if (autoRifle) {
+							animator.SetTrigger ("Auto");
+						}
+						else
+						{
+							animator.SetTrigger("Shoot");
+							currentFireTime = 0f;
+							animator.SetBool ("Shooting", true);
+						}
 					}
-                    else
-                    {
-                        animator.SetTrigger("Shoot");
-                        currentFireTime = 0f;
-                    }
                 }
             }
         }
@@ -452,34 +455,14 @@ public class CoreControl : Photon.PunBehaviour {
 
     #endregion Actions
 
+	private float shootingAnimationLength = 0f;
     private void Update()
     {
 		if (PhotonNetwork.connected && !photonView.isMine) {
 			return;
 		}
 
-        if (CurrentStateNameIs(0, "Shoot"))
-        {
-            currentFireTime += Time.deltaTime;
-            AnimatorStateInfo state = animator.GetCurrentAnimatorStateInfo(0);
-            if (1 / fireRate < state.length)
-            {
-                float ratio = (1 / fireRate) / state.length;
-                animator.speed = ratio;
-            }
-            //print(currentFireTime);
-            //print(state.length * animator.speed);
-            if (currentFireTime >= state.length * animator.speed)
-            {
-                StopShooting();
-            }
-        }
-        else if (animator.speed != 1f)
-        {
-            animator.speed = 1f;
-        }
-
-        if (Time.time >= nextTimeToFire)
+		if (IsShooting())
         {
             animator.SetBool("Shooting", false);
         }

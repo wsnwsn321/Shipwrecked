@@ -108,7 +108,7 @@ public class Control : Photon.MonoBehaviour {
         }
 
         // Ensure the layer is weighted 1 when shooting and reloading.
-        if ((coreControl.IsReloading() || coreControl.IsShooting()) && (classControl.CanReload() || classControl.CanShoot()))
+		if ((coreControl.IsReloading() && classControl.CanReload()) || coreControl.IsInAimingMode())
         {
             coreControl.SetLayerWeight(1, 1f);
         }
@@ -122,20 +122,18 @@ public class Control : Photon.MonoBehaviour {
 			if (Input.GetMouseButton (0) && coreControl.CanShoot() && classControl.CanShoot()) {
                 coreControl.Shoot();
             }
-            else if (coreControl.CanStopShooting())
-            {
-                coreControl.StopShooting();
-            }
+
+
 		} else {
+			print (Input.GetMouseButtonDown (0));
 			if (Input.GetMouseButtonDown (0) && coreControl.CanShoot() && classControl.CanShoot()) {
                 coreControl.Shoot();
             }
-            else if (coreControl.CanStopShooting())
-            {
-					coreControl.StopShooting();
 
-            }
+
 		}
+
+
 
         if (Input.GetMouseButton(0) && coreControl.ammo.ammo <= 0 && coreControl.CanReload() && classControl.CanReload())
         {
