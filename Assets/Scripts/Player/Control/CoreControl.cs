@@ -404,10 +404,6 @@ public class CoreControl : Photon.PunBehaviour {
 		}
 	}
 
-	public void PillThrown(Vector3 pillPos) {
-		photonView.RPC ("CheckForPillTarget", PhotonTargets.Others, pillPos);
-	}
-
 
     public void Revived()
     {
@@ -509,5 +505,9 @@ public class CoreControl : Photon.PunBehaviour {
 
 	public void WillBeRevived() {
 		photonView.RPC("CheckForRevival", PhotonTargets.Others, PlayerManager.LocalPlayerInstance.transform.position);
+	}
+
+	public void WillBePilled(Vector3 pillPos) {
+		photonView.RPC("CheckForPillTarget", PhotonTargets.Others, pillPos);
 	}
 }
