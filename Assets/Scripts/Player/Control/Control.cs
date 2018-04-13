@@ -228,13 +228,13 @@ public class Control : Photon.MonoBehaviour {
         }
 
         //revived by allies, for test
-		if (Input.GetKeyDown(KeyCode.N) ||coreControl.canReviveSelf )
+		if (Input.GetKeyDown(KeyCode.N) )
         {
-			//if (coreControl.canReviveSelf) {
+			if (coreControl.canReviveSelf) {
 
 				coreControl.canReviveSelf = false;
 				coreControl.Revived ();
-			//}
+			}
         }
 
         //cheat on experience
