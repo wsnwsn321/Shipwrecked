@@ -121,14 +121,16 @@ public class Control : Photon.MonoBehaviour {
 		if (this.tag == "Captain"||(coreControl.autoRifle)) {
 			if (Input.GetMouseButton (0) && coreControl.CanShoot() && classControl.CanShoot()) {
                 coreControl.Shoot();
-            } else
+            }
+            else if (coreControl.CanStopShooting())
             {
                 coreControl.StopShooting();
             }
 		} else {
 			if (Input.GetMouseButtonDown (0) && coreControl.CanShoot() && classControl.CanShoot()) {
                 coreControl.Shoot();
-            } else
+            }
+            else if (coreControl.CanStopShooting())
             {
 					coreControl.StopShooting();
 
