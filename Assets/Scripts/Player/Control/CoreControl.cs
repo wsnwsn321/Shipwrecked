@@ -17,7 +17,7 @@ public class CoreControl : Photon.PunBehaviour {
     public float forwardSpeed, horizontalSpeed;
 	public bool aiming, turnLeft, turnRight, sprint, isGrounded, turn, isMoving;
 	public float distance;
-
+	public bool canReviveSelf;
     [HideInInspector]
     public  Animator allie_ani;
 	private CoreControl allie_core;
@@ -44,6 +44,7 @@ public class CoreControl : Photon.PunBehaviour {
         dead = false;
 		autoRifle = false;
         hasSpecialAbility = false;
+		canReviveSelf = false;
 		rampage = false;
         forwardSpeed = 1f;
         horizontalSpeed = 1.5f;
@@ -378,7 +379,7 @@ public class CoreControl : Photon.PunBehaviour {
 		if (Vector3.Distance(PlayerManager.LocalPlayerInstance.transform.position, revPos) < 3f) {
 			// This means that this player is revived. Call Revived
 			print("I'm revived!");
-			Revived();
+			canReviveSelf = true;
 		}
 	}
 
