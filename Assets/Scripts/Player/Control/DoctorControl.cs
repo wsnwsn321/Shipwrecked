@@ -85,7 +85,7 @@ public class DoctorControl : Photon.PunBehaviour, IClassControl {
 				StartCoroutine(WaitAbilityUse());
 			}
 			Collider[] players = Physics.OverlapSphere (transform.position, 15f,layerMask, QueryTriggerInteraction.Collide);
-			Debug.Log (players.Length);
+			//Debug.Log (players.Length);
 			for(int i=0;i<players.Length;i++){
 				healEffect = players [i].transform.GetChild (5).gameObject;
 				healEffect.SetActive (true);

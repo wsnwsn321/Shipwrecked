@@ -125,7 +125,7 @@ public class Control : Photon.MonoBehaviour {
 
 
 		} else {
-			print (Input.GetMouseButtonDown (0));
+			//print (Input.GetMouseButtonDown (0));
 			if (Input.GetMouseButtonDown (0) && coreControl.CanShoot() && classControl.CanShoot()) {
                 coreControl.Shoot();
             }
