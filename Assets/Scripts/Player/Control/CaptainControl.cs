@@ -33,8 +33,7 @@ public class CaptainControl : Photon.MonoBehaviour, IClassControl
 
     void Start()
     {
-        timer = new CooldownTimerUI(GameObject.FindGameObjectWithTag("Skill1").GetComponent<Image>(), GameObject.FindGameObjectWithTag("Skill2").GetComponent<Image>());
-        timer.CooldownStart();
+
 
         StunDistance = 3f;
 		StunCooldown = 5f;
@@ -49,7 +48,12 @@ public class CaptainControl : Photon.MonoBehaviour, IClassControl
 
     void Update()
     {
-        timer.CooldownUpdate(RampageCooldown, StunCooldown, skillTimeStamp1, skillTimeStamp2);
+			if (timer == null) {
+				timer = new CooldownTimerUI (GameObject.FindGameObjectWithTag ("Skill1").GetComponent<Image> (), GameObject.FindGameObjectWithTag ("Skill2").GetComponent<Image> ());
+				timer.CooldownStart ();
+			}
+
+			timer.CooldownUpdate (RampageCooldown, StunCooldown, skillTimeStamp1, skillTimeStamp2);
     }
 
 	void Rampage(){
