@@ -66,7 +66,7 @@ public class PlayerHealth : Photon.MonoBehaviour {
 
 	public void updateHealthText()
     {
-		if (photonView.isMine) {
+		if (!PhotonNetwork.connected || photonView.isMine) {
 		health -= (int)enemyAttackType;
 		enemyAttackType = EnemyAttackType.NONE;
 
