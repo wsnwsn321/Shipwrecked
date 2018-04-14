@@ -25,6 +25,7 @@ public class TurretBehaviors : GenericBehaviors
     private bool ableToRotate;
     private float currentShootingTime;
     private Transform previousTarget;
+	private GameObject turretFlash;
 
     // Gatling
     private bool isRotating;
@@ -41,6 +42,7 @@ public class TurretBehaviors : GenericBehaviors
         idleRotationSpeed = 30f;
         ableToRotate = false;
         currentShootingTime = shootingDelay;
+		turretFlash = GameObject.FindGameObjectWithTag ("TurretFlash");
 
         isRotating = false;
         isShooting = false;
@@ -176,14 +178,15 @@ public class TurretBehaviors : GenericBehaviors
 
         foreach (Transform gun in guns)
         {
+			turretFlash.SetActive (true);
             StartCoroutine(KickBack(gun));
             target.TakeDamage(damage);
             target.AddAttacker(transform);
             target.AddCharacterAttacker(engineer.transform);
             yield return new WaitForSeconds(shootingDelay / guns.Count);
         }
-
         isShooting = false;
+		turretFlash.SetActive (false);
     }
 
     private IEnumerator RotateGuns()
