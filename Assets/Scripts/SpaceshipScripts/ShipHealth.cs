@@ -15,6 +15,7 @@ public class ShipHealth : Photon.MonoBehaviour {
 	private float timeColliding;
 	public float timeThreshold = 1f;
 	public bool isReparing;
+	public AudioClip []clips;
     void Start()
     {
         maxHealth = health;
@@ -35,6 +36,10 @@ public class ShipHealth : Photon.MonoBehaviour {
 		{
 			updateHealthText();
 			updateHealthBar();
+			GameObject.FindGameObjectWithTag("Background Music").GetComponent<AudioSource> ().clip = clips[0];
+
+			GameObject.FindGameObjectWithTag("Background Music").GetComponent<AudioSource> ().Play ();
+
 		}
 		if (Input.GetKeyDown(KeyCode.L))
 		{
@@ -83,6 +88,6 @@ public class ShipHealth : Photon.MonoBehaviour {
 	private void loseGame()
 	{
 		PhotonNetwork.Destroy (PlayerManager.LocalPlayerInstance);
-		SceneManager.LoadScene ("QuitCredits");
+		SceneManager.LoadScene ("BadEnd");
 	}
 }
