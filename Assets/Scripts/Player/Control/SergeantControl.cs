@@ -27,8 +27,7 @@ public class SergeantControl : MonoBehaviour, IClassControl
     private CoreControl cc;
     void Start()
     {
-        timer = new CooldownTimerUI(GameObject.FindGameObjectWithTag("Skill1").GetComponent<Image>(), GameObject.FindGameObjectWithTag("Skill2").GetComponent<Image>());
-        timer.CooldownStart();
+
 
         currentHealTime = 0;
         healDelay = healTime / healDivisions;
@@ -41,6 +40,11 @@ public class SergeantControl : MonoBehaviour, IClassControl
 
     void Update()
     {
+		if (timer == null) {
+			timer = new CooldownTimerUI (GameObject.FindGameObjectWithTag ("Skill1").GetComponent<Image> (), GameObject.FindGameObjectWithTag ("Skill2").GetComponent<Image> ());
+			timer.CooldownStart ();
+		}
+
         timer.CooldownUpdate(healCooldown, autoCooldown, skillTimeStamp1, skillTimeStamp2);
     }
 

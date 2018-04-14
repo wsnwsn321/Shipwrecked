@@ -21,24 +21,36 @@ public class ShipHealth : Photon.MonoBehaviour {
         maxHealth = health;
 		isReparing = false;
 		if (healthText == null) {
-			healthText = GameObject.FindGameObjectWithTag("ShipHealthText").GetComponent<Text>();
+			healthText = GameObject.Find("ShipHealthText").GetComponent<Text>();
 		}
 		if (healthBar == null) {
-			healthBar = GameObject.FindGameObjectWithTag("ShipHealthBar").GetComponent<Slider>();
+			healthBar = GameObject.Find("ShipHealthBar").GetComponent<Slider>();
 
 		}
     }
 
     // Update is called once per frame
     void Update () {
+
+		if (healthText == null) {
+			healthText = GameObject.Find("ShipHealthText").GetComponent<Text>();
+		}
+		if (healthBar == null) {
+			healthBar = GameObject.Find("ShipHealthBar").GetComponent<Slider>();
+
+		}
 		
 		if (tookDmg)
 		{
 			updateHealthText();
 			updateHealthBar();
+
 			GameObject.FindGameObjectWithTag("Background Music").GetComponent<AudioSource> ().clip = clips[0];
 
 			GameObject.FindGameObjectWithTag("Background Music").GetComponent<AudioSource> ().Play ();
+
+
+			tookDmg = false;
 
 		}
 		if (Input.GetKeyDown(KeyCode.L))
@@ -57,7 +69,7 @@ public class ShipHealth : Photon.MonoBehaviour {
 		if (stream.isWriting) {
 			stream.SendNext (health);
 		} else if (stream.isReading) {
-			health = (int)stream.ReceiveNext ();
+			health = (float)stream.ReceiveNext ();
 			tookDmg = true;
 		}
 	}

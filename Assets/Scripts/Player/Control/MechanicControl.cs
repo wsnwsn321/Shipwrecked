@@ -5,7 +5,7 @@ using PlayerAbilities;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class MechanicControl : MonoBehaviour, IClassControl {
+public class MechanicControl : Photon.MonoBehaviour, IClassControl {
 
     public float buildPositionOffset = 3;
     public float buildingPieceTime = 1.2f;
@@ -79,8 +79,7 @@ public class MechanicControl : MonoBehaviour, IClassControl {
     }
 
     void Start () {
-        timer = new CooldownTimerUI(GameObject.FindGameObjectWithTag("Skill1").GetComponent<Image>(), GameObject.FindGameObjectWithTag("Skill2").GetComponent<Image>());
-        timer.CooldownStart();
+
 		hpPerSec = 0.1025f;
 		totalHp = 50;
         isBuilding = false;
@@ -95,16 +94,19 @@ public class MechanicControl : MonoBehaviour, IClassControl {
 
     void Update()
     {
-        if (canBuild == false && Time.time >= skillTimeStamp1)
-        {
-            canBuild = true;
-        }
-        timer.CooldownUpdate(buildTurretCooldown, repairSpaceShipCooldown, skillTimeStamp1, skillTimeStamp2);
-		if (spaceship != null) {
-			distanceWithSpace = Vector3.Distance (transform.position, spaceship.transform.position);
-		} else {
-			spaceship = GameObject.Find("SpaceshipZone");
-		}
+			if (timer == null) {
+				timer = new CooldownTimerUI (GameObject.FindGameObjectWithTag ("Skill1").GetComponent<Image> (), GameObject.FindGameObjectWithTag ("Skill2").GetComponent<Image> ());
+				timer.CooldownStart ();
+			}
+			if (canBuild == false && Time.time >= skillTimeStamp1) {
+				canBuild = true;
+			}
+			timer.CooldownUpdate (buildTurretCooldown, repairSpaceShipCooldown, skillTimeStamp1, skillTimeStamp2);
+			if (spaceship != null) {
+				distanceWithSpace = Vector3.Distance (transform.position, spaceship.transform.position);
+			} else {
+				spaceship = GameObject.Find ("SpaceshipZone");
+			}
     }
     
     List<Transform> ActivateChildren(Transform t)
