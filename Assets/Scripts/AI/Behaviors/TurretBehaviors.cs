@@ -11,7 +11,7 @@ public class TurretBehaviors : GenericBehaviors
     private float shootingDelay = 1/3f;
     [HideInInspector]
     public float damage = 2f;
-    [HideInInspector]
+    //[HideInInspector]
     public float health = 20f;
     [HideInInspector]
     public int turretLevel;
@@ -56,7 +56,8 @@ public class TurretBehaviors : GenericBehaviors
 
     public void TakeDamage(float damage)
     {
-        health -= damage;
+		print ("turret taking damage");
+		health -= damage / 2;
         if (health < 0)
         {
 			StartCoroutine(Die());
