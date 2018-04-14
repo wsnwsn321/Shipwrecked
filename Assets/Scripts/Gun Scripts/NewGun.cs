@@ -39,7 +39,7 @@ public class NewGun : PlayerManager {
                 break;
             case TeammateTypes.Doctor:
                 baseDamage = 5f;
-                fireRate = 15f;
+                fireRate = 12f;
                 break;
             case TeammateTypes.Engineer:
                 baseDamage = 30f;
@@ -116,11 +116,7 @@ public class NewGun : PlayerManager {
 					enemy.TakeDamage (baseDamage * core.damageModifier);
 					enemy.AddAttacker (transform.parent);
 				}
-				GameObject bloodImpact = GameObject.Instantiate (bloodSplatter, hit.point, Quaternion.identity);
-				GameObject impactGO = Instantiate (impactEffect, hit.point, Quaternion.LookRotation (hit.normal));
-				//impactGO.GetComponent<ParticleSystem> ().Play ();
-				Destroy (impactGO, 1f);
-				Destroy (bloodImpact, 1f);
+
 			}
 		} else if (gameObject.GetComponent<AmmoRemaining> ().playerType.Equals ("Sergeant") || gameObject.GetComponent<AmmoRemaining> ().playerType.Equals ("Doctor")) {
 			float xOffset = Random.Range (-0.05f, 0.05f);
@@ -138,9 +134,7 @@ public class NewGun : PlayerManager {
 					enemy.TakeDamage (baseDamage * core.damageModifier);
 					enemy.AddAttacker (transform.parent);
 				}
-				GameObject impactGO = Instantiate (impactEffect, hit.point, Quaternion.LookRotation (hit.normal));
-				//impactGO.GetComponent<ParticleSystem> ().Play ();
-				Destroy (impactGO, 1f);
+
 			}
 		} else if (gameObject.GetComponentInParent<CoreControl>().aiming) {
 			if (Physics.Raycast (rayOrigin, newCamSpot.transform.forward, out hit, range, hitMask)) {	
@@ -154,10 +148,7 @@ public class NewGun : PlayerManager {
 					enemy.TakeDamage (baseDamage * core.damageModifier);
 					enemy.AddAttacker (transform.parent);
 				}
-				GameObject impactGO = Instantiate (impactEffect, hit.point, Quaternion.LookRotation (hit.normal));
-				//impactGO.GetComponent<ParticleSystem> ().Play ();
-				Destroy (impactGO, 1f);
-		
+					
 			}
 		} else {
 			if (Physics.Raycast (rayOrigin, newCamSpot.transform.forward, out hit, range, hitMask)) {	
@@ -171,14 +162,18 @@ public class NewGun : PlayerManager {
 					enemy.TakeDamage (baseDamage * core.damageModifier);
 					enemy.AddAttacker (transform.parent);
 				}
-				GameObject impactGO = Instantiate (impactEffect, hit.point, Quaternion.LookRotation (hit.normal));
-				//impactGO.GetComponent<ParticleSystem> ().Play ();
-				Destroy (impactGO, 1f);
+
 
 			}
 		}
-
-			
+		if (hit.transform.name.Equals ("AI_Crab_Alien(Clone)") || hit.transform.name.Equals ("Spider_Brain")) {
+			GameObject bloodImpact = GameObject.Instantiate (bloodSplatter, hit.point, Quaternion.identity);
+			Destroy (bloodImpact, 1f);
+		} else {
+			GameObject impactGO = Instantiate (impactEffect, hit.point, Quaternion.LookRotation (hit.normal));
+			//impactGO.GetComponent<ParticleSystem> ().Play ();
+			Destroy (impactGO, 1f);
+		}
 
 	}
 		

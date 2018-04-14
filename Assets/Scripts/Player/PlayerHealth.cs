@@ -15,6 +15,7 @@ public class PlayerHealth : Photon.MonoBehaviour {
     private float timeColliding;
     public float timeThreshold = 1f;
 	private GameObject peace;
+	private bool healthChanged = false;
 
     public EnemyAttackType enemyAttackType = EnemyAttackType.NONE;
 
@@ -26,6 +27,16 @@ public class PlayerHealth : Photon.MonoBehaviour {
         SPIDER_BRAIN = 20
     };
 
+
+	public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info) {
+		if (stream.isWriting) {
+			stream.SendNext (health);
+		} else if (stream.isReading) {
+			health = (int)stream.ReceiveNext ();
+			healthChanged = true;
+		}
+	}
+
     // Update is called once per frame
     void Update () {
 		// This is required in Update instead of LateStart since the prefab
@@ -35,7 +46,7 @@ public class PlayerHealth : Photon.MonoBehaviour {
 			healthText = GameObject.FindGameObjectWithTag("HealthText").GetComponent<Text>();
 			healthBar = GameObject.FindGameObjectWithTag("HealthBar").GetComponent<Slider>();
 		}
-        if (enemyAttackType != EnemyAttackType.NONE)
+        if (enemyAttackType != EnemyAttackType.NONE || healthChanged)
         {
             updateHealthText();
             updateHealthBar();
@@ -43,20 +54,19 @@ public class PlayerHealth : Photon.MonoBehaviour {
         }
         checkHealth();
 
-		//for the second ability of doctor to use
-		if (PlayerManager.LocalPlayerInstance.Equals (this.gameObject)) {
+		if (peace == null) {
 			peace = transform.GetChild (5).gameObject;
-			if (peace.activeSelf) {
-				health += 0.1025f;
-				updateHealthText ();
-				updateHealthBar ();
-			}
+		}
+
+		//for the second ability of doctor to use
+		if (peace.activeSelf) {
+			health += 0.1025f;
 		}
 	}
 
 	public void updateHealthText()
     {
-		//if (photonView.isMine) {
+		if (!PhotonNetwork.connected || photonView.isMine) {
 		health -= (int)enemyAttackType;
 		enemyAttackType = EnemyAttackType.NONE;
 
@@ -71,14 +81,14 @@ public class PlayerHealth : Photon.MonoBehaviour {
 			UIManager.updateUI = true;
 		}
 		healthText.text = Mathf.Floor (health).ToString () + "/100";
-		//}
+		}
     }
 
 	public void updateHealthBar()
     {
-		//if (photonView.isMine) {
+		if (photonView.isMine) {
 		healthBar.value = health;
-		//}
+		}
     }
 
     private void checkHealth()

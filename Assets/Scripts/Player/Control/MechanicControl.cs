@@ -13,6 +13,9 @@ public class MechanicControl : MonoBehaviour, IClassControl {
     public GameObject[] turrets;
     public GameObject[] turretGhosts;
     public Material[] turretMaterials;
+    public Sprite mechanicSkillOne;
+    public Sprite mechanicSkillTwo;
+    public Sprite genericSkillSprite;
 
     [HideInInspector]
     public int currentTurretBuildLevel = 0;
@@ -44,7 +47,8 @@ public class MechanicControl : MonoBehaviour, IClassControl {
     public float buildTurretCooldown = 20f;
 	public float repairSpaceShipCooldown = 10f;
     private CooldownTimerUI timer;
-    public float skillTimeStamp;
+    public float skillTimeStamp1;
+    public float skillTimeStamp2;
 
     class UnfinishedBuilding
     {
@@ -91,11 +95,11 @@ public class MechanicControl : MonoBehaviour, IClassControl {
 
     void Update()
     {
-        if (canBuild == false && Time.time >= skillTimeStamp)
+        if (canBuild == false && Time.time >= skillTimeStamp1)
         {
             canBuild = true;
         }
-        timer.CooldownUpdate(buildTurretCooldown, skillTimeStamp);
+        timer.CooldownUpdate(buildTurretCooldown, repairSpaceShipCooldown, skillTimeStamp1, skillTimeStamp2);
 		if (spaceship != null) {
 			distanceWithSpace = Vector3.Distance (transform.position, spaceship.transform.position);
 		} else {
@@ -251,7 +255,10 @@ public class MechanicControl : MonoBehaviour, IClassControl {
 				canRepair = false;
 				ani.SetTrigger ("Repairing");
 				shp.isReparing = true;
-				StartCoroutine (RepairTimer ());
+                // Start cooldown animation for UI skill image
+                timer.startCooldownTimerUI(2);
+                skillTimeStamp2 = Time.time + repairSpaceShipCooldown;
+                StartCoroutine (RepairTimer ());
 				StartCoroutine (WaitAbilityUse ());
 			}
 		}
@@ -281,6 +288,8 @@ public class MechanicControl : MonoBehaviour, IClassControl {
             if (canBuild)
             {
                 CreateTurretGhost();
+                GameObject.Find("Skill1").GetComponent<Image>().sprite = genericSkillSprite;
+                GameObject.Find("Skill2").GetComponent<Image>().sprite = mechanicSkillOne;
             }
 		}
 
@@ -288,9 +297,11 @@ public class MechanicControl : MonoBehaviour, IClassControl {
         {            
             BuildTurret();
             canBuild = false;
+            GameObject.Find("Skill1").GetComponent<Image>().sprite = mechanicSkillOne;
+            GameObject.Find("Skill2").GetComponent<Image>().sprite = mechanicSkillTwo;
             // Start cooldown animation for UI skill image
             timer.startCooldownTimerUI(1);
-            skillTimeStamp = Time.time + buildTurretCooldown;
+            skillTimeStamp1 = Time.time + buildTurretCooldown;
         }
 		if (ability == SpecialAbility.RepairShip) {
 

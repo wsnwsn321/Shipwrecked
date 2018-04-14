@@ -6,6 +6,7 @@ public class CoreControl : Photon.PunBehaviour {
 
     [HideInInspector]
     public float nextTimeToFire = 0f;
+    private float currentFireTime = 0f;
 
     [HideInInspector]
     public float damageModifier;
@@ -16,7 +17,7 @@ public class CoreControl : Photon.PunBehaviour {
     public float forwardSpeed, horizontalSpeed;
 	public bool aiming, turnLeft, turnRight, sprint, isGrounded, turn, isMoving;
 	public float distance;
-
+	public bool canReviveSelf;
     [HideInInspector]
     public  Animator allie_ani;
 	private CoreControl allie_core;
@@ -43,6 +44,7 @@ public class CoreControl : Photon.PunBehaviour {
         dead = false;
 		autoRifle = false;
         hasSpecialAbility = false;
+		canReviveSelf = false;
 		rampage = false;
         forwardSpeed = 1f;
         horizontalSpeed = 1.5f;
@@ -61,9 +63,7 @@ public class CoreControl : Photon.PunBehaviour {
 			//ammo = GetComponentInChildren<AmmoRemaining> ();
 		} else if (!PhotonNetwork.connected) {
 			myhp = GetComponent<PlayerHealth> ();
-
 		}
-			
     }
 
     public bool IsJumping()
@@ -117,7 +117,12 @@ public class CoreControl : Photon.PunBehaviour {
     public bool CanShoot()
     {
 		bool canShoot = !CurrentStateNameIs(0, "Sprint") && !CurrentStateNameIs(0, "Roll") && !CurrentStateNameIs(0, "PickupObject")&&!CurrentStateNameIs(0,"AB2");
-        return canShoot && Time.time >= nextTimeToFire;
+        return canShoot && !animator.GetBool("Shoot") && Time.time >= nextTimeToFire;
+    }
+
+    public bool CanStopShooting()
+    {
+		return !IsShooting();
     }
 
     #endregion Can Action
@@ -151,7 +156,7 @@ public class CoreControl : Photon.PunBehaviour {
 
     public bool IsShooting()
     {
-        return CurrentStateTagIs(1, "FIRE");
+		return CurrentStateNameIs(0, "Shoot")||CurrentStateNameIs(0, "RampageShoot")||CurrentStateNameIs(0, "AutoShoot");
     }
 
     #endregion Is Action
@@ -265,15 +270,19 @@ public class CoreControl : Photon.PunBehaviour {
             {
                 if (ammo.ammo != 0)
                 {
-					if (rampage) {
-						animator.SetTrigger ("Rampageshoot");
-					} else if (autoRifle) {
-						animator.SetTrigger ("Auto");
+					if (((CompareTag ("Captain") || autoRifle) && Input.GetMouseButton (0)) || Input.GetMouseButtonDown (0)) {
+						if (rampage) {
+							animator.SetTrigger ("Rampageshoot");
+						} else if (autoRifle) {
+							animator.SetTrigger ("Auto");
+						}
+						else
+						{
+							animator.SetTrigger("Shoot");
+							currentFireTime = 0f;
+							animator.SetBool ("Shooting", true);
+						}
 					}
-                    else
-                    {
-                        animator.SetTrigger("Shoot");
-                    }
                 }
             }
         }
@@ -310,7 +319,6 @@ public class CoreControl : Photon.PunBehaviour {
             control.CamRef.transform.localPosition = new Vector3(0.6f, -1.1f, -1.2f);
             control.main_c.transform.localEulerAngles = new Vector3(0.04f, 9.667f, 0.2f);
         }
-        
     }
 
     public void StopAiming()
@@ -330,14 +338,13 @@ public class CoreControl : Photon.PunBehaviour {
             control.CamRef.transform.localPosition = new Vector3(0.71f, -0, -0.22f);
             control.main_c.transform.localEulerAngles = new Vector3(18.41f, 9.667f, 0.2f);
         }
-       
     }
 
     public void StopShooting()
     {
         if (animator)
         {
-			
+            //print("Hit.");
 			if (rampage) {
 				animator.ResetTrigger ("Rampageshoot");
 			} else {
@@ -372,9 +379,10 @@ public class CoreControl : Photon.PunBehaviour {
 
 	[PunRPC]
 	public void CheckForRevival(Vector3 revPos) {
-		if (Vector3.Distance(PlayerManager.LocalPlayerInstance.transform.position, revPos) < 3f) {
+		if (Vector3.Distance(PlayerManager.LocalPlayerInstance.transform.position, revPos) < 5f) {
 			// This means that this player is revived. Call Revived
 			print("I'm revived!");
+			//canReviveSelf = true;
 			Revived();
 		}
 	}
@@ -396,10 +404,6 @@ public class CoreControl : Photon.PunBehaviour {
 		}
 	}
 
-	public void PillThrown(Vector3 pillPos) {
-		photonView.RPC ("CheckForPillTarget", PhotonTargets.Others, pillPos);
-	}
-
 
     public void Revived()
     {
@@ -407,7 +411,9 @@ public class CoreControl : Photon.PunBehaviour {
         {
 			print ("reviving!!!!!");
             dead = false;
+
             animator.SetTrigger("Revived");
+
 			this.gameObject.layer = 10;
 			myhp.health = 10;
 			myhp.updateHealthBar ();
@@ -445,6 +451,19 @@ public class CoreControl : Photon.PunBehaviour {
 
     #endregion Actions
 
+	private float shootingAnimationLength = 0f;
+    private void Update()
+    {
+		if (PhotonNetwork.connected && !photonView.isMine) {
+			return;
+		}
+
+		if (IsShooting())
+        {
+            animator.SetBool("Shooting", false);
+        }
+    }
+
     public void UpdateAnimationStates()
     {
         if (animator)
@@ -479,8 +498,16 @@ public class CoreControl : Photon.PunBehaviour {
 	IEnumerator animationDelay( )
 	{
 		yield return new WaitForSeconds(5f);
-		photonView.RPC("CheckForRevival", PhotonTargets.Others, PlayerManager.LocalPlayerInstance.transform.position);
+		allie_core.WillBeRevived ();
 		animator.SetTrigger ("FinishRevive");
-		//allie_core.Revived ();
+	}
+
+
+	public void WillBeRevived() {
+		photonView.RPC("CheckForRevival", PhotonTargets.Others, PlayerManager.LocalPlayerInstance.transform.position);
+	}
+
+	public void WillBePilled(Vector3 pillPos) {
+		photonView.RPC("CheckForPillTarget", PhotonTargets.Others, pillPos);
 	}
 }

@@ -39,7 +39,7 @@ public class CooldownTimerUI {
                 break;
             case 2:               
                 skillCooldownGO2.SetActive(true);
-                skillCooldownImage2 = skillCooldownGO1.GetComponent<Image>();
+                skillCooldownImage2 = skillCooldownGO2.GetComponent<Image>();
                 skillCooldownImage2.sprite = GameObject.FindGameObjectWithTag("Skill2").GetComponent<Image>().sprite;
                 skillCooldownImage2.fillAmount = 1;
                 startCooldown2 = true;
@@ -61,17 +61,17 @@ public class CooldownTimerUI {
         startCooldown2 = false;
     }
 
-    public void CooldownUpdate(float cooldown, float timeStamp)
+    public void CooldownUpdate(float cooldown1, float cooldown2, float timeStamp1, float timeStamp2)
     {
         if (startCooldown1)
         {
-            if (cooldown == 0)
+            if (cooldown1 == 0)
             {
                 skillCooldownImage1.fillAmount = 0;
             }
             else
             {
-                float percentage = (timeStamp - Time.time) / cooldown;
+                float percentage = (timeStamp1 - Time.time) / cooldown1;
                 skillCooldownImage1.fillAmount = percentage;
                 if (skillCooldownImage1.fillAmount <= 0.01)
                 {
@@ -81,13 +81,13 @@ public class CooldownTimerUI {
         }   
         if (startCooldown2)
         {
-            if (cooldown == 0)
+            if (cooldown2 == 0)
             {
                 skillCooldownImage1.fillAmount = 0;
             }
             else
             {
-                float percentage = (timeStamp - Time.time) / cooldown;
+                float percentage = (timeStamp2 - Time.time) / cooldown2;
                 skillCooldownImage2.fillAmount = percentage;
                 if (skillCooldownImage2.fillAmount <= 0.01)
                 {

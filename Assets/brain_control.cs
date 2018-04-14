@@ -92,6 +92,7 @@ public class brain_control : MonoBehaviour {
 			else if(turrets!=null){
 				ap.maxSpeed = 0;
 				an.Play ("Attack_1");
+				setEnemyAttackTypeTurret ();
 			}
 			else {
 				if (collide && fov.visibleTargets.Count > 0) {
@@ -192,6 +193,27 @@ public class brain_control : MonoBehaviour {
 				break;
 			case "SpiderBrain":
 				ph.TakeDamage((int)PlayerHealth.EnemyAttackType.SPIDER_BRAIN);
+				break;
+			default:
+				break;
+			}
+		}
+	}
+
+	void setEnemyAttackTypeTurret()
+	{
+		if (Time.time > nextAttack) {
+			print ("turret taking damage2");
+			nextAttack = attackCooldown + Time.time;
+			TurretBehaviors tb = turrets.GetComponent<TurretBehaviors> ();
+			switch (transform.gameObject.tag) {
+			case "CrabAlien":
+				// make this access the specific player that got hit instead of all instances of PlayerHealth
+				// Otherwise, this will hit every player.
+				tb.TakeDamage((int)PlayerHealth.EnemyAttackType.CRAB_ALIEN);
+				break;
+			case "SpiderBrain":
+				tb.TakeDamage((int)PlayerHealth.EnemyAttackType.SPIDER_BRAIN);
 				break;
 			default:
 				break;

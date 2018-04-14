@@ -108,7 +108,7 @@ public class Control : Photon.MonoBehaviour {
         }
 
         // Ensure the layer is weighted 1 when shooting and reloading.
-        if ((coreControl.IsReloading() || coreControl.IsShooting()) && (classControl.CanReload() || classControl.CanShoot()))
+		if ((coreControl.IsReloading() && classControl.CanReload()) || coreControl.IsInAimingMode())
         {
             coreControl.SetLayerWeight(1, 1f);
         }
@@ -121,19 +121,19 @@ public class Control : Photon.MonoBehaviour {
 		if (this.tag == "Captain"||(coreControl.autoRifle)) {
 			if (Input.GetMouseButton (0) && coreControl.CanShoot() && classControl.CanShoot()) {
                 coreControl.Shoot();
-            } else
-            {
-                coreControl.StopShooting();
             }
+
+
 		} else {
+			//print (Input.GetMouseButtonDown (0));
 			if (Input.GetMouseButtonDown (0) && coreControl.CanShoot() && classControl.CanShoot()) {
                 coreControl.Shoot();
-            } else
-            {
-					coreControl.StopShooting();
-
             }
+
+
 		}
+
+
 
         if (Input.GetMouseButton(0) && coreControl.ammo.ammo <= 0 && coreControl.CanReload() && classControl.CanReload())
         {
@@ -226,9 +226,13 @@ public class Control : Photon.MonoBehaviour {
         }
 
         //revived by allies, for test
-        if (Input.GetKeyDown(KeyCode.N))
+		if (Input.GetKeyDown(KeyCode.N) )
         {
-            coreControl.Revived();
+			if (coreControl.canReviveSelf) {
+
+				coreControl.canReviveSelf = false;
+				coreControl.Revived ();
+			}
         }
 
         //cheat on experience

@@ -5,7 +5,8 @@ using PlayerAbilities;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class DoctorControl : Photon.MonoBehaviour, IClassControl {
+[RequireComponent (typeof(PhotonView))]
+public class DoctorControl : Photon.PunBehaviour, IClassControl {
 
     public int maxPills = 1;
     public GameObject healParticle;
@@ -27,7 +28,8 @@ public class DoctorControl : Photon.MonoBehaviour, IClassControl {
 	private PlayerHealth allieHP;
 
     private CooldownTimerUI timer;
-    public float skillTimeStamp;
+    public float skillTimeStamp1;
+    public float skillTimeStamp2;
     private float healingCooldown = 5f;
 	private float healBuffCooldown =10f;
 
@@ -48,7 +50,7 @@ public class DoctorControl : Photon.MonoBehaviour, IClassControl {
 				Debug.Log ("ERROR! Doctor cannot retrieve its animator");
 			}
 		}
-        timer.CooldownUpdate(healingCooldown, skillTimeStamp);
+        timer.CooldownUpdate(healingCooldown, healBuffCooldown, skillTimeStamp1, skillTimeStamp2);
     }
 
     void ThrowPill()
@@ -71,6 +73,7 @@ public class DoctorControl : Photon.MonoBehaviour, IClassControl {
         }
     }
 
+	[PunRPC]
 	void HealingCircle(){
 		if (animator&&!animator.GetCurrentAnimatorStateInfo(0).IsName("Die")&&canBuff)
 		{
@@ -82,7 +85,7 @@ public class DoctorControl : Photon.MonoBehaviour, IClassControl {
 				StartCoroutine(WaitAbilityUse());
 			}
 			Collider[] players = Physics.OverlapSphere (transform.position, 15f,layerMask, QueryTriggerInteraction.Collide);
-			Debug.Log (players.Length);
+			//Debug.Log (players.Length);
 			for(int i=0;i<players.Length;i++){
 				healEffect = players [i].transform.GetChild (5).gameObject;
 				healEffect.SetActive (true);
@@ -100,7 +103,10 @@ public class DoctorControl : Photon.MonoBehaviour, IClassControl {
 
 	IEnumerator EndBuff(GameObject hE)
 	{
-		yield return new WaitForSeconds(5f);
+        // Start cooldown animation for UI skill image
+        timer.startCooldownTimerUI(2);
+        skillTimeStamp2 = Time.time + healBuffCooldown;
+        yield return new WaitForSeconds(5f);
 		hE.SetActive (false);
 		//StopHealing ();
 		healBuff.SetActive (false);
@@ -121,7 +127,7 @@ public class DoctorControl : Photon.MonoBehaviour, IClassControl {
     {
         // Start cooldown animation for UI skill image
         timer.startCooldownTimerUI(1);
-        skillTimeStamp = Time.time + healingCooldown;
+        skillTimeStamp1 = Time.time + healingCooldown;
         yield return new WaitForSeconds(5f);
 		if (PhotonNetwork.connected) {
 			if (pills [0] != null) {
@@ -158,7 +164,11 @@ public class DoctorControl : Photon.MonoBehaviour, IClassControl {
         }
 		if (ability == SpecialAbility.HealingCircle)
 		{
-			HealingCircle();
+			if (PhotonNetwork.connected) {
+				photonView.RPC ("HealingCircle", PhotonTargets.All, null);
+			} else {
+				HealingCircle ();
+			}
 		}
     }
 
