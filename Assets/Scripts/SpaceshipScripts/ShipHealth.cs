@@ -42,8 +42,6 @@ public class ShipHealth : Photon.MonoBehaviour {
 		
 		if (tookDmg)
 		{
-			updateHealthText();
-			updateHealthBar();
 
 			GameObject.Find("MissionText").GetComponent<AudioSource> ().clip = clips[0];
 
@@ -60,9 +58,18 @@ public class ShipHealth : Photon.MonoBehaviour {
 
 		if (isReparing) {
 			health += 0.1025f;
-			updateHealthText ();
-			updateHealthBar ();
 		}
+		if (!PhotonNetwork.connected || PhotonNetwork.isMasterClient && health <= 750f) {
+			health += 0.0125f;
+		}
+
+		if (health < 1000f) {
+			health = 1000f;
+		}
+
+
+		updateHealthText ();
+		updateHealthBar ();
 	}
 
 	public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info) {
