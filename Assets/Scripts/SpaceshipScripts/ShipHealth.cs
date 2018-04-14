@@ -45,9 +45,9 @@ public class ShipHealth : Photon.MonoBehaviour {
 			updateHealthText();
 			updateHealthBar();
 
-			GameObject.FindGameObjectWithTag("Background Music").GetComponent<AudioSource> ().clip = clips[0];
+			GameObject.Find("MissionText").GetComponent<AudioSource> ().clip = clips[0];
 
-			GameObject.FindGameObjectWithTag("Background Music").GetComponent<AudioSource> ().Play ();
+			GameObject.Find("MissionText").GetComponent<AudioSource> ().Play ();
 
 
 			tookDmg = false;
