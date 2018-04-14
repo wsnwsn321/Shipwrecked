@@ -15,26 +15,41 @@ public class ShipHealth : Photon.MonoBehaviour {
 	private float timeColliding;
 	public float timeThreshold = 1f;
 	public bool isReparing;
+	public AudioClip []clips;
     void Start()
     {
         maxHealth = health;
 		isReparing = false;
 		if (healthText == null) {
-			healthText = GameObject.FindGameObjectWithTag("ShipHealthText").GetComponent<Text>();
+			healthText = GameObject.Find("ShipHealthText").GetComponent<Text>();
 		}
 		if (healthBar == null) {
-			healthBar = GameObject.FindGameObjectWithTag("ShipHealthBar").GetComponent<Slider>();
+			healthBar = GameObject.Find("ShipHealthBar").GetComponent<Slider>();
 
 		}
     }
 
     // Update is called once per frame
     void Update () {
+
+		if (healthText == null) {
+			healthText = GameObject.Find("ShipHealthText").GetComponent<Text>();
+		}
+		if (healthBar == null) {
+			healthBar = GameObject.Find("ShipHealthBar").GetComponent<Slider>();
+
+		}
 		
 		if (tookDmg)
 		{
-			updateHealthText();
-			updateHealthBar();
+
+			GameObject.Find("MissionText").GetComponent<AudioSource> ().clip = clips[0];
+
+			GameObject.Find("MissionText").GetComponent<AudioSource> ().Play ();
+
+
+			tookDmg = false;
+
 		}
 		if (Input.GetKeyDown(KeyCode.L))
 		{
@@ -43,16 +58,25 @@ public class ShipHealth : Photon.MonoBehaviour {
 
 		if (isReparing) {
 			health += 0.1025f;
-			updateHealthText ();
-			updateHealthBar ();
 		}
+		if ((!PhotonNetwork.connected || PhotonNetwork.isMasterClient) && health <= 750f) {
+			health += 0.0125f;
+		}
+
+		if (health > 1000f) {
+			health = 1000f;
+		}
+
+
+		updateHealthText ();
+		updateHealthBar ();
 	}
 
 	public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info) {
 		if (stream.isWriting) {
 			stream.SendNext (health);
 		} else if (stream.isReading) {
-			health = (int)stream.ReceiveNext ();
+			health = (float)stream.ReceiveNext ();
 			tookDmg = true;
 		}
 	}
@@ -83,6 +107,6 @@ public class ShipHealth : Photon.MonoBehaviour {
 	private void loseGame()
 	{
 		PhotonNetwork.Destroy (PlayerManager.LocalPlayerInstance);
-		SceneManager.LoadScene ("QuitCredits");
+		SceneManager.LoadScene ("BadEnd");
 	}
 }

@@ -35,22 +35,26 @@ public class DoctorControl : Photon.PunBehaviour, IClassControl {
 
     void Start()
     {
-        timer = new CooldownTimerUI(GameObject.FindGameObjectWithTag("Skill1").GetComponent<Image>(), GameObject.FindGameObjectWithTag("Skill2").GetComponent<Image>());
-        timer.CooldownStart();
+
 		canBuff = true;
     }
 
     void Update()
     {
-		if (animator == null) {
-			heal = false;
-			pills = new List<GameObject> ();
-			animator = GetComponent<CoreControl> ().GetAnimator ();
-			if (animator == null) {
-				Debug.Log ("ERROR! Doctor cannot retrieve its animator");
+			if (timer == null) {
+				timer = new CooldownTimerUI (GameObject.FindGameObjectWithTag ("Skill1").GetComponent<Image> (), GameObject.FindGameObjectWithTag ("Skill2").GetComponent<Image> ());
+				timer.CooldownStart ();
 			}
-		}
-        timer.CooldownUpdate(healingCooldown, healBuffCooldown, skillTimeStamp1, skillTimeStamp2);
+
+			if (animator == null) {
+				heal = false;
+				pills = new List<GameObject> ();
+				animator = GetComponent<CoreControl> ().GetAnimator ();
+				if (animator == null) {
+					Debug.Log ("ERROR! Doctor cannot retrieve its animator");
+				}
+			}
+			timer.CooldownUpdate (healingCooldown, healBuffCooldown, skillTimeStamp1, skillTimeStamp2);
     }
 
     void ThrowPill()

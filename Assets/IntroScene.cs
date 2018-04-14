@@ -12,7 +12,7 @@ public class IntroScene : MonoBehaviour {
 	public AudioClip[] clips;
 	void Start()
 	{
-		GameObject.Find ("Main Camera").GetComponent<AudioSource>().Pause();
+		GameObject.Find ("Background Music").GetComponent<AudioSource>().Pause();
 		StartCoroutine("PlayVideo");
 	}
 

@@ -32,7 +32,7 @@ public class PlayerHealth : Photon.MonoBehaviour {
 		if (stream.isWriting) {
 			stream.SendNext (health);
 		} else if (stream.isReading) {
-			health = (int)stream.ReceiveNext ();
+			health = (float)stream.ReceiveNext ();
 			healthChanged = true;
 		}
 	}
@@ -66,7 +66,7 @@ public class PlayerHealth : Photon.MonoBehaviour {
 
 	public void updateHealthText()
     {
-		if (photonView.isMine) {
+		if (!PhotonNetwork.connected || photonView.isMine) {
 		health -= (int)enemyAttackType;
 		enemyAttackType = EnemyAttackType.NONE;
 
