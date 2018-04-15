@@ -30,6 +30,7 @@ public class PlayerManager : Photon.MonoBehaviour {
 			this.GetComponentInChildren<NewGun> ().enabled = true;
 			this.gameObject.GetComponent<Control> ().main_c = cam.GetComponentInChildren<Camera>();
 			this.gameObject.GetComponent<Control> ().CamRef = cam;
+			TeammateUI.Instance.InitializeManager ();
 		}
 	}
 }
