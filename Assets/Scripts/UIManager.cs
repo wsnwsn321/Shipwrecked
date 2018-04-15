@@ -20,14 +20,12 @@ public class UIManager : Photon.MonoBehaviour {
 	public void InitializeUI(){
 
 		int numberOfTeammates = 0;
-		if (teammates != null) {
-			numberOfTeammates = teammates.Length;
+		if (teammates == null) {
+			teammates = PhotonNetwork.connected ? PhotonNetwork.playerList : new PhotonPlayer[0]; 
 		}
-        if (PhotonNetwork.connected)
-        {
-            Debug.Log("Teammate Count: " + numberOfTeammates);
-        }
-		
+		numberOfTeammates = teammates.Length;
+        Debug.Log("Teammate Count: " + numberOfTeammates);
+
 		switch (numberOfTeammates) {
 		case 3:
 			// Three teammates, view 3 total teammate health bars

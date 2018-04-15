@@ -93,6 +93,7 @@ public class DoctorControl : Photon.PunBehaviour, IClassControl {
 			for(int i=0;i<players.Length;i++){
 				healEffect = players [i].transform.GetChild (5).gameObject;
 				healEffect.SetActive (true);
+				healEffect.GetComponent<HealEffect> ().hp = players [i].GetComponent<PlayerHealth> ();
 				//healing = PhotonNetwork.connected? PhotonNetwork.Instantiate(healEffect.name, players[i].transform.position, Quaternion.identity,0) :Instantiate(healEffect,  players[i].transform.position, Quaternion.identity);
 				//healing.transform.position = players [i].transform.position;	
 				StartCoroutine(EndBuff(healEffect));

@@ -26,7 +26,11 @@ public sealed class TeammateUI : Photon.PunBehaviour {
 			
 	public void InitializeManager() {
 		ui = GameObject.Find ("UIManager").GetComponent<UIManager> ();
-		ui.InitializeUI ();
+		if (ui == null) {
+			Debug.Log ("UI was not found!");
+		} else {
+			ui.InitializeUI ();
+		}
 	}
 
 

@@ -6,16 +6,16 @@ using UnityEngine;
 // Heals the player when active
 public class HealEffect : MonoBehaviour {
 
-	PlayerHealth hp;
-	public float regenAmount = 1f;
+	[HideInInspector]
+	public PlayerHealth hp;
+	public float regenAmount = 0.1f;
 
-	// Use this for initialization
-	void Start () {
-		hp = this.gameObject.GetComponent<PlayerHealth> ();
-	}
-	
 	// Update is called once per frame
 	void FixedUpdate () {
-		hp.RecoverHealthLocally(regenAmount);
+		if (hp != null) {
+			hp.RecoverHealthLocally (regenAmount);
+		} else {
+			Debug.Log ("Failed to heal player! PlayerHealth not set!");
+		}
 	}
 }
