@@ -17,7 +17,8 @@ public class brain_control : MonoBehaviour {
 	private GameObject spaceship;
 	private float nextAttack = 0f;
 	public bool stunned, dead, collideSpace;
-
+	public static int currentSlot;
+	private float runspeed, walkspeed;
 	public float attackCooldown = 2.5f;
     void Start () {
         an = GetComponent<Animation>();
@@ -34,15 +35,39 @@ public class brain_control : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+
+		switch(currentSlot)
+		{
+		case 0:
+			runspeed = 3f;
+			walkspeed = 1f;
+			break;
+		case 1:
+			runspeed = 3.3f;
+			walkspeed = 1.5f;
+			break;
+		case 2:
+			runspeed = 3.6f;
+			walkspeed = 1.8f;
+			break;
+		case 3:
+			runspeed = 4f;
+			walkspeed = 2f;
+			break;
+		case 4:
+			runspeed = 4.5f;
+			walkspeed = 2.5f;
+			break;
+		}
         if (fov.visibleTargets.Count > 0)
         {
-            ap.maxSpeed = 3;
+			ap.maxSpeed = runspeed;
         }
         else
         {
 			if (!collideSpace) {
 				an.Play("Walk");
-				ap.maxSpeed = 1;
+				ap.maxSpeed = walkspeed;
 			}
 				
 
@@ -106,16 +131,16 @@ public class brain_control : MonoBehaviour {
 						}
 					} else {
 						an.Play ("Walk");
-						ap.maxSpeed = 1;
+						ap.maxSpeed = walkspeed;
 					}
 
 
 				} else {
 					an.Play ("Walk");
 					if (fov.visibleTargets.Count > 0) {
-						ap.maxSpeed = 3;
+						ap.maxSpeed = runspeed;
 					} else {
-						ap.maxSpeed = 1;
+						ap.maxSpeed = walkspeed;
 					}
 				}
 			}
