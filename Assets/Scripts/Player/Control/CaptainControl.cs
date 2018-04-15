@@ -5,7 +5,7 @@ using PlayerAbilities;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class CaptainControl : Photon.MonoBehaviour, IClassControl
+public class CaptainControl : Photon.PunBehaviour, IClassControl
 {
 	
 	[Range(0f, 10f)]
@@ -56,6 +56,7 @@ public class CaptainControl : Photon.MonoBehaviour, IClassControl
 			timer.CooldownUpdate (RampageCooldown, StunCooldown, skillTimeStamp1, skillTimeStamp2);
     }
 
+	[PunRPC]
 	void Rampage(){
 		isFlaming = true;
 		if (canRampage&&!animator.GetCurrentAnimatorStateInfo (0).IsName ("AB1")&&!animator.GetCurrentAnimatorStateInfo(0).IsName("Die")) {
@@ -75,7 +76,7 @@ public class CaptainControl : Photon.MonoBehaviour, IClassControl
 		}
 	}
 
-
+	[PunRPC]
 	void KnockBack(){
 		if (canKnockBack && !animator.GetCurrentAnimatorStateInfo (0).IsName ("AB2")&&!animator.GetCurrentAnimatorStateInfo(0).IsName("Die")) {
 			canKnockBack = false;
@@ -161,11 +162,11 @@ public class CaptainControl : Photon.MonoBehaviour, IClassControl
     {
         if (ability == SpecialAbility.Leadership)
         {
-			Rampage ();
+			this.photonView.RPC("Rampage", PhotonTargets.All, null);
         }
 		if (ability == SpecialAbility.KnockBack)
 		{
-			KnockBack();
+			this.photonView.RPC("KnockBack", PhotonTargets.All, null);
 		}
     }
 
