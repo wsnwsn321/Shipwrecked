@@ -15,7 +15,7 @@ public class HealEffect : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	void FixedUpdate () {
 		hp.RecoverHealthLocally(regenAmount);
 	}
 }
