@@ -102,6 +102,13 @@ public class PlayerHealth : Photon.PunBehaviour {
 		healthChanged = true;
 	}
 
+	// Recovers health only for the local player. Use this to prevent overlapping heal effects.
+	public void RecoverHealthLocally(float rec) {
+		if (this.gameObject.Equals (PlayerManager.LocalPlayerInstance)) {
+			RecoverHealth (rec);
+		}
+	}
+
 	public void RecoverOrRevive(float rec) {
 		if (health > 0) {
 			RecoverHealth (rec);
