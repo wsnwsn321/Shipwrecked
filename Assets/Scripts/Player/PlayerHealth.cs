@@ -56,12 +56,14 @@ public class PlayerHealth : Photon.PunBehaviour {
 			enemyAttackType = EnemyAttackType.NONE;
         }
 
+
+
 		// Only happens for the local player
 		if (healthChanged && (!PhotonNetwork.connected || this.gameObject.Equals(PlayerManager.LocalPlayerInstance))) {
 			if (PhotonNetwork.connected) {
 				// Only necessary in multiplayer
 				PhotonNetwork.player.SetScore ((int)health);
-				UIManager.updateUI = true;
+				TeammateUI.Instance.HealthChanged();
 			}
 			updateHealthText ();
 			updateHealthBar ();

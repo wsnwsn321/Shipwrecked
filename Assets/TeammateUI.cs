@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TeammateUI : Photon.PunBehaviour {
+public sealed class TeammateUI : Photon.PunBehaviour {
 
 	private UIManager ui;
 
@@ -20,6 +20,7 @@ public class TeammateUI : Photon.PunBehaviour {
 						instance = new TeammateUI ();
 				}
 			}
+			return instance;
 		}
 	}
 			
@@ -30,7 +31,6 @@ public class TeammateUI : Photon.PunBehaviour {
 
 	public void HealthChanged() {
 		// Handles the RPC for the UI updating
-		// RPC CALL DOESNT WORK cORRECTLY SinCE GAMEOBJECTS DONT MATCH
 		this.photonView.RPC ("UpdateTeammateUI", PhotonTargets.Others, null);
 	}
 

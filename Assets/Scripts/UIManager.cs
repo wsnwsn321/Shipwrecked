@@ -69,7 +69,7 @@ public class UIManager : Photon.MonoBehaviour {
 		}
 	}
 
-	private static void GetTeammateUIElements() {
+	private void GetTeammateUIElements() {
 		teammateOneName = GameObject.Find ("TeammateOneName").GetComponent<Text>();
 		teammateTwoName = GameObject.Find ("TeammateTwoName").GetComponent<Text>();
 		teammateThreeName = GameObject.Find ("TeammateThreeName").GetComponent<Text>();
