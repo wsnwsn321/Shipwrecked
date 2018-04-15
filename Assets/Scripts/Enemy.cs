@@ -10,7 +10,7 @@ public class Enemy : Photon.MonoBehaviour {
 	private brain_control bc;
 	// We want Photon to sync this value, so we will serialize it
 	[SerializeField]
-	public float health = 50f;
+	public float health;
 
     // Variables to keep track of recent attackers.
     [HideInInspector]
@@ -25,9 +25,10 @@ public class Enemy : Photon.MonoBehaviour {
     {
         get { return attackers; }
     }
-    
+
 	void Start()
     {
+		health = 50f;
         EntityType type = GetComponent<EntityType>();
         if (type)
         {

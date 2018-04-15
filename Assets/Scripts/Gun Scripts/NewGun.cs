@@ -38,11 +38,11 @@ public class NewGun : PlayerManager {
         switch (characterType)
         {
             case TeammateTypes.Captain:
-                baseDamage = 3f;
+                baseDamage = 5f;
                 fireRate = 20f;
                 break;
             case TeammateTypes.Doctor:
-                baseDamage = 5f;
+                baseDamage = 6f;
                 fireRate = 12f;
                 break;
             case TeammateTypes.Engineer:
@@ -50,7 +50,7 @@ public class NewGun : PlayerManager {
                 fireRate = 1f;
                 break;
             case TeammateTypes.Sergeant:
-                baseDamage = 5f;
+                baseDamage = 7f;
                 fireRate = 15f;
                 break;
         }

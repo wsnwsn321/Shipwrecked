@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 public class PartPickup : Photon.PunBehaviour {
 
     public Sprite shipPartImage;
-    private static int slot = 0;
+    public static int slot = 0;
 
 	[PunRPC]
 	public void OnPickup ()
@@ -38,6 +38,7 @@ public class PartPickup : Photon.PunBehaviour {
                 break;
         }
         slot++;
+		Experience.currentSlot++;
         if (slot >= 5)
         {
 			SceneManager.LoadScene("EndScene");
