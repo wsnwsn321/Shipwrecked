@@ -63,7 +63,7 @@ public class PlayerHealth : Photon.PunBehaviour {
 			if (PhotonNetwork.connected) {
 				// Only necessary in multiplayer
 				PhotonNetwork.player.SetScore ((int)health);
-				TeammateUI.Instance.HealthChanged();
+				GameObject.Find("TeammateUISingleton").GetComponent<TeammateUI>().HealthChanged();
 			}
 			updateHealthText ();
 			updateHealthBar ();

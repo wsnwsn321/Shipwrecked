@@ -2,28 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public sealed class TeammateUI : Photon.PunBehaviour {
+public class TeammateUI : Photon.PunBehaviour {
 
 	private UIManager ui;
+	private PhotonView p;
 
-	// MAKE THIS THING A SINGLETON
-	private static volatile TeammateUI instance;
-	private static object syncRoot = new Object();
-
-	private TeammateUI() {}
-
-	public static TeammateUI Instance {
-		get {
-			if (instance == null) {
-				lock (syncRoot) {
-					if (instance == null)
-						instance = new TeammateUI ();
-				}
-			}
-			return instance;
-		}
-	}
-			
 	public void InitializeManager() {
 		ui = GameObject.Find ("UIManager").GetComponent<UIManager> ();
 		if (ui == null) {
@@ -37,7 +20,7 @@ public sealed class TeammateUI : Photon.PunBehaviour {
 	public void HealthChanged() {
 
 		// Handles the RPC for the UI updating
-		this.photonView.RPC ("UpdateTeammateUI", PhotonTargets.Others, null);
+		photonView.RPC ("UpdateTeammateUI", PhotonTargets.Others, null);
 	}
 
 	[PunRPC]
