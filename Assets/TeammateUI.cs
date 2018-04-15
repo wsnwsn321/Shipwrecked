@@ -26,16 +26,21 @@ public sealed class TeammateUI : Photon.PunBehaviour {
 			
 	public void InitializeManager() {
 		ui = GameObject.Find ("UIManager").GetComponent<UIManager> ();
+		ui.InitializeUI ();
 	}
 
 
 	public void HealthChanged() {
+
 		// Handles the RPC for the UI updating
 		this.photonView.RPC ("UpdateTeammateUI", PhotonTargets.Others, null);
 	}
 
 	[PunRPC]
 	public void UpdateTeammateUI() {
+		if (ui == null) {
+			InitializeManager ();
+		}
 		ui.UpdateUI ();
 	}
 

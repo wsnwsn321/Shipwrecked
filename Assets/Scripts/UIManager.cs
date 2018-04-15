@@ -18,7 +18,6 @@ public class UIManager : Photon.MonoBehaviour {
 	public Slider teammateThreeHealth;
 
 	public void InitializeUI(){
-		GetTeammateUIElements ();
 
 		int numberOfTeammates = 0;
 		if (teammates != null) {
@@ -67,16 +66,6 @@ public class UIManager : Photon.MonoBehaviour {
 			teammateOneHealth.gameObject.SetActive (false);
 			break;
 		}
-	}
-
-	private void GetTeammateUIElements() {
-		teammateOneName = GameObject.Find ("TeammateOneName").GetComponent<Text>();
-		teammateTwoName = GameObject.Find ("TeammateTwoName").GetComponent<Text>();
-		teammateThreeName = GameObject.Find ("TeammateThreeName").GetComponent<Text>();
-		teammateOneHealth = GameObject.Find ("TeammateOneHealth").GetComponent<Slider>();
-		teammateTwoHealth = GameObject.Find ("TeammateTwoHealth").GetComponent<Slider>();
-		teammateThreeHealth = GameObject.Find ("TeammateThreeHealth").GetComponent<Slider>();
-
 	}
 
 	public void UpdateUI () {

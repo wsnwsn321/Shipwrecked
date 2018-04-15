@@ -170,7 +170,7 @@ public class NewGun : PlayerManager {
 
 			}
 		}
-		if ((hit.transform.name.Equals ("AI_Crab_Alien(Clone)") || hit.transform.name.Equals ("Spider_Brain")) && this.gameObject.Equals(PlayerManager.LocalPlayerInstance)) {
+		if ((hit.transform.name.Equals ("AI_Crab_Alien(Clone)") || hit.transform.name.Equals ("Spider_Brain")) && (!PhotonNetwork.connected || photonView.isMine)) {
 			if (PhotonNetwork.connected) {
 				GameObject bloodImpact = PhotonNetwork.Instantiate (bloodSplatter.name, hit.point, Quaternion.LookRotation (hit.normal), 0);
 				StartCoroutine (DestroyImpact (bloodImpact));
@@ -178,7 +178,7 @@ public class NewGun : PlayerManager {
 				GameObject bloodImpact = GameObject.Instantiate (bloodSplatter, hit.point, Quaternion.identity);
 				Destroy (bloodImpact, 1f);
 			}
-		} else if(this.gameObject.Equals(PlayerManager.LocalPlayerInstance)){
+		} else if((!PhotonNetwork.connected || photonView.isMine)){
 			if (PhotonNetwork.connected) {
 				GameObject impactEff = PhotonNetwork.Instantiate (impactEffect.name, hit.point, Quaternion.LookRotation (hit.normal), 0);
 				StartCoroutine (DestroyImpact (impactEff));

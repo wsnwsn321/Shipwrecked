@@ -5,9 +5,7 @@ using System.Linq;
 
 public class ShipPartsSpawnManager : MonoBehaviour
 {
-    public GameObject ShipParts;
-
-    List<GameObject> parts;
+    public List<GameObject> parts;
     List<Transform> spawnPoints;
     List<Transform> sortedSpawnPoints;
 
@@ -17,12 +15,12 @@ public class ShipPartsSpawnManager : MonoBehaviour
     void Start()
     {
         spawnPoints = new List<Transform>();
-        parts = new List<GameObject>();
+        //parts = new List<GameObject>();
 
-        foreach (Transform child in ShipParts.transform)
-        {
-            parts.Add(child.gameObject);
-        }
+        //foreach (Transform child in ShipParts.transform)
+       // {
+         //   parts.Add(child.gameObject);
+        //}
 
         foreach (Transform child in transform)
         {

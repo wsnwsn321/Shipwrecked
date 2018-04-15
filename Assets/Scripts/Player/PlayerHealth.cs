@@ -42,8 +42,8 @@ public class PlayerHealth : Photon.PunBehaviour {
 		// Uses boolean logic of && instead of || to reduce checks per update
 		if (!(healthText != null && healthBar != null && corecontrol != null && peace != null)) {
 			corecontrol = GetComponent<CoreControl> ();
-			healthText = GameObject.FindGameObjectWithTag("HealthText").GetComponent<Text>();
-			healthBar = GameObject.FindGameObjectWithTag("HealthBar").GetComponent<Slider>();
+			healthText = GameObject.Find("HealthText").GetComponent<Text>();
+			healthBar = GameObject.Find("HealthBar").GetComponent<Slider>();
 			peace = transform.GetChild (5).gameObject;
 		}
 
