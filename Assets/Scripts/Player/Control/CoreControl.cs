@@ -58,12 +58,6 @@ public class CoreControl : Photon.PunBehaviour {
 		rb = GetComponent<Rigidbody> ();
 		ammo = GetComponentInChildren<AmmoRemaining> ();
 		myhp = GetComponent<PlayerHealth> ();
-		if (PhotonNetwork.connected && this.gameObject.Equals (PlayerManager.LocalPlayerInstance)) {
-			//myhp = GetComponent<PlayerHealth> ();
-			//ammo = GetComponentInChildren<AmmoRemaining> ();
-		} else if (!PhotonNetwork.connected) {
-			myhp = GetComponent<PlayerHealth> ();
-		}
     }
 
     public bool IsJumping()
@@ -368,12 +362,10 @@ public class CoreControl : Photon.PunBehaviour {
 
     public void DieOnGround()
     {
-        if (animator)
+		if (animator && (!PhotonNetwork.connected || PlayerManager.LocalPlayerInstance.Equals(this.gameObject)))
         {
             dead = true;
-			myhp.health = 0;
-			myhp.updateHealthBar ();
-			myhp.updateHealthText ();
+			photonView.RPC ("FallDead", PhotonTargets.All, null);
         }
     }
 
@@ -392,14 +384,12 @@ public class CoreControl : Photon.PunBehaviour {
 		// Physics can be faster instead of Vector distance!
 		if (Vector3.Distance(PlayerManager.LocalPlayerInstance.transform.position, pillPos) < 3f) {
 			// This means that this player is revived. Call Revived
-			if (this.gameObject.GetComponent<PlayerHealth> ().health == 0) {
+			if (myhp.GetHealth() == 0) {
 				// Player is dead, revive them
 				Revived();
 			} else {
 				// Player is alive, heal them
-				this.gameObject.GetComponent<PlayerHealth> ().health += 40;
-				this.gameObject.GetComponent<PlayerHealth> ().updateHealthBar ();
-				this.gameObject.GetComponent<PlayerHealth> ().updateHealthText ();
+				myhp.RecoverHealth(40);
 			}
 		}
 	}
@@ -411,16 +401,22 @@ public class CoreControl : Photon.PunBehaviour {
         {
 			print ("reviving!!!!!");
             dead = false;
-
             animator.SetTrigger("Revived");
-
-			this.gameObject.layer = 10;
-			myhp.health = 10;
-			myhp.updateHealthBar ();
-			myhp.updateHealthText ();
-
+			myhp.RecoverHealth (10);
+			photonView.RPC ("ReviveSelf", PhotonTargets.All, null);
         }
     }
+
+	[PunRPC]
+	void ReviveSelf() {
+		this.gameObject.layer = 10;
+	}
+
+	[PunRPC]
+	void FallDead() {
+		this.gameObject.layer = 16;
+	}
+
 	public void ReviveAllies()
 	{
 		if (animator)

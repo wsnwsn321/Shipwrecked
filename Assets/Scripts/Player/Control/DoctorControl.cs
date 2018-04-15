@@ -35,12 +35,12 @@ public class DoctorControl : Photon.PunBehaviour, IClassControl {
 
     void Start()
     {
-
 		canBuff = true;
     }
 
     void Update()
     {
+		if(!PhotonNetwork.connected || PlayerManager.LocalPlayerInstance.Equals(this.gameObject)) {
 			if (timer == null) {
 				timer = new CooldownTimerUI (GameObject.FindGameObjectWithTag ("Skill1").GetComponent<Image> (), GameObject.FindGameObjectWithTag ("Skill2").GetComponent<Image> ());
 				timer.CooldownStart ();
@@ -55,7 +55,8 @@ public class DoctorControl : Photon.PunBehaviour, IClassControl {
 				}
 			}
 			timer.CooldownUpdate (healingCooldown, healBuffCooldown, skillTimeStamp1, skillTimeStamp2);
-    }
+    	}
+	}
 
     void ThrowPill()
     {
@@ -67,7 +68,6 @@ public class DoctorControl : Photon.PunBehaviour, IClassControl {
                 animator.SetTrigger("Ability1");
             }
 			GameObject currentPill = PhotonNetwork.connected ? PhotonNetwork.Instantiate(pill.name, new Vector3(transform.position.x, transform.position.y + 1f, transform.position.z), Quaternion.identity, 0) :Instantiate(pill, new Vector3(transform.position.x, transform.position.y + 1f, transform.position.z), Quaternion.identity);
-			currentPill.GetComponent<Increase> ().player = PhotonNetwork.player;
 			currentPill.GetComponent<Increase> ().thrower = this.gameObject;
 			Physics.IgnoreCollision(this.GetComponent<BoxCollider>(), currentPill.GetComponent<CapsuleCollider>());
             currentPill.GetComponent<Rigidbody>().velocity = GetComponent<Control>().main_c.transform.forward * 10;

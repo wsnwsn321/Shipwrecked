@@ -17,13 +17,6 @@ public class PlayerManager : Photon.MonoBehaviour {
 	// Cam is a reference to the Camera prefab
 	private GameObject cam;
 
-	void Awake() {
-
-		// #Critical
-		// we flag as don't destroy on load so that instance survives level sync
-		//DontDestroyOnLoad(this.gameObject);
-	}
-
 	// Use this for initialization
 	void Start () {
 		//#Important
@@ -37,14 +30,6 @@ public class PlayerManager : Photon.MonoBehaviour {
 			this.GetComponentInChildren<NewGun> ().enabled = true;
 			this.gameObject.GetComponent<Control> ().main_c = cam.GetComponentInChildren<Camera>();
 			this.gameObject.GetComponent<Control> ().CamRef = cam;
-		}
-	}
-
-	// Update is called once per frame
-	void Update () {
-		// We only want to update our character! Added on 2/6/18
-		if (PhotonNetwork.connected && photonView.isMine == false) {
-			return;
 		}
 	}
 }

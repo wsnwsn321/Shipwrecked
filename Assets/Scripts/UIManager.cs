@@ -35,8 +35,6 @@ public class UIManager : Photon.PunBehaviour {
 			InitializeUI ();
 		}
 
-
-		// It will never enter this statement 
 		if (updateUI) {
 			HealthChanged ();
 			updateUI = false;
@@ -45,7 +43,7 @@ public class UIManager : Photon.PunBehaviour {
 
 	void InitializeUI() {
 		int numberOfTeammates = 0;
-		if(teammates != null) {
+		if (teammates != null) {
 			numberOfTeammates = teammates.Length;
 		}
         if (PhotonNetwork.connected)
@@ -91,41 +89,42 @@ public class UIManager : Photon.PunBehaviour {
 			teammateOneHealth.gameObject.SetActive (false);
 			break;
 		}
+		UpdateUI ();
 	}
 
 
 
 	public void HealthChanged() {
 		// Handles the RPC for the UI updating
+		// RPC CALL DOESNT WORK cORRECTLY SinCE GAMEOBJECTS DONT MATCH
 		this.photonView.RPC ("UpdateUI", PhotonTargets.Others, null);
 	}
 
 	[PunRPC]
 	private void UpdateUI () {
 		// Updates the UI for other teammates, aka "Teammate Health bars"
-		teammates = PhotonNetwork.otherPlayers;
-		int numberOfTeammates = teammates != null ? teammates.Length : 0;
+		int numberOfTeammates = teammates.Length;
 		switch (numberOfTeammates) {
-		case 3:
-			teammateThreeName.text = teammates [2].NickName;
-			teammateThreeHealth.value = (float)teammates [2].GetScore ();
-			teammateTwoName.text = teammates [1].NickName;
-			teammateTwoHealth.value = (float)teammates [1].GetScore ();
-			teammateOneName.text = teammates [0].NickName;
-			teammateOneHealth.value = (float)teammates [0].GetScore ();
-			break;
-		case 2:
-			teammateTwoName.text = teammates [1].NickName;
-			teammateTwoHealth.value = (float)teammates [1].GetScore ();
-			teammateOneName.text = teammates [0].NickName;
-			teammateOneHealth.value = (float)teammates [0].GetScore ();
-			break;
-		case 1:
-			teammateOneName.text = teammates [0].NickName;
-			teammateOneHealth.value = (float)teammates [0].GetScore ();
-			break;
-		default:
-			break;
+			case 3:
+				teammateThreeName.text = teammates [2].NickName;
+				teammateThreeHealth.value = (float)teammates [2].GetScore ();
+				teammateTwoName.text = teammates [1].NickName;
+				teammateTwoHealth.value = (float)teammates [1].GetScore ();
+				teammateOneName.text = teammates [0].NickName;
+				teammateOneHealth.value = (float)teammates [0].GetScore ();
+				break;
+			case 2:
+				teammateTwoName.text = teammates [1].NickName;
+				teammateTwoHealth.value = (float)teammates [1].GetScore ();
+				teammateOneName.text = teammates [0].NickName;
+				teammateOneHealth.value = (float)teammates [0].GetScore ();
+				break;
+			case 1:
+				teammateOneName.text = teammates [0].NickName;
+				teammateOneHealth.value = (float)teammates [0].GetScore ();
+				break;
+			default:
+				break;
 		}
 	}
 

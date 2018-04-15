@@ -5,7 +5,6 @@ using UnityEngine;
 public class Increase : Photon.MonoBehaviour {
     public GameObject healedEffect;
 	[HideInInspector]
-	public PhotonPlayer player;
 	public GameObject thrower;
     private GameObject h;
 	private CoreControl cc;
@@ -23,7 +22,7 @@ public class Increase : Photon.MonoBehaviour {
 					an = other.gameObject.GetComponent<Animator> ();
 					allieHP = other.gameObject.GetComponent<PlayerHealth> ();
 					h = Instantiate (healedEffect, other.transform.position, Quaternion.identity);
-					allieHP.health += 40;
+					allieHP.RecoverOrRevive (40);
 					Destroy (h, 2f);
 					if (cc.dead || an.GetCurrentAnimatorStateInfo (0).IsName ("Die")) {
 						an.SetTrigger ("Revived");

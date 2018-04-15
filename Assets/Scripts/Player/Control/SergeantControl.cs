@@ -103,9 +103,7 @@ public class SergeantControl : MonoBehaviour, IClassControl
     IEnumerator HealForTime()
     {
         yield return new WaitForSeconds(healTime);
-		myhp.health += 20;
-		myhp.updateHealthBar ();
-		myhp.updateHealthText ();
+		myhp.RecoverHealth (20);
         if (healing)
         {
             StopHealing();
