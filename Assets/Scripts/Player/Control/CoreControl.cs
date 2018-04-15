@@ -364,6 +364,7 @@ public class CoreControl : Photon.PunBehaviour {
     {
 		if (animator && (!PhotonNetwork.connected || PlayerManager.LocalPlayerInstance.Equals(this.gameObject)))
         {
+			myhp.TakeDamage (100);
             dead = true;
 			photonView.RPC ("FallDead", PhotonTargets.All, null);
         }
@@ -402,7 +403,6 @@ public class CoreControl : Photon.PunBehaviour {
 			print ("reviving!!!!!");
             dead = false;
             animator.SetTrigger("Revived");
-			myhp.RecoverHealth (10);
 			photonView.RPC ("ReviveSelf", PhotonTargets.All, null);
         }
     }
@@ -410,6 +410,7 @@ public class CoreControl : Photon.PunBehaviour {
 	[PunRPC]
 	void ReviveSelf() {
 		this.gameObject.layer = 10;
+		myhp.RecoverHealth (10);
 	}
 
 	[PunRPC]

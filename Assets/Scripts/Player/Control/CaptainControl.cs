@@ -170,16 +170,16 @@ public class CaptainControl : Photon.PunBehaviour, IClassControl
     {
         if (ability == SpecialAbility.Leadership)
         {
-			if (photonView.isMine && !PhotonNetwork.isMasterClient) {
-				this.photonView.RPC ("Rampage", PhotonTargets.MasterClient, null);
+			if (photonView.isMine) {
+				this.photonView.RPC ("Rampage", PhotonTargets.All, null);
 			} else {
 				Rampage ();
 			}
         }
 		if (ability == SpecialAbility.KnockBack)
 		{
-			if (photonView.isMine && !PhotonNetwork.isMasterClient) {
-				this.photonView.RPC ("KnockBack", PhotonTargets.MasterClient, null);
+			if (photonView.isMine) {
+				this.photonView.RPC ("KnockBack", PhotonTargets.All, null);
 			} else {
 				KnockBack ();
 			}
