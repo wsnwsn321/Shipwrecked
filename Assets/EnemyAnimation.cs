@@ -16,10 +16,10 @@ public class EnemyAnimation : MonoBehaviour {
 	private float nextAttack = 0f;
 	private GameObject Spaceship;
 	private GameObject turrets;
-
+	public static int currentSlot = 0;
 	public float attackCooldown = 1.5f;
     bool run, attack, collide, hitted, spaceship;
-
+	private float runspeed, walkspeed;
 	void Start () {
         attack = false;
         run = false;
@@ -35,18 +35,43 @@ public class EnemyAnimation : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+
+		switch(currentSlot)
+		{
+		case 0:
+			runspeed = 3f;
+			walkspeed = 1f;
+			break;
+		case 1:
+			runspeed = 3.3f;
+			walkspeed = 1.5f;
+			break;
+		case 2:
+			runspeed = 3.6f;
+			walkspeed = 1.8f;
+			break;
+		case 3:
+			runspeed = 4f;
+			walkspeed = 2f;
+			break;
+		case 4:
+			runspeed = 4.5f;
+			walkspeed = 2.5f;
+			break;
+		}
+
         attack = false ;
             ani.SetBool("findPlayer", run);
 		//if (Player_ani != null) {
 			if (fov.visibleTargets.Count > 0)
 			{
 				run = true;
-				ap.maxSpeed = 3;
+			ap.maxSpeed = runspeed;
 			}
 			else
 			{
 				run = false;
-				ap.maxSpeed = 1;
+			ap.maxSpeed = walkspeed;
 			}
 		//}
            
@@ -75,21 +100,21 @@ public class EnemyAnimation : MonoBehaviour {
 			} else {
 				//remove the player from the fov
 				run = false;
-				ap.maxSpeed = 1;
+				ap.maxSpeed = walkspeed;
 			}
                
 		} else if (distance > 1.4f) {
 			if (fov.visibleTargets.Count > 0) {
-				ap.maxSpeed = 3;
+				ap.maxSpeed = runspeed;
 			} else {
 				run = false;
-				ap.maxSpeed = 1;
+				ap.maxSpeed = walkspeed;
 			}
 		}
 
 		if (Player_ani!=null&&Player_ani.GetCurrentAnimatorStateInfo (0).IsName ("Die")) {
 			run = false;
-			ap.maxSpeed = 1;
+			ap.maxSpeed = walkspeed;
 		}
 
 		spaceshipDistance = Vector3.Distance (transform.position, Spaceship.transform.position);
