@@ -19,11 +19,12 @@ public class Increase : Photon.MonoBehaviour {
 			if (!activated && other.gameObject != thrower && other.gameObject.layer == LayerMask.NameToLayer ("Character")) {
 				activated = true;
 				if (!PhotonNetwork.connected) {
+					float healHP = thrower.GetComponent<DoctorControl> ().pillHeal;
 					cc = other.gameObject.GetComponent<CoreControl> ();
 					an = other.gameObject.GetComponent<Animator> ();
 					allieHP = other.gameObject.GetComponent<PlayerHealth> ();
 					h = Instantiate (healedEffect, other.transform.position, Quaternion.identity);
-					allieHP.health += 40;
+					allieHP.health += healHP;
 					Destroy (h, 2f);
 					if (cc.dead || an.GetCurrentAnimatorStateInfo (0).IsName ("Die")) {
 						an.SetTrigger ("Revived");

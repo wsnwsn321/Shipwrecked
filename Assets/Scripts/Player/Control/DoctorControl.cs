@@ -15,6 +15,7 @@ public class DoctorControl : Photon.PunBehaviour, IClassControl {
 	private GameObject healEffect;
     [HideInInspector]
     public float healthPerSec = 1f;
+	public float pillHeal = 30f;
     [HideInInspector]
     public float researchBuff = 1f;
 
@@ -30,9 +31,9 @@ public class DoctorControl : Photon.PunBehaviour, IClassControl {
     private CooldownTimerUI timer;
     public float skillTimeStamp1;
     public float skillTimeStamp2;
-    private float healingCooldown = 5f;
-	private float healBuffCooldown =10f;
-
+	public float healingCooldown = 8f;
+	public float healBuffCooldown =10f;
+	public float healBuffTime =5f;
     void Start()
     {
 
@@ -86,7 +87,7 @@ public class DoctorControl : Photon.PunBehaviour, IClassControl {
 				animator.SetTrigger("Ability2");
 				healBuff.SetActive (true);
 				StartCoroutine(HealBuff());
-				StartCoroutine(WaitAbilityUse());
+
 			}
 			Collider[] players = Physics.OverlapSphere (transform.position, 15f,layerMask, QueryTriggerInteraction.Collide);
 			//Debug.Log (players.Length);
@@ -108,9 +109,8 @@ public class DoctorControl : Photon.PunBehaviour, IClassControl {
 	IEnumerator EndBuff(GameObject hE)
 	{
         // Start cooldown animation for UI skill image
-        timer.startCooldownTimerUI(2);
-        skillTimeStamp2 = Time.time + healBuffCooldown;
-        yield return new WaitForSeconds(5f);
+        
+		yield return new WaitForSeconds(healBuffTime);
 		hE.SetActive (false);
 		//StopHealing ();
 		healBuff.SetActive (false);
@@ -143,7 +143,7 @@ public class DoctorControl : Photon.PunBehaviour, IClassControl {
         pills.RemoveAt(0);
     }
 
-	IEnumerator WaitAbilityUse()
+	IEnumerator WaitAbility2Use()
 	{
 		yield return new WaitForSeconds(healBuffCooldown);
 		canBuff = true;
@@ -153,10 +153,12 @@ public class DoctorControl : Photon.PunBehaviour, IClassControl {
 
 	IEnumerator HealBuff( )
 	{
-		yield return new WaitForSeconds(5f);
+		yield return new WaitForSeconds(healBuffTime);
 		healBuff.SetActive (false);
 		animator.SetTrigger("Ab2Finished");
-
+		timer.startCooldownTimerUI(2);
+		skillTimeStamp2 = Time.time + healBuffCooldown;
+		StartCoroutine(WaitAbility2Use());
 	}
     #region Inherited Methods
 

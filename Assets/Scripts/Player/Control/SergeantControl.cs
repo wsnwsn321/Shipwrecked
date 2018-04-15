@@ -8,12 +8,14 @@ using UnityEngine.UI;
 public class SergeantControl : MonoBehaviour, IClassControl
 {
     [Range(0f, 10f)]
-    public float healCooldown = 5f;
-	public float autoCooldown = 8f;
+    public float healCooldown = 10f;
+	public float autoCooldown = 10f;
+	public float autoBuffTime = 4f;
     [Range(0f, 10f)]
     public float healTime = 5f;
     [Range(1, 100)]
     public int healDivisions = 10;
+	public float healAmount;
     public GameObject healParticle;
     private Animator ani;
     private float currentHealTime;
@@ -28,7 +30,7 @@ public class SergeantControl : MonoBehaviour, IClassControl
     void Start()
     {
 
-
+		healAmount = 20;
         currentHealTime = 0;
         healDelay = healTime / healDivisions;
         canHeal = true;
@@ -72,7 +74,7 @@ public class SergeantControl : MonoBehaviour, IClassControl
             timer.startCooldownTimerUI(2);
             skillTimeStamp2 = Time.time + autoCooldown;
         }
-        StartCoroutine(WaitAbility2Use());
+		StartCoroutine(AutoRifleTime());
 	}
 
     void Heal()
@@ -103,7 +105,7 @@ public class SergeantControl : MonoBehaviour, IClassControl
     IEnumerator HealForTime()
     {
         yield return new WaitForSeconds(healTime);
-		myhp.health += 20;
+		myhp.health += healAmount;
 		myhp.updateHealthBar ();
 		myhp.updateHealthText ();
         if (healing)
@@ -117,11 +119,21 @@ public class SergeantControl : MonoBehaviour, IClassControl
         yield return new WaitForSeconds(healCooldown);
         canHeal = true;
     }
+	IEnumerator AutoRifleTime()
+	{
+		yield return new WaitForSeconds(autoBuffTime);
+		canAuto = true;
+		cc.autoRifle = false;
+		StartCoroutine(WaitAbility2Use());
+
+	}
+
 	IEnumerator WaitAbility2Use()
 	{
 		yield return new WaitForSeconds(autoCooldown);
 		canAuto = true;
 		cc.autoRifle = false;
+
 	}
 
     #region Inherited Methods
