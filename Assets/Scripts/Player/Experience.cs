@@ -18,7 +18,7 @@ public class Experience : MonoBehaviour {
     int nextLevelThreshold;
     int nextThresholdPosition;
     private Text levelText;
-
+	public static int currentSlot = 0;
     // Use this for initialization
     void Start () {
         core = GetComponent<CoreControl>();
@@ -87,19 +87,34 @@ public class Experience : MonoBehaviour {
         switch(level)
         {
             case 3:
-                core.damageModifier = 1.2f;
                 break;
             case 5:
                 core.hasSpecialAbility = true;
-                core.damageModifier = 1.6f;
                 break;
             case 7:
-                core.damageModifier = 2.2f;
                 break;
             case 9:
-                core.damageModifier = 3.0f;
                 break;
         }
+
+		switch(currentSlot)
+		{
+		case 1:
+			core.damageModifier = 0.95f;
+			break;
+		case 2:
+			core.hasSpecialAbility = true;
+			core.damageModifier = 0.9f;
+			break;
+		case 3:
+			core.damageModifier = 0.85f;
+			break;
+		case 4:
+			core.damageModifier =0.8f;
+			break;
+		}
+
+
     }
 
     private void UpdateCaptainSkills()
@@ -140,23 +155,21 @@ public class Experience : MonoBehaviour {
         switch (level)
         {
             case 2:
-                control.healthPerSec = 2f;
+
                 break;
             case 3:
                 control.maxPills++;
                 break;
             case 4:
-                control.healthPerSec = 3f;
+
                 break;
             case 5:
-                control.researchBuff = 1.5f;
                 control.maxPills++;
                 break;
             case 6:
                 control.healthPerSec = 4f;
                 break;
             case 7:
-                control.researchBuff = 2.0f;
                 control.maxPills++;
                 break;
             case 8:
@@ -167,7 +180,6 @@ public class Experience : MonoBehaviour {
                 control.maxPills++;
                 break;
             case 10:
-                control.researchBuff = 3f;
                 break;
         }
     }
