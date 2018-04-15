@@ -3,13 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UIManager : Photon.PunBehaviour {
+public class UIManager : Photon.MonoBehaviour {
 
 	private PhotonPlayer[] teammates;
 	private int initialTeammateCount = 0;
-
-	[HideInInspector]
-	public static bool updateUI = false;
+	private UIManager ui;
 
 	public Text teammateOneName;
 	public Text teammateTwoName;
@@ -19,29 +17,9 @@ public class UIManager : Photon.PunBehaviour {
 	public Slider teammateTwoHealth;
 	public Slider teammateThreeHealth;
 
+	public void InitializeUI(){
+		GetTeammateUIElements ();
 
-	void Update() {
-		// Need to consider if otherPlayers will exist w/ connected check
-		if (teammates == null && PhotonNetwork.connected) {
-			teammates = PhotonNetwork.otherPlayers;
-			initialTeammateCount = teammates.Length;
-			InitializeUI ();
-		} else if(!PhotonNetwork.connected){
-			teammates = new PhotonPlayer[0];
-			InitializeUI ();
-		}
-		if (teammates.Length != initialTeammateCount) {
-			initialTeammateCount = teammates.Length;
-			InitializeUI ();
-		}
-
-		if (updateUI) {
-			HealthChanged ();
-			updateUI = false;
-		}
-	}
-
-	void InitializeUI() {
 		int numberOfTeammates = 0;
 		if (teammates != null) {
 			numberOfTeammates = teammates.Length;
@@ -89,19 +67,34 @@ public class UIManager : Photon.PunBehaviour {
 			teammateOneHealth.gameObject.SetActive (false);
 			break;
 		}
-		UpdateUI ();
 	}
 
+	private static void GetTeammateUIElements() {
+		teammateOneName = GameObject.Find ("TeammateOneName").GetComponent<Text>();
+		teammateTwoName = GameObject.Find ("TeammateTwoName").GetComponent<Text>();
+		teammateThreeName = GameObject.Find ("TeammateThreeName").GetComponent<Text>();
+		teammateOneHealth = GameObject.Find ("TeammateOneHealth").GetComponent<Slider>();
+		teammateTwoHealth = GameObject.Find ("TeammateTwoHealth").GetComponent<Slider>();
+		teammateThreeHealth = GameObject.Find ("TeammateThreeHealth").GetComponent<Slider>();
 
-
-	public void HealthChanged() {
-		// Handles the RPC for the UI updating
-		// RPC CALL DOESNT WORK cORRECTLY SinCE GAMEOBJECTS DONT MATCH
-		this.photonView.RPC ("UpdateUI", PhotonTargets.Others, null);
 	}
 
-	[PunRPC]
-	private void UpdateUI () {
+	public void UpdateUI () {
+
+		// Need to consider if otherPlayers will exist w/ connected check
+		if (teammates == null && PhotonNetwork.connected) {
+			teammates = PhotonNetwork.otherPlayers;
+			initialTeammateCount = teammates.Length;
+			InitializeUI ();
+		} else if(!PhotonNetwork.connected){
+			teammates = new PhotonPlayer[0];
+			InitializeUI ();
+		}
+		if (teammates.Length != initialTeammateCount) {
+			initialTeammateCount = teammates.Length;
+			InitializeUI ();
+		}
+
 		// Updates the UI for other teammates, aka "Teammate Health bars"
 		int numberOfTeammates = teammates.Length;
 		switch (numberOfTeammates) {
