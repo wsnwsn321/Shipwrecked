@@ -24,7 +24,7 @@ public class Increase : Photon.MonoBehaviour {
 					an = other.gameObject.GetComponent<Animator> ();
 					allieHP = other.gameObject.GetComponent<PlayerHealth> ();
 					h = Instantiate (healedEffect, other.transform.position, Quaternion.identity);
-					allieHP.RecoverHealth(healHP);
+					allieHP.RecoverOrRevive(healHP);
 					Destroy (h, 2f);
 					if (cc.dead || an.GetCurrentAnimatorStateInfo (0).IsName ("Die")) {
 						an.SetTrigger ("Revived");
