@@ -123,26 +123,33 @@ public class Experience : MonoBehaviour {
         switch(level)
         {
             case 2:
-                control.attackBuff = control.defenseBuff = 2f;
+			control.RampageTime = 5f;
                 break;
             case 3:
                 break;
-            case 4:
-                control.attackBuff = control.defenseBuff = 3f;
+		case 4:
+			control.RampageTime = 6f;
                 break;
-            case 5:
+		case 5:
+			control.RampageCooldown = 9f;
                 break;
-            case 6:
-                control.attackBuff = control.defenseBuff = 4f;
+		case 6:
+			control.EnemyStunnedTime = 3f;
                 break;
             case 7:
+			control.RampageTime = 7f;
+			control.StunCooldown = 5f;
                 break;
             case 8:
-                control.attackBuff = control.defenseBuff = 5f;
+			control.RampageCooldown = 8f;
+			control.StunDistance = 5f;
                 break;
             case 9:
+			control.RampageTime = 8f;
+			control.StunCooldown = 4f;
                 break;
             case 10:
+			control.EnemyStunnedTime = 5f;
                 break;
         }
     }
@@ -156,29 +163,33 @@ public class Experience : MonoBehaviour {
             case 2:
 
                 break;
-            case 3:
-                control.maxPills++;
+		case 3:
+			control.healingCooldown = 7f;
+              
                 break;
             case 4:
-
+			control.maxPills++;
                 break;
             case 5:
-                control.maxPills++;
+			control.healingCooldown = 6f;
                 break;
-            case 6:
-                control.healthPerSec = 4f;
+		case 6:
+			control.healthPerSec = 4f;
+			control.healBuffCooldown = 8f;
                 break;
             case 7:
                 control.maxPills++;
                 break;
             case 8:
                 control.healthPerSec = 5f;
+			control.healingCooldown = 5f;
+			control.healBuffCooldown = 6f;
                 break;
             case 9:
-                control.researchBuff = 2.5f;
-                control.maxPills++;
                 break;
             case 10:
+			control.healingCooldown = 3f;
+			control.healBuffCooldown = 4f;
                 break;
         }
     }
@@ -228,21 +239,37 @@ public class Experience : MonoBehaviour {
         {
             case 2:
                 break;
-            case 3:
+		case 3:
+			control.healCooldown = 9f;
+			control.healAmount = 25f;
                 break;
-            case 4:
+		case 4:
+			control.healTime = 4f;
                 break;
             case 5:
+			control.healCooldown = 7f;
+			control.healAmount = 35f;
                 break;
-            case 6:
+		case 6:
+			control.healTime = 3f;
+			control.autoCooldown = 8f;
                 break;
-            case 7:
+		case 7:
+			control.healAmount = 50f;
+			control.autoBuffTime = 5f;
+			control.healCooldown = 5f;
                 break;
             case 8:
+			control.autoCooldown = 6f;
                 break;
             case 9:
+			control.healTime = 2f;
+			control.autoBuffTime = 6f;
                 break;
             case 10:
+			control.healAmount = 80f;
+			control.autoCooldown = 4f;
+			control.healCooldown = 3f;
                 break;
         }
     }

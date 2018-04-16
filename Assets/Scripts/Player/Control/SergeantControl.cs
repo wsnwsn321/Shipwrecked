@@ -68,11 +68,9 @@ public class SergeantControl : MonoBehaviour, IClassControl
 
 	void AutoRifle(){
 		if (canAuto && !cc.autoRifle) {
-			print ("entered!");
 			cc.autoRifle = true;
             // Start cooldown animation for UI skill image
-            timer.startCooldownTimerUI(2);
-            skillTimeStamp2 = Time.time + autoCooldown;
+         
         }
 		StartCoroutine(AutoRifleTime());
 	}
@@ -124,6 +122,8 @@ public class SergeantControl : MonoBehaviour, IClassControl
 		canAuto = true;
 		cc.autoRifle = false;
 		StartCoroutine(WaitAbility2Use());
+		timer.startCooldownTimerUI(2);
+		skillTimeStamp2 = Time.time + autoCooldown;
 
 	}
 

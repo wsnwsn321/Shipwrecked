@@ -14,9 +14,8 @@ public class CaptainControl : Photon.PunBehaviour, IClassControl
 	public float StunCooldown;
 	public float EnemyStunnedTime;
 	[Range(0f, 10f)]
-	public float RampageTime = 8f;
+	public float RampageTime = 4f;
     [HideInInspector]
-    public float attackBuff = 1f, defenseBuff = 1f;
 
 	private Animator animator;
 	private Animator enemy_animator;
@@ -36,7 +35,7 @@ public class CaptainControl : Photon.PunBehaviour, IClassControl
 
 
         StunDistance = 3f;
-		StunCooldown = 5f;
+		StunCooldown = 8f;
 		EnemyStunnedTime = 2f;
         // TODO
 		animator = GetComponent<Animator>();
