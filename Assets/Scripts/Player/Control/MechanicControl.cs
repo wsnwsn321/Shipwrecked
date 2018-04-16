@@ -364,10 +364,9 @@ public class MechanicControl : Photon.MonoBehaviour, IClassControl {
 				ani.SetTrigger ("Repairing");
 				shp.isReparing = true;
                 // Start cooldown animation for UI skill image
-                timer.startCooldownTimerUI(2);
-                skillTimeStamp2 = Time.time + repairSpaceShipCooldown;
+              
                 StartCoroutine (RepairTimer ());
-				StartCoroutine (WaitAbilityUse ());
+
 			}
 		}
 
@@ -378,6 +377,9 @@ public class MechanicControl : Photon.MonoBehaviour, IClassControl {
 		yield return new WaitForSeconds(5f);
 		shp.isReparing = false;
 		ani.SetTrigger ("FinishRepair");
+		StartCoroutine (WaitAbilityUse ());
+		timer.startCooldownTimerUI(2);
+		skillTimeStamp2 = Time.time + repairSpaceShipCooldown;
 
 	}
 
