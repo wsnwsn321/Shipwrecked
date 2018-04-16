@@ -16,6 +16,7 @@ public class Experience : MonoBehaviour {
     TeammateTypes characterType;
     public int experience;
     public int level;
+	public static int currentSlot;
     int nextLevelThreshold;
     int nextThresholdPosition;
     private Text levelText;
