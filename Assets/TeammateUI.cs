@@ -12,6 +12,7 @@ public class TeammateUI : Photon.PunBehaviour {
 		if (ui == null) {
 			Debug.Log ("UI was not found!");
 		} else {
+			Debug.Log ("UI was found. Initializing...");
 			ui.InitializeUI ();
 		}
 	}

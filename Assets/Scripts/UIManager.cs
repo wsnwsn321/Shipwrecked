@@ -22,6 +22,7 @@ public class UIManager : Photon.MonoBehaviour {
 		int numberOfTeammates = 0;
 		if (teammates == null) {
 			teammates = PhotonNetwork.connected ? PhotonNetwork.otherPlayers : new PhotonPlayer[0]; 
+			initialTeammateCount = teammates.Length;
 		}
 		numberOfTeammates = teammates.Length;
         Debug.Log("Teammate Count: " + numberOfTeammates);
@@ -64,6 +65,7 @@ public class UIManager : Photon.MonoBehaviour {
 			teammateOneHealth.gameObject.SetActive (false);
 			break;
 		}
+		UpdateUI ();
 	}
 
 	public void UpdateUI () {
@@ -72,9 +74,6 @@ public class UIManager : Photon.MonoBehaviour {
 		if (teammates == null && PhotonNetwork.connected) {
 			teammates = PhotonNetwork.otherPlayers;
 			initialTeammateCount = teammates.Length;
-			InitializeUI ();
-		} else if(!PhotonNetwork.connected){
-			teammates = new PhotonPlayer[0];
 			InitializeUI ();
 		}
 		if (teammates.Length != initialTeammateCount) {
