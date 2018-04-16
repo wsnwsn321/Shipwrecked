@@ -102,7 +102,7 @@ public class Control : Photon.MonoBehaviour {
             coreControl.StartAiming();
         }
         // Exit Aiming Mode
-        else if(Input.GetMouseButtonUp(1) && coreControl.IsInAimingMode() && classControl.CanAim())
+        else if(coreControl.IsInAimingMode() && classControl.CanAim())
         {
             coreControl.StopAiming();
         }
@@ -119,35 +119,33 @@ public class Control : Photon.MonoBehaviour {
 
         // Shoot
 		if (this.tag == "Captain"||(coreControl.autoRifle)) {
-			if (Input.GetMouseButton (0) && coreControl.CanShoot() && classControl.CanShoot()) {
+			if (InputManager.ShootHeld() && coreControl.CanShoot() && classControl.CanShoot()) {
                 coreControl.Shoot();
             }
-
-
 		} else {
-			//print (Input.GetMouseButtonDown (0));
-			if (Input.GetMouseButtonDown (0) && coreControl.CanShoot() && classControl.CanShoot()) {
+			if (InputManager.ShootHeld() && coreControl.CanShoot() && classControl.CanShoot()) {
                 coreControl.Shoot();
             }
-
-
 		}
 
+        if (!InputManager.ShootHeld())
+        {
+            InputManager.UpdateRightTriggerInUse(false);
+        }
 
-
-        if (Input.GetMouseButton(0) && coreControl.ammo.ammo <= 0 && coreControl.CanReload() && classControl.CanReload())
+        if (InputManager.ShootHeld() && coreControl.ammo.ammo <= 0 && !coreControl.IsShooting() && coreControl.CanReload() && classControl.CanReload())
         {
             coreControl.Reload();
         }
 
         // Reload
-        if (Input.GetKeyDown(KeyCode.R) && coreControl.CanReload() && classControl.CanReload())
+        if (InputManager.Reload() && coreControl.CanReload() && classControl.CanReload())
         {
             coreControl.Reload();
         }
 
         // Sprint
-        if (Input.GetKey(KeyCode.LeftShift) && classControl.CanSprint())
+        if (InputManager.Sprint() && classControl.CanSprint())
         {
             coreControl.Sprint();
         }
@@ -163,7 +161,7 @@ public class Control : Photon.MonoBehaviour {
         }
 
         // Jump
-		if (Input.GetKeyDown(KeyCode.Space) && coreControl.CanJump() && classControl.CanJump()&&!ani.GetCurrentAnimatorStateInfo (0).IsName ("Reviving"))
+		if (InputManager.Jump() && coreControl.CanJump() && classControl.CanJump()&&!ani.GetCurrentAnimatorStateInfo (0).IsName ("Reviving"))
         {
             coreControl.Jump();
         }
@@ -181,7 +179,7 @@ public class Control : Photon.MonoBehaviour {
         }
 
         // Stop current special action.
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (InputManager.StopAbility())
         {
             classControl.StopAction();
         }
@@ -189,7 +187,7 @@ public class Control : Photon.MonoBehaviour {
         classControl.FixedUpdateActions(Time.deltaTime);
 
         // Activate Ability 1
-		if (Input.GetKeyDown(KeyCode.Q) && !coreControl.IsAiming() && classControl.CanUseAbility1())
+		if (InputManager.Ability1() && !coreControl.IsAiming() && classControl.CanUseAbility1())
         {
             classControl.Activate(SpecialAbility.ThrowPill);
 			classControl.Activate(SpecialAbility.MakeGhostTurret);
@@ -198,7 +196,7 @@ public class Control : Photon.MonoBehaviour {
         }
 
 		// Activate Ability 2
-		if (Input.GetKeyDown(KeyCode.E) && !coreControl.IsAiming())
+		if (InputManager.Ability2() && !coreControl.IsAiming())
 		{
             if (classControl.OverrideAbility2())
             {
@@ -242,7 +240,7 @@ public class Control : Photon.MonoBehaviour {
         }
 
         //revive allies
-        if (Input.GetKeyDown(KeyCode.G))
+        if (InputManager.ReviveAlly())
 		{
 			if (coreControl.distance < 1.2f) {
 				if (!ani.GetCurrentAnimatorStateInfo (0).IsName ("Reviving")) {

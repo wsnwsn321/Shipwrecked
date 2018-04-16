@@ -6,16 +6,17 @@ public class CoreControl : Photon.PunBehaviour {
 
     [HideInInspector]
     public float nextTimeToFire = 0f;
-    private float currentFireTime = 0f;
+    private float currentFireTime;
 
     [HideInInspector]
     public float damageModifier;
 
-    public float fireRate = 15f;
+    [HideInInspector]
+    public float fireRate;
 
     public float forwardMovement, horizontalMovement, timeScale;
     public float forwardSpeed, horizontalSpeed;
-	public bool aiming, turnLeft, turnRight, sprint, isGrounded, turn, isMoving;
+	public bool aiming, sprint, isGrounded, isMoving;
 	public float distance;
 	public bool canReviveSelf;
     [HideInInspector]
@@ -29,6 +30,8 @@ public class CoreControl : Photon.PunBehaviour {
 
     [HideInInspector]
 	public AmmoRemaining ammo;
+    [HideInInspector]
+    NewGun gun;
 
 	public AudioClip footstepAudio;
 
@@ -36,11 +39,8 @@ public class CoreControl : Photon.PunBehaviour {
         damageModifier = 1f;
         forwardMovement = 0;
         horizontalMovement = 0;
-        turnLeft = false;
-        turnRight = false;
         sprint = false;
         isGrounded = true;
-        turn = false;
         dead = false;
 		autoRifle = false;
         hasSpecialAbility = false;
@@ -57,7 +57,12 @@ public class CoreControl : Photon.PunBehaviour {
 		animator = GetComponent<Animator> ();
 		rb = GetComponent<Rigidbody> ();
 		ammo = GetComponentInChildren<AmmoRemaining> ();
+        gun = GetComponentInChildren<NewGun>();
 		myhp = GetComponent<PlayerHealth> ();
+
+        fireRate = gun.fireRate;
+        currentFireTime = 2 / fireRate;
+        print(gun.fireRate);
     }
 
     public bool IsJumping()
@@ -72,8 +77,8 @@ public class CoreControl : Photon.PunBehaviour {
 
     public void GetMovement()
     {
-        forwardMovement = Input.GetAxis("Vertical");
-        horizontalMovement = Input.GetAxis("Horizontal");
+        forwardMovement = InputManager.MovementForward();
+        horizontalMovement = InputManager.MovementLateral();
     }
 
     public void SetLayerWeight(int layerIndex, float weight)
@@ -212,15 +217,6 @@ public class CoreControl : Photon.PunBehaviour {
 
             movement = transform.TransformDirection(movement);
             rb.MovePosition(transform.position + movement);
-
-            if (!Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.D) && horizontalMovement == 0)
-            {
-                turn = true;
-            }
-            else
-            {
-                turn = false;
-            }
         }
     }
 
@@ -262,9 +258,9 @@ public class CoreControl : Photon.PunBehaviour {
 
 			if (animator)
             {
-                if (ammo.ammo != 0)
+                if (ammo.ammo != 0 && currentFireTime >= 2 / fireRate)
                 {
-					if (((CompareTag ("Captain") || autoRifle) && Input.GetMouseButton (0)) || Input.GetMouseButtonDown (0)) {
+					if (((CompareTag ("Captain") || autoRifle) && InputManager.ShootHeld()) || InputManager.ShootDown()) {
 						if (rampage) {
 							animator.SetTrigger ("Rampageshoot");
 						} else if (autoRifle) {
@@ -273,14 +269,26 @@ public class CoreControl : Photon.PunBehaviour {
 						else
 						{
 							animator.SetTrigger("Shoot");
-							currentFireTime = 0f;
 							animator.SetBool ("Shooting", true);
 						}
+
+                        StartCoroutine(DelayShooting());
+
+                        gun.ShootGun();
 					}
                 }
             }
         }
-        
+    }
+
+    IEnumerator DelayShooting()
+    {
+        currentFireTime = 0f;
+        while (currentFireTime < 2 / fireRate)
+        {
+            yield return new WaitForFixedUpdate();
+            currentFireTime += Time.fixedDeltaTime;
+        }
     }
 
     public void Sprint()
@@ -300,7 +308,7 @@ public class CoreControl : Photon.PunBehaviour {
             }
             horizontalSpeed = 0.5f;
             forwardSpeed = 0.5f;
-            if (Input.GetMouseButtonDown(0) && Time.time >= nextTimeToFire)
+            if (InputManager.ShootDown() && Time.time >= nextTimeToFire)
             {
                 nextTimeToFire = Time.time + 2f / fireRate;
                 //	GetComponent<AudioSource>().PlayOneShot(Shoot);// play audio
@@ -471,7 +479,6 @@ public class CoreControl : Photon.PunBehaviour {
             animator.SetFloat("Y", horizontalMovement);
             animator.SetBool("Aiming", aiming);
             animator.SetBool("Sprint", sprint);
-            //animator.SetBool("Turn", turn);
             animator.SetBool("Dead", dead);
         }
     }

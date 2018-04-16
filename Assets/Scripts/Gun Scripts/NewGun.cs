@@ -8,7 +8,7 @@ public class NewGun : PlayerManager {
 
 	public float damage = 10f;
 	public float range = 100f;
-	public float fireRate = 15f;
+	public float fireRate;
 	public GameObject impactEffect;
 	private Camera newCamSpot;
 	public GameObject charLocation;
@@ -23,7 +23,7 @@ public class NewGun : PlayerManager {
 
 	private float nextTimeToFire = 0f;
 	public GameObject crosshairPrefab;
-
+    private bool hasSetFireRate;
 
 	void Start(){
 		camera = this.GetComponentInParent<Control> ().CamRef;
@@ -50,8 +50,51 @@ public class NewGun : PlayerManager {
                 break;
         }
 
-        core.fireRate = fireRate;
+        hasSetFireRate = false;
 	}
+
+    public void ShootGun()
+    {
+        //add rid of GetButtonDown to make it fire on click
+        //add GetButton to fire automatically on click and hold
+
+        //this if checks if the player has remaining ammo
+        if (!gameObject.GetComponentInParent<CoreControl>().IsReloading() && !gameObject.GetComponentInParent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("Die") && !gameObject.GetComponentInParent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("AB2"))
+        {
+            if (gameObject.GetComponent<AmmoRemaining>().ammo > 0 && gameObject.GetComponent<AmmoRemaining>().playerType.Equals("Sergeant") && !core.autoRifle)
+            {
+                if (Time.time >= nextTimeToFire)
+                {
+                    nextTimeToFire = Time.time + 2f / fireRate;
+                    Shoot();
+                }
+            }
+            else if (gameObject.GetComponent<AmmoRemaining>().ammo > 0 && gameObject.GetComponent<AmmoRemaining>().playerType.Equals("Doctor"))
+            {
+                if (Time.time >= nextTimeToFire)
+                {
+                    nextTimeToFire = Time.time + 2f / fireRate;
+                    Shoot();
+                }
+            }
+            else if (gameObject.GetComponent<AmmoRemaining>().ammo > 0 && gameObject.GetComponent<AmmoRemaining>().playerType.Equals("Mechanic"))
+            {
+                if (Time.time >= nextTimeToFire)
+                {
+                    nextTimeToFire = Time.time + 2f / fireRate;
+                    Shoot();
+                }
+            }
+            else if (gameObject.GetComponent<AmmoRemaining>().ammo > 0 && gameObject.GetComponent<AmmoRemaining>().playerType.Equals("Captain") || core.autoRifle)
+            {
+                if (Time.time >= nextTimeToFire)
+                {
+                    nextTimeToFire = Time.time + 2f / fireRate;
+                    Shoot();
+                }
+            }
+        }
+    }
 
 	void Update () {
 		if (PhotonNetwork.connected && !photonView.isMine) {
@@ -66,36 +109,11 @@ public class NewGun : PlayerManager {
 				Debug.Log ("Cannot get component in parent!");
 			}
 		}
-			//add rid of GetButtonDown to make it fire on click
-			//add GetButton to fire automatically on click and hold
 
-			//this if checks if the player has remaining ammo
-		if (!gameObject.GetComponentInParent<CoreControl> ().IsReloading ()&& !gameObject.GetComponentInParent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("Die")&& !gameObject.GetComponentInParent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("AB2")) {
-			if (gameObject.GetComponent<AmmoRemaining> ().ammo > 0 && gameObject.GetComponent<AmmoRemaining>().playerType.Equals("Sergeant")&&!core.autoRifle) {
-				if (Input.GetButtonDown ("Fire1") && Time.time >= nextTimeToFire) {
-					nextTimeToFire = Time.time + 2f / fireRate;
-					Shoot ();
-				}
-			}
-			else if (gameObject.GetComponent<AmmoRemaining> ().ammo > 0 && gameObject.GetComponent<AmmoRemaining>().playerType.Equals("Doctor")) {
-				if (Input.GetButtonDown ("Fire1") && Time.time >= nextTimeToFire) {
-					nextTimeToFire = Time.time + 2f / fireRate;
-					Shoot ();
-				}
-			}
-			else if (gameObject.GetComponent<AmmoRemaining> ().ammo > 0 && gameObject.GetComponent<AmmoRemaining>().playerType.Equals("Mechanic")) {
-				if (Input.GetButtonDown ("Fire1") && Time.time >= nextTimeToFire) {
-					nextTimeToFire = Time.time + 2f / fireRate;
-					Shoot ();
-				}
-			}
-			else if (gameObject.GetComponent<AmmoRemaining> ().ammo > 0 && gameObject.GetComponent<AmmoRemaining>().playerType.Equals("Captain")||core.autoRifle) {
-				if (Input.GetButton ("Fire1") && Time.time >= nextTimeToFire) {
-					nextTimeToFire = Time.time + 2f / fireRate;
-					Shoot ();
-				}
-			}
-		}
+        if (hasSetFireRate && core)
+        {
+            core.fireRate = fireRate;
+        }
 	}
 		
 
