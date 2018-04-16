@@ -4,7 +4,7 @@ using PlayerAbilities;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class NewGun : PlayerManager {
+public class NewGun : Photon.MonoBehaviour {
 
 	public float damage = 10f;
 	public float range = 100f;
@@ -24,16 +24,11 @@ public class NewGun : PlayerManager {
 	private float nextTimeToFire = 0f;
 	public GameObject crosshairPrefab;
 
-	private PlayerManager playerManager;
 
-
-
-	void Start(){
+	void LateStart(){
 		camera = this.GetComponentInParent<Control> ().CamRef;
 		crosshairPrefab = Instantiate (crosshairPrefab);
-		newCamSpot = this.GetComponentInParent<Control> ().main_c;
 
-        core = GetComponentInParent<CoreControl>();
         TeammateTypes characterType = GetComponentInParent<EntityType>().teammateType;
         switch (characterType)
         {
@@ -59,8 +54,13 @@ public class NewGun : PlayerManager {
 	}
 
 	void Update () {
-
-
+		if (!(newCamSpot != null && core != null)) {
+			newCamSpot = this.GetComponentInParent<Control> ().main_c;
+			core = GetComponentInParent<CoreControl> ();
+			if (!(newCamSpot != null && core != null)) {
+				Debug.Log ("Cannot get component in parent!");
+			}
+		}
 			//add rid of GetButtonDown to make it fire on click
 			//add GetButton to fire automatically on click and hold
 

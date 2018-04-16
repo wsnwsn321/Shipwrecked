@@ -10,7 +10,7 @@ public class SergeantControl : Photon.MonoBehaviour, IClassControl
     [Range(0f, 10f)]
     public float healCooldown = 10f;
 	public float autoCooldown = 10f;
-	public float autoBuffTime = 4f;
+	public float autoBuffTime = 6f;
     [Range(0f, 10f)]
     public float healTime = 5f;
     [Range(1, 100)]
@@ -27,6 +27,8 @@ public class SergeantControl : Photon.MonoBehaviour, IClassControl
     public float skillTimeStamp1;
     public float skillTimeStamp2;
     private CoreControl cc;
+	public AudioClip abilityAudio;
+
     void Start()
     {
 
@@ -66,6 +68,7 @@ public class SergeantControl : Photon.MonoBehaviour, IClassControl
             Animator animator = GetComponent<CoreControl>().GetAnimator();
             if (animator)
             {
+				AudioSource.PlayClipAtPoint (abilityAudio, transform.position, 2);
                 animator.SetTrigger("Use");
             }
 
@@ -77,6 +80,7 @@ public class SergeantControl : Photon.MonoBehaviour, IClassControl
 	void AutoRifle(){
 		if (canAuto && !cc.autoRifle) {
 			cc.autoRifle = true;
+			AudioSource.PlayClipAtPoint (abilityAudio, transform.position, 2);
             // Start cooldown animation for UI skill image
          
         }

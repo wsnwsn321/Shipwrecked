@@ -19,6 +19,9 @@ public class Experience : MonoBehaviour {
     int nextThresholdPosition;
     private Text levelText;
 	public static int currentSlot = 0;
+	public AudioClip levelUpAudio;
+
+
     // Use this for initialization
     void Start () {
         core = GetComponent<CoreControl>();
@@ -62,6 +65,8 @@ public class Experience : MonoBehaviour {
     private void levelUpAnimation()
     {
         core.LevelUp();
+		AudioSource.PlayClipAtPoint (levelUpAudio, transform.position, 1);
+
     }
 
     private void UpdateSkills()
@@ -265,7 +270,7 @@ public class Experience : MonoBehaviour {
                 break;
 		case 7:
 			control.healAmount = 50f;
-			control.autoBuffTime = 5f;
+			control.autoBuffTime = 8f;
 			control.healCooldown = 5f;
                 break;
             case 8:
@@ -273,7 +278,7 @@ public class Experience : MonoBehaviour {
                 break;
             case 9:
 			control.healTime = 2f;
-			control.autoBuffTime = 6f;
+			control.autoBuffTime =10f;
                 break;
             case 10:
 			control.healAmount = 80f;

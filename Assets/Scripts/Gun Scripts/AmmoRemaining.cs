@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using PlayerAbilities;
 using UnityEngine;
 
-public class AmmoRemaining : Photon.MonoBehaviour {
+public class AmmoRemaining : Photon.PunBehaviour {
 
 	public int ammo;
 	public int ammoPerShot = 1;
@@ -80,10 +80,24 @@ public class AmmoRemaining : Photon.MonoBehaviour {
 	public void shotFired(){
 		ammo -= 1;
 		if (isFlaming) {
-			AudioSource.PlayClipAtPoint (captainShootingAudio, transform.position, 1);
+			if (!PhotonNetwork.connected) {
+				AudioSource.PlayClipAtPoint (captainShootingAudio, transform.position, 1);
+			} else if (photonView.isMine) {
+				photonView.RPC ("PlayShootingAudio", PhotonTargets.All, 1); 
+			}
 		} else if (shootingAudio) {
-			AudioSource.PlayClipAtPoint (shootingAudio, transform.position, 1);
+			if (!PhotonNetwork.connected) {
+				AudioSource.PlayClipAtPoint (shootingAudio, transform.position, 1);
+			} else if (photonView.isMine) {
+				photonView.RPC ("PlayShootingAudio", PhotonTargets.All, 2); 
+			}		
 		}
+	}
+
+	[PunRPC]
+	private void PlayShootingAudio(int index) {
+		AudioClip audio = index == 1 ? captainShootingAudio : shootingAudio;
+		AudioSource.PlayClipAtPoint (audio, transform.position, 1);
 	}
 
 	private void updateAmmoText()

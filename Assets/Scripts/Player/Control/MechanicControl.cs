@@ -41,6 +41,8 @@ public class MechanicControl : Photon.MonoBehaviour, IClassControl {
 	private GameObject spaceship;
 	private ShipHealth shp;
 	private float distanceWithSpace;
+	public AudioClip abilityAudio;
+
 
     private List<GameObject> builtTurrets;
     [HideInInspector]
@@ -175,36 +177,39 @@ public class MechanicControl : Photon.MonoBehaviour, IClassControl {
 
     void BuildTurret()
     {
-        GameObject.Find("Skill1").GetComponent<Image>().sprite = mechanicSkillOne;
-        GameObject.Find("Skill2").GetComponent<Image>().sprite = mechanicSkillTwo;
+		if (!ani.GetCurrentAnimatorStateInfo (0).IsName ("Die")) {
+			GameObject.Find("Skill1").GetComponent<Image>().sprite = mechanicSkillOne;
+			GameObject.Find("Skill2").GetComponent<Image>().sprite = mechanicSkillTwo;
+			AudioSource.PlayClipAtPoint (abilityAudio, transform.position, 2);
+			if (currentPlaceableObject && currentPlaceableObject.activeSelf)
+			{
+				if (currentPlaceableObject.GetComponent<Placement>().canBeBuilt)
+				{
+					BuildNewTurret();
+				}
+			}
+			else if (highlightedTurret)
+			{
+				buildPosition = transform.localPosition + transform.forward * buildPositionOffset;
+				Collider[] nearbyTurrets = Physics.OverlapSphere(buildPosition, 0.5f, LayerMask.GetMask("TurretParent"), QueryTriggerInteraction.Collide);
+				if (nearbyTurrets.Length > 0)
+				{
+					if (nearbyTurrets[0].GetComponent<TurretBehaviors>().isFinished)
+					{
+						UpgradeTurret(nearbyTurrets[0].transform);
+					}
+					else
+					{
+						ContinueBuildingNearestTurret(nearbyTurrets);
+					}
 
-        if (currentPlaceableObject && currentPlaceableObject.activeSelf)
-        {
-            if (currentPlaceableObject.GetComponent<Placement>().canBeBuilt)
-            {
-                BuildNewTurret();
-            }
-        }
-		else if (highlightedTurret)
-        {
-            buildPosition = transform.localPosition + transform.forward * buildPositionOffset;
-            Collider[] nearbyTurrets = Physics.OverlapSphere(buildPosition, 0.5f, LayerMask.GetMask("TurretParent"), QueryTriggerInteraction.Collide);
-            if (nearbyTurrets.Length > 0)
-            {
-                if (nearbyTurrets[0].GetComponent<TurretBehaviors>().isFinished)
-                {
-                    UpgradeTurret(nearbyTurrets[0].transform);
-                }
-                else
-                {
-                    ContinueBuildingNearestTurret(nearbyTurrets);
-                }
-
-                Placement.SetMaterial(highlightedTurret.transform, previousTurretMaterial);
-                highlightedTurret = null;
-                previousTurretMaterial = null;
-            }
-        }
+					Placement.SetMaterial(highlightedTurret.transform, previousTurretMaterial);
+					highlightedTurret = null;
+					previousTurretMaterial = null;
+				}
+			}
+		}
+       
     }
 
     void UpgradeTurret(Transform turret)
@@ -358,6 +363,7 @@ public class MechanicControl : Photon.MonoBehaviour, IClassControl {
     }
 
 	void RepairShip(){
+		AudioSource.PlayClipAtPoint (abilityAudio, transform.position, 1);
 		if (ani && !ani.GetCurrentAnimatorStateInfo (0).IsName ("Die")&&canRepair) {
 			if (!ani.GetCurrentAnimatorStateInfo (0).IsName ("AB2")&&distanceWithSpace < 9.5f) {
 				canRepair = false;

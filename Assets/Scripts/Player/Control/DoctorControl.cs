@@ -27,6 +27,7 @@ public class DoctorControl : Photon.PunBehaviour, IClassControl {
 	private bool canBuff;
 	private Animator animator;
 	private PlayerHealth allieHP;
+	public AudioClip abilityAudio;
 
     private CooldownTimerUI timer;
     public float skillTimeStamp1;
@@ -70,6 +71,7 @@ public class DoctorControl : Photon.PunBehaviour, IClassControl {
             
             if (animator&&!animator.GetCurrentAnimatorStateInfo(0).IsName("Die"))
             {
+				AudioSource.PlayClipAtPoint (abilityAudio, transform.position, 2);
                 animator.SetTrigger("Ability1");
             }
 			GameObject currentPill = PhotonNetwork.connected ? PhotonNetwork.Instantiate(pill.name, new Vector3(transform.position.x, transform.position.y + 1f, transform.position.z), Quaternion.identity, 0) :Instantiate(pill, new Vector3(transform.position.x, transform.position.y + 1f, transform.position.z), Quaternion.identity);
@@ -86,6 +88,7 @@ public class DoctorControl : Photon.PunBehaviour, IClassControl {
 	void HealingCircle(){
 		if (animator&&!animator.GetCurrentAnimatorStateInfo(0).IsName("Die")&&canBuff)
 		{
+			AudioSource.PlayClipAtPoint (abilityAudio, transform.position, 2);
 			Debug.Log ("Doctor is healing his teammates!");
 			if (!animator.GetCurrentAnimatorStateInfo (0).IsName ("AB2")) {
 				canBuff = false;
