@@ -102,6 +102,9 @@ public class brain_control : MonoBehaviour {
 
 		if (stunned) {
 			an.Play ("Die_2");
+			if (dead) {
+				stunned = false;
+			}
 			ap.maxSpeed = 0;
 		} else if (dead) {
 			an.Play ("Die_3");
