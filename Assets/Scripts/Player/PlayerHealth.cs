@@ -59,7 +59,7 @@ public class PlayerHealth : Photon.PunBehaviour {
 
 
 		// Only happens for the local player
-		if (healthChanged && (!PhotonNetwork.connected || this.gameObject.Equals(PlayerManager.LocalPlayerInstance))) {
+		if (healthChanged && (!PhotonNetwork.connected || photonView.isMine)) {
 			if (PhotonNetwork.connected) {
 				// Only necessary in multiplayer
 				PhotonNetwork.player.SetScore ((int)health);

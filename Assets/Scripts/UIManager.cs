@@ -21,7 +21,7 @@ public class UIManager : Photon.MonoBehaviour {
 
 		int numberOfTeammates = 0;
 		if (teammates == null) {
-			teammates = PhotonNetwork.connected ? PhotonNetwork.playerList : new PhotonPlayer[0]; 
+			teammates = PhotonNetwork.connected ? PhotonNetwork.otherPlayers : new PhotonPlayer[0]; 
 		}
 		numberOfTeammates = teammates.Length;
         Debug.Log("Teammate Count: " + numberOfTeammates);
