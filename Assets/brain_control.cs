@@ -151,7 +151,7 @@ public class brain_control : MonoBehaviour {
 
 	IEnumerator StunTimer()
 	{
-		yield return new WaitForSeconds(0.5f);
+		yield return new WaitForSeconds(CaptainControl.EnemyStunnedTime);
 		an.Stop ();
 	}
 

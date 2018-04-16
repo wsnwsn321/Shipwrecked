@@ -134,7 +134,7 @@ public class Experience : MonoBehaviour {
 			control.RampageCooldown = 9f;
                 break;
 		case 6:
-			control.EnemyStunnedTime = 3f;
+			CaptainControl.EnemyStunnedTime = 3f;
                 break;
             case 7:
 			control.RampageTime = 7f;
@@ -149,7 +149,7 @@ public class Experience : MonoBehaviour {
 			control.StunCooldown = 4f;
                 break;
             case 10:
-			control.EnemyStunnedTime = 5f;
+			CaptainControl.EnemyStunnedTime = 5f;
                 break;
         }
     }

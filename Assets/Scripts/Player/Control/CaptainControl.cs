@@ -12,7 +12,7 @@ public class CaptainControl : Photon.PunBehaviour, IClassControl
 	public float StunDistance;
 	public float RampageCooldown = 10f;
 	public float StunCooldown;
-	public float EnemyStunnedTime;
+	public static float EnemyStunnedTime = 1f;
 	[Range(0f, 10f)]
 	public float RampageTime = 4f;
     [HideInInspector]
@@ -36,7 +36,6 @@ public class CaptainControl : Photon.PunBehaviour, IClassControl
 
         StunDistance = 3f;
 		StunCooldown = 8f;
-		EnemyStunnedTime = 2f;
         // TODO
 		animator = GetComponent<Animator>();
 		canRampage = true;
