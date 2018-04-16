@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MonsterSpawnManager : MonoBehaviour {
+public class MonsterSpawnManager : Photon.MonoBehaviour {
 
     List<MonsterSpawner> SpawnPoints;
     List<float> spawnChances;
@@ -88,6 +88,11 @@ public class MonsterSpawnManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		if (PhotonNetwork.connected) {
+			maxNumberMonsters = PhotonNetwork.playerList.Length * 7;
+		} else {
+			maxNumberMonsters = 8;
+		}
         if (state == SpawnState.Waiting)
         {
             if (numMonsters < maxNumberMonsters)
