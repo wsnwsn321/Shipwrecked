@@ -5,7 +5,7 @@ using PlayerAbilities;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class SergeantControl : MonoBehaviour, IClassControl
+public class SergeantControl : Photon.MonoBehaviour, IClassControl
 {
     [Range(0f, 10f)]
     public float healCooldown = 10f;
@@ -35,19 +35,27 @@ public class SergeantControl : MonoBehaviour, IClassControl
         healDelay = healTime / healDivisions;
         canHeal = true;
 		canAuto = true;
-        ani = GetComponent<Animator>();
-		myhp = GetComponent<PlayerHealth> ();
-		cc = GetComponent<CoreControl> ();
+
     }
 
     void Update()
-    {
-		if (timer == null) {
-			timer = new CooldownTimerUI (GameObject.FindGameObjectWithTag ("Skill1").GetComponent<Image> (), GameObject.FindGameObjectWithTag ("Skill2").GetComponent<Image> ());
-			timer.CooldownStart ();
+	{
+		if (ani == null) {
+			ani = GetComponent<Animator> ();
+			myhp = GetComponent<PlayerHealth> ();
+			cc = GetComponent<CoreControl> ();
+			if (ani && myhp && cc) {
+				Debug.Log ("Sarge retrieved components successfully!");
+			}
 		}
+		if (!PhotonNetwork.connected || photonView.isMine) {
+			if (timer == null) {
+				timer = new CooldownTimerUI (GameObject.FindGameObjectWithTag ("Skill1").GetComponent<Image> (), GameObject.FindGameObjectWithTag ("Skill2").GetComponent<Image> ());
+				timer.CooldownStart ();
+			}
 
-        timer.CooldownUpdate(healCooldown, autoCooldown, skillTimeStamp1, skillTimeStamp2);
+			timer.CooldownUpdate (healCooldown, autoCooldown, skillTimeStamp1, skillTimeStamp2);
+		}
     }
 
     void HealSelf()

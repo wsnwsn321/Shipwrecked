@@ -37,18 +37,21 @@ public class DoctorControl : Photon.PunBehaviour, IClassControl {
     void Start()
     {
 		canBuff = true;
-		if (animator == null) {
-			heal = false;
-			pills = new List<GameObject> ();
-			animator = GetComponent<CoreControl> ().GetAnimator ();
-			if (animator == null) {
-				Debug.Log ("ERROR! Doctor cannot retrieve its animator");
-			}
-		}
+		heal = false;
+		pills = new List<GameObject> ();
     }
 
     void Update()
     {
+		if (animator == null) {
+			animator = GetComponent<CoreControl> ().GetAnimator ();
+			if (animator == null) {
+				Debug.Log ("ERROR! Doctor cannot retrieve its animator");
+			} else {
+				Debug.Log ("Doctor retrieved animator successfully!");
+			}
+		}
+
 		if(!PhotonNetwork.connected || PlayerManager.LocalPlayerInstance.Equals(this.gameObject)) {
 			if (timer == null) {
 				timer = new CooldownTimerUI (GameObject.FindGameObjectWithTag ("Skill1").GetComponent<Image> (), GameObject.FindGameObjectWithTag ("Skill2").GetComponent<Image> ());
@@ -81,9 +84,9 @@ public class DoctorControl : Photon.PunBehaviour, IClassControl {
 
 	[PunRPC]
 	void HealingCircle(){
-		Debug.Log ("Doctor is healing his teammates!");
 		if (animator&&!animator.GetCurrentAnimatorStateInfo(0).IsName("Die")&&canBuff)
 		{
+			Debug.Log ("Doctor is healing his teammates!");
 			if (!animator.GetCurrentAnimatorStateInfo (0).IsName ("AB2")) {
 				canBuff = false;
 				animator.SetTrigger("Ability2");

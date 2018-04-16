@@ -12,7 +12,7 @@ public class CaptainControl : Photon.PunBehaviour, IClassControl
 	public float StunDistance;
 	public float RampageCooldown = 10f;
 	public float StunCooldown;
-	public static float EnemyStunnedTime = 1f;
+	public static float EnemyStunnedTime = 1.5f;
 	[Range(0f, 10f)]
 	public float RampageTime = 4f;
     [HideInInspector]
@@ -33,19 +33,26 @@ public class CaptainControl : Photon.PunBehaviour, IClassControl
     void Start()
     {
 
-
         StunDistance = 3f;
 		StunCooldown = 8f;
-        // TODO
-		animator = GetComponent<Animator>();
 		canRampage = true;
 		canKnockBack = true;
-		corecontrol = GetComponent<CoreControl> ();
 		isFlaming = false;
     }
 
     void Update()
     {
+		if (animator == null) {
+			animator = GetComponent<Animator> ();
+			corecontrol = GetComponent<CoreControl> ();
+			if (animator == null || corecontrol == null) {
+				Debug.Log ("ERROR! Captain couldn't retrieve his animator or core control in CaptControl!");
+			} else {
+				Debug.Log ("Captain retrieved his animator or core control in CaptControl!");
+
+			}
+		}
+
 		if (!PhotonNetwork.connected || photonView.isMine) {
 			if (timer == null) {
 				timer = new CooldownTimerUI (GameObject.FindGameObjectWithTag ("Skill1").GetComponent<Image> (), GameObject.FindGameObjectWithTag ("Skill2").GetComponent<Image> ());
@@ -79,6 +86,7 @@ public class CaptainControl : Photon.PunBehaviour, IClassControl
 	[PunRPC]
 	void KnockBack(){
 		if (canKnockBack && !animator.GetCurrentAnimatorStateInfo (0).IsName ("AB2")&&!animator.GetCurrentAnimatorStateInfo(0).IsName("Die")) {
+			Debug.Log ("Captain is kicking some butt!");
 			canKnockBack = false;
 			if (animator) {
 				animator.SetTrigger("Ability2");
@@ -111,7 +119,7 @@ public class CaptainControl : Photon.PunBehaviour, IClassControl
 
 	void StopRampage()
 	{
-		if (PhotonNetwork.connected) {
+		if (PhotonNetwork.connected && photonView.isMine) {
 			PhotonNetwork.Destroy (flaming);
 		} else {
 			Destroy (flaming);
