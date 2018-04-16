@@ -19,7 +19,7 @@ public class HealEffect : MonoBehaviour {
 			if (hp == null) {
 				Debug.Log ("Failed to heal player! PlayerHealth not set!");
 			} else {
-				Debug.Log ("Regen activated!");
+				Debug.Log ("Regen activated for "+ this.gameObject.transform.parent.gameObject.name + "!");
 			}
 		}
 	}
