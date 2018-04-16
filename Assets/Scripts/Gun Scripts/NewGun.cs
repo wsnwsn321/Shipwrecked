@@ -4,7 +4,7 @@ using PlayerAbilities;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class NewGun : Photon.MonoBehaviour {
+public class NewGun : PlayerManager {
 
 	public float damage = 10f;
 	public float range = 100f;
