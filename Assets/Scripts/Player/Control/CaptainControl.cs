@@ -29,6 +29,8 @@ public class CaptainControl : Photon.PunBehaviour, IClassControl
     private CooldownTimerUI timer;
     public float skillTimeStamp1;
     public float skillTimeStamp2;
+	public AudioClip abilityAudio;
+
 
     void Start()
     {
@@ -66,6 +68,7 @@ public class CaptainControl : Photon.PunBehaviour, IClassControl
 	[PunRPC]
 	void Rampage(){
 		if (canRampage&&!animator.GetCurrentAnimatorStateInfo (0).IsName ("AB1")&&!animator.GetCurrentAnimatorStateInfo(0).IsName("Die")) {
+			AudioSource.PlayClipAtPoint (abilityAudio, transform.position, 2);
 			Debug.Log ("Captain is on a RAMPAGE!!!");
 			isFlaming = true;
 			canRampage = false;
@@ -87,6 +90,7 @@ public class CaptainControl : Photon.PunBehaviour, IClassControl
 	[PunRPC]
 	void KnockBack(){
 		if (canKnockBack && !animator.GetCurrentAnimatorStateInfo (0).IsName ("AB2")&&!animator.GetCurrentAnimatorStateInfo(0).IsName("Die")) {
+			AudioSource.PlayClipAtPoint (abilityAudio, transform.position, 2);
 			Debug.Log ("Captain is kicking some butt!");
 			canKnockBack = false;
 			if (animator) {
