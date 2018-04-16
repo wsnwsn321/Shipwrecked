@@ -32,7 +32,7 @@ public class missionText : MonoBehaviour {
 
 	private IEnumerator MissionUpdate()
 	{
-		yield return new WaitForSeconds (8f);
+		yield return new WaitForSeconds (90f);
 		secondaryMission = 2;
 		hasMission = true;
 	}
