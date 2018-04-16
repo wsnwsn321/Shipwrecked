@@ -17,6 +17,8 @@ public class CameraCollision : MonoBehaviour {
 
     Vector3 desiredCameraPos;
 
+    Vector3 offset;
+
     void Awake()
     {
         dollyDir = transform.localPosition.normalized;
@@ -24,13 +26,14 @@ public class CameraCollision : MonoBehaviour {
         distance = transform.localPosition.z;
         maxDistance = -distance;
         minDistance = 0f;
+        offset = new Vector3(0, 1, 0);
     }
 	
 	// Update is called once per frame
 	void Update () {
         RaycastHit hit;
-        desiredCameraPos = transform.parent.parent.TransformPoint(dollyDir * dollyDist);
-        if (Physics.Linecast(transform.parent.parent.position, desiredCameraPos, out hit, layersToCheck))
+        desiredCameraPos = transform.parent.TransformPoint(dollyDir * dollyDist);
+        if (Physics.Linecast(transform.parent.parent.position + offset, desiredCameraPos, out hit, layersToCheck))
         {
             distance = Mathf.Clamp(hit.distance, minDistance, maxDistance) - 1;
         }
