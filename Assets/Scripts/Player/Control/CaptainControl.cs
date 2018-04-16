@@ -5,7 +5,7 @@ using PlayerAbilities;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class CaptainControl : Photon.MonoBehaviour, IClassControl
+public class CaptainControl : Photon.PunBehaviour, IClassControl
 {
 	
 	[Range(0f, 10f)]
@@ -48,17 +48,20 @@ public class CaptainControl : Photon.MonoBehaviour, IClassControl
 
     void Update()
     {
+		if (!PhotonNetwork.connected || photonView.isMine) {
 			if (timer == null) {
 				timer = new CooldownTimerUI (GameObject.FindGameObjectWithTag ("Skill1").GetComponent<Image> (), GameObject.FindGameObjectWithTag ("Skill2").GetComponent<Image> ());
 				timer.CooldownStart ();
 			}
 
 			timer.CooldownUpdate (RampageCooldown, StunCooldown, skillTimeStamp1, skillTimeStamp2);
+		}
     }
 
+	[PunRPC]
 	void Rampage(){
-		isFlaming = true;
 		if (canRampage&&!animator.GetCurrentAnimatorStateInfo (0).IsName ("AB1")&&!animator.GetCurrentAnimatorStateInfo(0).IsName("Die")) {
+			isFlaming = true;
 			canRampage = false;
 			if (animator) {
 				animator.SetTrigger("Ability1");
@@ -75,7 +78,7 @@ public class CaptainControl : Photon.MonoBehaviour, IClassControl
 		}
 	}
 
-
+	[PunRPC]
 	void KnockBack(){
 		if (canKnockBack && !animator.GetCurrentAnimatorStateInfo (0).IsName ("AB2")&&!animator.GetCurrentAnimatorStateInfo(0).IsName("Die")) {
 			canKnockBack = false;
@@ -97,10 +100,13 @@ public class CaptainControl : Photon.MonoBehaviour, IClassControl
 				}
 
 			}
-            // Start cooldown animation for UI skill image
-            timer.startCooldownTimerUI(2);
-            skillTimeStamp2 = Time.time + StunCooldown;
-            StartCoroutine(WaitAbility2Use());
+			if (!PhotonNetwork.connected || photonView.isMine) {
+				
+				// Start cooldown animation for UI skill image
+				timer.startCooldownTimerUI (2);
+				skillTimeStamp2 = Time.time + StunCooldown;
+				StartCoroutine (WaitAbility2Use ());
+			}
 
 		}
 	}
@@ -115,11 +121,14 @@ public class CaptainControl : Photon.MonoBehaviour, IClassControl
 		flaming = null;
 		corecontrol.rampage = false;    
         
-        // Start cooldown animation for UI skill image
-        timer.startCooldownTimerUI(1);
-        skillTimeStamp1 = Time.time + RampageCooldown;
+		if (!PhotonNetwork.connected || photonView.isMine) {
+			
+			// Start cooldown animation for UI skill image
+			timer.startCooldownTimerUI (1);
+			skillTimeStamp1 = Time.time + RampageCooldown;
 
-        StartCoroutine(WaitAbility1Use());
+			StartCoroutine (WaitAbility1Use ());
+		}
 	}
 
 	IEnumerator RampageForTime()
@@ -161,11 +170,19 @@ public class CaptainControl : Photon.MonoBehaviour, IClassControl
     {
         if (ability == SpecialAbility.Leadership)
         {
-			Rampage ();
+			if (PhotonNetwork.connected) {
+				this.photonView.RPC ("Rampage", PhotonTargets.All, null);
+			} else {
+				Rampage ();
+			}
         }
 		if (ability == SpecialAbility.KnockBack)
 		{
-			KnockBack();
+			if (PhotonNetwork.connected) {
+				this.photonView.RPC ("KnockBack", PhotonTargets.All, null);
+			} else {
+				KnockBack ();
+			}
 		}
     }
 

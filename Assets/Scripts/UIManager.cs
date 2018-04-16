@@ -3,13 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UIManager : Photon.PunBehaviour {
+public class UIManager : Photon.MonoBehaviour {
 
 	private PhotonPlayer[] teammates;
 	private int initialTeammateCount = 0;
-
-	[HideInInspector]
-	public static bool updateUI = false;
+	private UIManager ui;
 
 	public Text teammateOneName;
 	public Text teammateTwoName;
@@ -19,40 +17,15 @@ public class UIManager : Photon.PunBehaviour {
 	public Slider teammateTwoHealth;
 	public Slider teammateThreeHealth;
 
+	public void InitializeUI(){
 
-	void Update() {
-		// Need to consider if otherPlayers will exist w/ connected check
-		if (teammates == null && PhotonNetwork.connected) {
-			teammates = PhotonNetwork.otherPlayers;
-			initialTeammateCount = teammates.Length;
-			InitializeUI ();
-		} else if(!PhotonNetwork.connected){
-			teammates = new PhotonPlayer[0];
-			InitializeUI ();
-		}
-		if (teammates.Length != initialTeammateCount) {
-			initialTeammateCount = teammates.Length;
-			InitializeUI ();
-		}
-
-
-		// It will never enter this statement 
-		if (updateUI) {
-			HealthChanged ();
-			updateUI = false;
-		}
-	}
-
-	void InitializeUI() {
 		int numberOfTeammates = 0;
-		if(teammates != null) {
-			numberOfTeammates = teammates.Length;
+		if (teammates == null) {
+			teammates = PhotonNetwork.connected ? PhotonNetwork.otherPlayers : new PhotonPlayer[0]; 
 		}
-        if (PhotonNetwork.connected)
-        {
-            Debug.Log("Teammate Count: " + numberOfTeammates);
-        }
-		
+		numberOfTeammates = teammates.Length;
+        Debug.Log("Teammate Count: " + numberOfTeammates);
+
 		switch (numberOfTeammates) {
 		case 3:
 			// Three teammates, view 3 total teammate health bars
@@ -93,39 +66,45 @@ public class UIManager : Photon.PunBehaviour {
 		}
 	}
 
+	public void UpdateUI () {
 
+		// Need to consider if otherPlayers will exist w/ connected check
+		if (teammates == null && PhotonNetwork.connected) {
+			teammates = PhotonNetwork.otherPlayers;
+			initialTeammateCount = teammates.Length;
+			InitializeUI ();
+		} else if(!PhotonNetwork.connected){
+			teammates = new PhotonPlayer[0];
+			InitializeUI ();
+		}
+		if (teammates.Length != initialTeammateCount) {
+			initialTeammateCount = teammates.Length;
+			InitializeUI ();
+		}
 
-	public void HealthChanged() {
-		// Handles the RPC for the UI updating
-		this.photonView.RPC ("UpdateUI", PhotonTargets.Others, null);
-	}
-
-	[PunRPC]
-	private void UpdateUI () {
 		// Updates the UI for other teammates, aka "Teammate Health bars"
-		teammates = PhotonNetwork.otherPlayers;
-		int numberOfTeammates = teammates != null ? teammates.Length : 0;
+		int numberOfTeammates = teammates.Length;
 		switch (numberOfTeammates) {
-		case 3:
-			teammateThreeName.text = teammates [2].NickName;
-			teammateThreeHealth.value = (float)teammates [2].GetScore ();
-			teammateTwoName.text = teammates [1].NickName;
-			teammateTwoHealth.value = (float)teammates [1].GetScore ();
-			teammateOneName.text = teammates [0].NickName;
-			teammateOneHealth.value = (float)teammates [0].GetScore ();
-			break;
-		case 2:
-			teammateTwoName.text = teammates [1].NickName;
-			teammateTwoHealth.value = (float)teammates [1].GetScore ();
-			teammateOneName.text = teammates [0].NickName;
-			teammateOneHealth.value = (float)teammates [0].GetScore ();
-			break;
-		case 1:
-			teammateOneName.text = teammates [0].NickName;
-			teammateOneHealth.value = (float)teammates [0].GetScore ();
-			break;
-		default:
-			break;
+			case 3:
+				teammateThreeName.text = teammates [2].NickName;
+				teammateThreeHealth.value = (float)teammates [2].GetScore ();
+				teammateTwoName.text = teammates [1].NickName;
+				teammateTwoHealth.value = (float)teammates [1].GetScore ();
+				teammateOneName.text = teammates [0].NickName;
+				teammateOneHealth.value = (float)teammates [0].GetScore ();
+				break;
+			case 2:
+				teammateTwoName.text = teammates [1].NickName;
+				teammateTwoHealth.value = (float)teammates [1].GetScore ();
+				teammateOneName.text = teammates [0].NickName;
+				teammateOneHealth.value = (float)teammates [0].GetScore ();
+				break;
+			case 1:
+				teammateOneName.text = teammates [0].NickName;
+				teammateOneHealth.value = (float)teammates [0].GetScore ();
+				break;
+			default:
+				break;
 		}
 	}
 

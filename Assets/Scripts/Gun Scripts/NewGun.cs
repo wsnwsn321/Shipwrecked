@@ -1,4 +1,8 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using System.Collections.Generic;
+using PlayerAbilities;
+using UnityEngine;
+using UnityEngine.UI;
 
 public class NewGun : PlayerManager {
 
@@ -34,11 +38,11 @@ public class NewGun : PlayerManager {
         switch (characterType)
         {
             case TeammateTypes.Captain:
-                baseDamage = 3f;
+                baseDamage = 5f;
                 fireRate = 20f;
                 break;
             case TeammateTypes.Doctor:
-                baseDamage = 5f;
+                baseDamage = 6f;
                 fireRate = 12f;
                 break;
             case TeammateTypes.Engineer:
@@ -46,7 +50,7 @@ public class NewGun : PlayerManager {
                 fireRate = 1f;
                 break;
             case TeammateTypes.Sergeant:
-                baseDamage = 5f;
+                baseDamage = 7f;
                 fireRate = 15f;
                 break;
         }
@@ -166,14 +170,31 @@ public class NewGun : PlayerManager {
 
 			}
 		}
-		if (hit.transform.name.Equals ("AI_Crab_Alien(Clone)") || hit.transform.name.Equals ("Spider_Brain")) {
-			GameObject bloodImpact = GameObject.Instantiate (bloodSplatter, hit.point, Quaternion.identity);
-			Destroy (bloodImpact, 1f);
-		} else {
-			GameObject impactGO = Instantiate (impactEffect, hit.point, Quaternion.LookRotation (hit.normal));
-			//impactGO.GetComponent<ParticleSystem> ().Play ();
-			Destroy (impactGO, 1f);
+		if ((hit.transform.name.Equals ("AI_Crab_Alien(Clone)") || hit.transform.name.Equals ("Spider_Brain")) && (!PhotonNetwork.connected || photonView.isMine)) {
+			if (PhotonNetwork.connected) {
+				GameObject bloodImpact = PhotonNetwork.Instantiate (bloodSplatter.name, hit.point, Quaternion.LookRotation (hit.normal), 0);
+				StartCoroutine (DestroyImpact (bloodImpact));
+			} else {
+				GameObject bloodImpact = GameObject.Instantiate (bloodSplatter, hit.point, Quaternion.identity);
+				Destroy (bloodImpact, 1f);
+			}
+		} else if((!PhotonNetwork.connected || photonView.isMine)){
+			if (PhotonNetwork.connected) {
+				GameObject impactEff = PhotonNetwork.Instantiate (impactEffect.name, hit.point, Quaternion.LookRotation (hit.normal), 0);
+				StartCoroutine (DestroyImpact (impactEff));
+			} else {
+				GameObject impactEff = GameObject.Instantiate (impactEffect, hit.point, Quaternion.identity);
+				Destroy (impactEff, 1f);
+			}
 		}
+
+	}
+
+	IEnumerator DestroyImpact(GameObject hE)
+	{
+		// Start cooldown animation for UI skill image
+		yield return new WaitForSeconds(1f);
+		PhotonNetwork.Destroy (hE);
 
 	}
 		
