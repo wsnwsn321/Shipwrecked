@@ -19,6 +19,9 @@ public class Experience : MonoBehaviour {
     int nextThresholdPosition;
     private Text levelText;
 	public static int currentSlot = 0;
+	public AudioClip levelUpAudio;
+
+
     // Use this for initialization
     void Start () {
         core = GetComponent<CoreControl>();
@@ -62,6 +65,8 @@ public class Experience : MonoBehaviour {
     private void levelUpAnimation()
     {
         core.LevelUp();
+		AudioSource.PlayClipAtPoint (levelUpAudio, transform.position, 1);
+
     }
 
     private void UpdateSkills()
