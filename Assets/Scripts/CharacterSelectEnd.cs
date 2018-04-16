@@ -14,6 +14,7 @@ public class CharacterSelectEnd : Photon.MonoBehaviour {
 
 		string name;
 		if (Input.GetKeyDown (KeyCode.A)) {
+			
 			name = GameObject.Find ("CharacterNameText").GetComponent<TypeOutScript> ().FinalText;
 			GameObject.Find ("Player").GetComponent<playerInfo> ().playerName = name;
 			GameObject.Find ("Player").GetComponent<playerInfo> ().SetCharacterPref ();

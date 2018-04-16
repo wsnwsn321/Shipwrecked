@@ -30,7 +30,7 @@ public class characterAnimationTrigger : MonoBehaviour {
 			anim.SetBool ("trig", true);
 			GameObject.Find ("CharacterInfoText").GetComponent<TypeOutScript> ().FinalText = characterInfo;
 			GameObject.Find ("CharacterInfoText").GetComponent<TypeOutScript> ().On = true;
-	
+		characterWeaponInfo = characterWeaponInfo.Replace("<br>", "\n");
 			GameObject.Find ("WeaponInfoText").GetComponent<TypeOutScript> ().FinalText = characterWeaponInfo;
 			GameObject.Find ("WeaponInfoText").GetComponent<TypeOutScript> ().On = true;
 

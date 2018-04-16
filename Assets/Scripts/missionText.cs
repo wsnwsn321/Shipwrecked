@@ -15,15 +15,26 @@ public class missionText : MonoBehaviour {
 	{
 
 		StartCoroutine("MissionControl");
+		StartCoroutine("MissionUpdate");
+
 	}
 
 	// Update is called once per frame
 	void Update () {
 
 		if (hasMission) {
+			
 			StartCoroutine("MissionControl");
 		}
 
+	}
+
+
+	private IEnumerator MissionUpdate()
+	{
+		yield return new WaitForSeconds (8f);
+		secondaryMission = 2;
+		hasMission = true;
 	}
 
 	private IEnumerator MissionControl()
@@ -57,6 +68,8 @@ public class missionText : MonoBehaviour {
 				gameObject.GetComponent<AudioSource> ().Play ();
 
 				gameObject.GetComponent<TypeOutScript> ().reset = true;
+		MissionList [secondaryMission] = MissionList [secondaryMission].Replace("<br>", "\n");
+
 				gameObject.GetComponent<TypeOutScript> ().FinalText = string.Concat (primaryMission, MissionList [secondaryMission]);
 				gameObject.GetComponent<TypeOutScript> ().On = true;
 				yield return new WaitForSeconds (2f);
