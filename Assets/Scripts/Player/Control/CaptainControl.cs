@@ -170,7 +170,7 @@ public class CaptainControl : Photon.PunBehaviour, IClassControl
     {
         if (ability == SpecialAbility.Leadership)
         {
-			if (photonView.isMine) {
+			if (PhotonNetwork.connected) {
 				this.photonView.RPC ("Rampage", PhotonTargets.All, null);
 			} else {
 				Rampage ();
@@ -178,7 +178,7 @@ public class CaptainControl : Photon.PunBehaviour, IClassControl
         }
 		if (ability == SpecialAbility.KnockBack)
 		{
-			if (photonView.isMine) {
+			if (PhotonNetwork.connected) {
 				this.photonView.RPC ("KnockBack", PhotonTargets.All, null);
 			} else {
 				KnockBack ();
