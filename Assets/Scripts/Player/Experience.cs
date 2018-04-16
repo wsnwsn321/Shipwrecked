@@ -205,6 +205,7 @@ public class Experience : MonoBehaviour {
                 control.turretHealth = 40f;
                 break;
             case 3:
+                control.maxTurrets++;
                 break;
             case 4:
                 control.currentTurretBuildLevel++;
@@ -212,16 +213,19 @@ public class Experience : MonoBehaviour {
                 control.turretDamage = 4f;
                 break;
             case 5:
+                control.maxTurrets++;
                 break;
             case 6:
                 control.currentTurretBuildLevel++;
                 break;
             case 7:
+                control.maxTurrets++;
                 break;
             case 8:
                 control.turretHealth = 80f;
                 break;
             case 9:
+                control.maxTurrets++;
                 break;
             case 10:
                 control.currentTurretBuildLevel++;

@@ -16,6 +16,8 @@ public class TurretBehaviors : GenericBehaviors
     [HideInInspector]
     public int turretLevel;
     [HideInInspector]
+    public bool isFinished;
+    [HideInInspector]
     public GameObject engineer;
 
     private bool isGatling;
@@ -25,7 +27,7 @@ public class TurretBehaviors : GenericBehaviors
     private bool ableToRotate;
     private float currentShootingTime;
     private Transform previousTarget;
-	private GameObject turretFlash;
+    private TurretAuxiliary aux;
 
     // Gatling
     private bool isRotating;
@@ -42,7 +44,9 @@ public class TurretBehaviors : GenericBehaviors
         idleRotationSpeed = 30f;
         ableToRotate = false;
         currentShootingTime = shootingDelay;
-		turretFlash = GameObject.FindGameObjectWithTag ("TurretFlash");
+
+        // Get the auxiliary effects for the turret.
+        aux = GetComponent<TurretAuxiliary>();
 
         isRotating = false;
         isShooting = false;
@@ -58,7 +62,6 @@ public class TurretBehaviors : GenericBehaviors
 
     public void TakeDamage(float damage)
     {
-		print ("turret taking damage");
 		health -= damage / 2;
         if (health < 0)
         {
@@ -77,6 +80,8 @@ public class TurretBehaviors : GenericBehaviors
 		{
 			Destroy(gameObject);
 		}
+
+        engineer.GetComponent<MechanicControl>().RemoveTurretFromBuiltList(gameObject);
 	}
 
     // Assumes that the format of the turret is:
@@ -90,6 +95,31 @@ public class TurretBehaviors : GenericBehaviors
 
         // Get the Pylon
         turningElements.Add(turretBase.GetChild(1));
+    }
+
+    public List<Quaternion> GetRotations()
+    {
+        List<Quaternion> rotations = new List<Quaternion>();
+        for (int i = 0; i < turningElements.Count; i++)
+        {
+            rotations.Add(turningElements[i].rotation);
+        }
+        return rotations;
+    }
+
+    public void SetRotations(List<Quaternion> rotations)
+    {
+        if (rotations.Count < turningElements.Count)
+        {
+            return;
+        }
+        else
+        {
+            for (int i = 0; i < turningElements.Count; i++)
+            {
+                turningElements[i].rotation = rotations[i];
+            }
+        }
     }
 
     private void GetGuns()
@@ -178,7 +208,7 @@ public class TurretBehaviors : GenericBehaviors
 
         foreach (Transform gun in guns)
         {
-			turretFlash.SetActive (true);
+			// turretFlash.SetActive (true);
             StartCoroutine(KickBack(gun));
             target.TakeDamage(damage);
             target.AddAttacker(transform);
@@ -186,7 +216,7 @@ public class TurretBehaviors : GenericBehaviors
             yield return new WaitForSeconds(shootingDelay / guns.Count);
         }
         isShooting = false;
-		turretFlash.SetActive (false);
+		// turretFlash.SetActive (false);
     }
 
     private IEnumerator RotateGuns()

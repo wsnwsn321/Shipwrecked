@@ -489,7 +489,6 @@ public class CoreControl : Photon.PunBehaviour {
 			allie_health = other.gameObject.GetComponent<PlayerHealth> ();
 			distance = Vector3.Distance(transform.position, other.gameObject.transform.position);
 		}
-
     }
 
 	IEnumerator animationDelay( )

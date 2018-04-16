@@ -12,12 +12,14 @@ public class Placement : MonoBehaviour {
     public bool canBeBuilt = false;
     [HideInInspector]
     public CoreControl builderCoreControl;
+    private MechanicControl control;
 
     Collider col;
 
     void Start()
     {
         col = GetComponent<Collider>();
+        control = builderCoreControl.GetComponent<MechanicControl>();
     }
 
     void FixedUpdate()
@@ -34,9 +36,9 @@ public class Placement : MonoBehaviour {
             canBeBuilt = false;
         }
 
-		overlap = Physics.OverlapBox(transform.position, col.bounds.extents, transform.rotation, LayerMask.NameToLayer("TurretParent"));
-    
-		if (canBeBuilt && overlap.Length > 0)
+        overlap = Physics.OverlapBox(transform.position, col.bounds.extents, transform.rotation, LayerMask.NameToLayer("TurretParent"));
+
+        if ((canBeBuilt && overlap.Length > 0) || !control.canBuild || control.IsAtMaxTurrets())
 		{
 			SetMaterial(transform, badPlacementMaterial);
 			canBeBuilt = false;

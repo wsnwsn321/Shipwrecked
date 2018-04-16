@@ -42,7 +42,13 @@ public class MechanicControl : Photon.MonoBehaviour, IClassControl {
 	private ShipHealth shp;
 	private float distanceWithSpace;
 
-    private bool canBuild = true;
+    private List<GameObject> builtTurrets;
+    [HideInInspector]
+    public int maxTurrets;
+
+    [HideInInspector]
+    public bool canBuild = true;
+    private bool canUseAbility = true;
 	private bool canRepair;
     public float buildTurretCooldown = 20f;
 	public float repairSpaceShipCooldown = 10f;
@@ -82,11 +88,13 @@ public class MechanicControl : Photon.MonoBehaviour, IClassControl {
 
 		hpPerSec = 0.1025f;
 		totalHp = 50;
+        maxTurrets = 1;
         isBuilding = false;
 		isReparing = false;
 		canRepair = true;
         currentBuildingChildren = new List<Transform>();
         unfinishedBuildings = new Dictionary<GameObject, UnfinishedBuilding>();
+        builtTurrets = new List<GameObject>();
         ani = GetComponent<Animator>();
 		spaceship = GameObject.Find("SpaceshipZone");
 		shp = spaceship.GetComponent<ShipHealth> ();
@@ -123,6 +131,7 @@ public class MechanicControl : Photon.MonoBehaviour, IClassControl {
             {
                 child.gameObject.SetActive(true);
                 isBuilding = false;
+                currentTurret.GetComponent<TurretBehaviors>().isFinished = true;
             }
 
             if (child.name.Equals("Turret"))
@@ -134,8 +143,41 @@ public class MechanicControl : Photon.MonoBehaviour, IClassControl {
         return children;
     }
 
+    void ActivateDescendents(Transform t)
+    {
+        foreach (Transform child in t)
+        {
+            child.gameObject.SetActive(true);
+            ActivateDescendents(child);
+        }
+    }
+
+    public void AddTurretToBuildList(GameObject turret)
+    {
+        if (!builtTurrets.Contains(turret))
+        {
+            builtTurrets.Add(turret);
+        }
+    }
+
+    public void RemoveTurretFromBuiltList(GameObject turret)
+    {
+        if (builtTurrets.Contains(turret))
+        {
+            builtTurrets.Remove(turret);
+        }
+    }
+
+    public bool IsAtMaxTurrets()
+    {
+        return builtTurrets.Count == maxTurrets;
+    }
+
     void BuildTurret()
     {
+        GameObject.Find("Skill1").GetComponent<Image>().sprite = mechanicSkillOne;
+        GameObject.Find("Skill2").GetComponent<Image>().sprite = mechanicSkillTwo;
+
         if (currentPlaceableObject && currentPlaceableObject.activeSelf)
         {
             if (currentPlaceableObject.GetComponent<Placement>().canBeBuilt)
@@ -149,8 +191,67 @@ public class MechanicControl : Photon.MonoBehaviour, IClassControl {
             Collider[] nearbyTurrets = Physics.OverlapSphere(buildPosition, 0.5f, LayerMask.GetMask("TurretParent"), QueryTriggerInteraction.Collide);
             if (nearbyTurrets.Length > 0)
             {
-                ContinueBuildingNearestTurret(nearbyTurrets);
+                if (nearbyTurrets[0].GetComponent<TurretBehaviors>().isFinished)
+                {
+                    UpgradeTurret(nearbyTurrets[0].transform);
+                }
+                else
+                {
+                    ContinueBuildingNearestTurret(nearbyTurrets);
+                }
+
+                Placement.SetMaterial(highlightedTurret.transform, previousTurretMaterial);
+                highlightedTurret = null;
+                previousTurretMaterial = null;
             }
+        }
+    }
+
+    void UpgradeTurret(Transform turret)
+    {
+        isBuilding = true;
+        currentBuildingIteration = 1;
+
+        Destroy(currentPlaceableObject);
+        currentPlaceableObject = null;
+
+        TurretBehaviors oldStats = turret.GetComponent<TurretBehaviors>();
+        if (oldStats.turretLevel < currentTurretBuildLevel)
+        {
+            GameObject newTurret;
+            if (PhotonNetwork.connected)
+            {
+                newTurret = PhotonNetwork.Instantiate(turrets[currentTurretBuildLevel].name, turret.position, Quaternion.identity, 0);
+            }
+            else
+            {
+                newTurret = Instantiate(turrets[currentTurretBuildLevel], turret.position, Quaternion.identity);
+            }
+
+            ActivateDescendents(newTurret.transform);
+
+            TurretBehaviors newStats = newTurret.GetComponent<TurretBehaviors>();
+            newStats.enabled = true;
+            newStats.isFinished = true;
+            newStats.engineer = gameObject;
+            newStats.damage = turretDamage;
+            newStats.health = turretHealth;
+            newStats.turretLevel = currentTurretBuildLevel;
+            newStats.SetRotations(oldStats.GetRotations());
+
+            if (PhotonNetwork.connected)
+            {
+                PhotonNetwork.Destroy(turret.GetComponent<PhotonView>());
+            }
+            else
+            {
+                Destroy(turret.gameObject);
+            }
+        }
+        else
+        {
+            oldStats.damage = turretDamage;
+            oldStats.health = turretHealth;
         }
     }
 
@@ -168,6 +269,8 @@ public class MechanicControl : Photon.MonoBehaviour, IClassControl {
         {
             currentTurret = Instantiate(turrets[currentTurretBuildLevel], buildPosition, Quaternion.identity);
         }
+
+        AddTurretToBuildList(currentTurret);
 
         TurretBehaviors turretStats = currentTurret.GetComponent<TurretBehaviors>();
         turretStats.engineer = gameObject;
@@ -208,10 +311,15 @@ public class MechanicControl : Photon.MonoBehaviour, IClassControl {
 
     void ExitBuildingMode()
     {
+        if (currentPlaceableObject || isBuilding)
+        {
+            GameObject.Find("Skill1").GetComponent<Image>().sprite = mechanicSkillOne;
+            GameObject.Find("Skill2").GetComponent<Image>().sprite = mechanicSkillTwo;
+        }
+
         if (currentPlaceableObject)
         {
             Destroy(currentPlaceableObject);
-            
             currentPlaceableObject = null;
         }
 
@@ -249,9 +357,7 @@ public class MechanicControl : Photon.MonoBehaviour, IClassControl {
         currentPlaceableObject.transform.position = buildPosition;
     }
 
-
 	void RepairShip(){
-
 		if (ani && !ani.GetCurrentAnimatorStateInfo (0).IsName ("Die")&&canRepair) {
 			if (!ani.GetCurrentAnimatorStateInfo (0).IsName ("AB2")&&distanceWithSpace < 9.5f) {
 				canRepair = false;
@@ -281,29 +387,52 @@ public class MechanicControl : Photon.MonoBehaviour, IClassControl {
 		canRepair = true;
 	}
 
+    IEnumerator DelayButtonPress()
+    {
+        canUseAbility = false;
+        yield return new WaitForSeconds(.1f);
+        canUseAbility = true;
+    }
+
     #region Inherited Methods
 
     public void Activate(SpecialAbility ability)
     {
 		if (ability == SpecialAbility.MakeGhostTurret)
 		{
-            if (canBuild)
+            if (!currentPlaceableObject && canUseAbility)
             {
                 CreateTurretGhost();
+                StartCoroutine(DelayButtonPress());
                 GameObject.Find("Skill1").GetComponent<Image>().sprite = genericSkillSprite;
                 GameObject.Find("Skill2").GetComponent<Image>().sprite = mechanicSkillOne;
+            }
+
+            if (currentPlaceableObject && canUseAbility)
+            {
+                ExitBuildingMode();
+                StartCoroutine(DelayButtonPress());
             }
 		}
 
         if (ability == SpecialAbility.Build)
-        {            
-            BuildTurret();
-            canBuild = false;
-            GameObject.Find("Skill1").GetComponent<Image>().sprite = mechanicSkillOne;
-            GameObject.Find("Skill2").GetComponent<Image>().sprite = mechanicSkillTwo;
-            // Start cooldown animation for UI skill image
-            timer.startCooldownTimerUI(1);
-            skillTimeStamp1 = Time.time + buildTurretCooldown;
+        {
+            if (canBuild && !IsAtMaxTurrets())
+            {
+                if (!highlightedTurret)
+                {
+                    // Start cooldown animation for UI skill image
+                    timer.startCooldownTimerUI(1);
+                    skillTimeStamp1 = Time.time + buildTurretCooldown;
+                    canBuild = false;
+                }
+                BuildTurret();
+            }
+
+            if (!isBuilding && highlightedTurret)
+            {
+                BuildTurret();
+            }
         }
 		if (ability == SpecialAbility.RepairShip) {
 
@@ -358,7 +487,7 @@ public class MechanicControl : Photon.MonoBehaviour, IClassControl {
 
 	public bool CanUseAbility1()
 	{
-		if (currentPlaceableObject || isBuilding) {
+		if ((currentPlaceableObject && !canUseAbility) || isBuilding) {
 			return false;
 		}
 
