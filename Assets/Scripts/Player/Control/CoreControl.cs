@@ -402,7 +402,6 @@ public class CoreControl : Photon.PunBehaviour {
         {
 			print ("reviving!!!!!");
             dead = false;
-            animator.SetTrigger("Revived");
 			photonView.RPC ("ReviveSelf", PhotonTargets.All, null);
         }
     }
@@ -410,6 +409,7 @@ public class CoreControl : Photon.PunBehaviour {
 	[PunRPC]
 	void ReviveSelf() {
 		this.gameObject.layer = 10;
+		animator.SetTrigger("Revived");
 		myhp.RecoverHealth (10);
 	}
 

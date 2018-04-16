@@ -26,9 +26,9 @@ public class Increase : Photon.MonoBehaviour {
 					h = Instantiate (healedEffect, other.transform.position, Quaternion.identity);
 					allieHP.RecoverOrRevive(healHP);
 					Destroy (h, 2f);
-					if (cc.dead || an.GetCurrentAnimatorStateInfo (0).IsName ("Die")) {
-						an.SetTrigger ("Revived");
-					}
+						//if (cc.dead || an.GetCurrentAnimatorStateInfo (0).IsName ("Die")) {
+						//	an.SetTrigger ("Revived");
+					//	}
 					Destroy (gameObject);
 				} else if (photonView.isMine) {
 					other.gameObject.GetComponent<CoreControl> ().WillBePilled(this.gameObject.transform.position);
