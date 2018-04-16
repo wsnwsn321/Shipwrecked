@@ -96,7 +96,7 @@ public class AmmoRemaining : Photon.PunBehaviour {
 
 	[PunRPC]
 	private void PlayShootingSound(int index) {
-		AudioSource audio = index == 1 ? captainShootingAudio : shootingAudio;
+		AudioClip audio = index == 1 ? captainShootingAudio : shootingAudio;
 		AudioSource.PlayClipAtPoint (audio, transform.position, 1);
 	}
 
