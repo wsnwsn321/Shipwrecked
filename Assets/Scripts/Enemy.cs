@@ -20,6 +20,9 @@ public class Enemy : Photon.MonoBehaviour {
     List<float> times;
     Transform mostRecentCharacterAttacker;
     float secondsToKeepTrack = 2f;
+	public AudioClip deadCrabAudio;
+	public AudioClip deadBrainAudio;
+
 
     public List<Transform> Attackers
     {
@@ -126,15 +129,17 @@ public class Enemy : Photon.MonoBehaviour {
 	void Die() {
 		if (this.tag == "CrabAlien") {
 			crab_ani.SetTrigger("die");
+			AudioSource.PlayClipAtPoint (deadCrabAudio, transform.position, 2);
 		} else if (this.tag == "SpiderBrain") {
 			bc.dead = true;
+			AudioSource.PlayClipAtPoint (deadBrainAudio, transform.position, 2);
 		}
         isDead = true;
         foreach (Transform child in transform)
         {
             child.gameObject.layer = LayerMask.NameToLayer("Dead");
         }
-        
+
         Destroy (gameObject,2f);
 		UpdateMonsterAmount ();
         AllocateExp();
