@@ -72,16 +72,15 @@ public class TurretBehaviors : GenericBehaviors
 	public IEnumerator Die() 
 	{
 		yield return new WaitForSeconds (1f);
-		if (PhotonNetwork.connected) 
-		{
-			PhotonNetwork.Destroy(gameObject);
-		} 
-		else 
-		{
-			Destroy(gameObject);
+		if (PhotonNetwork.connected && engineer.Equals (PlayerManager.LocalPlayerInstance)) {
+			PhotonNetwork.Destroy (gameObject);
+			engineer.GetComponent<MechanicControl> ().RemoveTurretFromBuiltList (gameObject);
+		} else if (engineer.Equals (PlayerManager.LocalPlayerInstance)) {
+			Destroy (gameObject);
+		} else {
+			Debug.Log ("Allied turret has been destroyed!");
 		}
 
-        engineer.GetComponent<MechanicControl>().RemoveTurretFromBuiltList(gameObject);
 	}
 
     // Assumes that the format of the turret is:
