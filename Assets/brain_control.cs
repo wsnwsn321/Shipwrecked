@@ -102,7 +102,6 @@ public class brain_control : MonoBehaviour {
 
 		if (stunned) {
 			an.Play ("Die_2");
-			StartCoroutine (StunTimer ());
 			ap.maxSpeed = 0;
 		} else if (dead) {
 			an.Play ("Die_3");
@@ -148,12 +147,7 @@ public class brain_control : MonoBehaviour {
 		}
 
     }
-
-	IEnumerator StunTimer()
-	{
-		yield return new WaitForSeconds(CaptainControl.EnemyStunnedTime);
-		an.Stop ();
-	}
+		
 
     void OnCollisionEnter(Collision collision)
     {
