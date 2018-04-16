@@ -41,6 +41,8 @@ public class MechanicControl : Photon.MonoBehaviour, IClassControl {
 	private GameObject spaceship;
 	private ShipHealth shp;
 	private float distanceWithSpace;
+	public AudioClip abilityAudio;
+
 
     private List<GameObject> builtTurrets;
     [HideInInspector]
@@ -177,7 +179,7 @@ public class MechanicControl : Photon.MonoBehaviour, IClassControl {
     {
         GameObject.Find("Skill1").GetComponent<Image>().sprite = mechanicSkillOne;
         GameObject.Find("Skill2").GetComponent<Image>().sprite = mechanicSkillTwo;
-
+		AudioSource.PlayClipAtPoint (abilityAudio, transform.position, 2);
         if (currentPlaceableObject && currentPlaceableObject.activeSelf)
         {
             if (currentPlaceableObject.GetComponent<Placement>().canBeBuilt)
@@ -358,6 +360,7 @@ public class MechanicControl : Photon.MonoBehaviour, IClassControl {
     }
 
 	void RepairShip(){
+		AudioSource.PlayClipAtPoint (abilityAudio, transform.position, 1);
 		if (ani && !ani.GetCurrentAnimatorStateInfo (0).IsName ("Die")&&canRepair) {
 			if (!ani.GetCurrentAnimatorStateInfo (0).IsName ("AB2")&&distanceWithSpace < 9.5f) {
 				canRepair = false;
