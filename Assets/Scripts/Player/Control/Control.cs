@@ -97,12 +97,12 @@ public class Control : Photon.MonoBehaviour {
         }
 
         // Enter Aiming Mode
-        if (Input.GetMouseButtonUp(1) && coreControl.CanAim() && classControl.CanAim())
+        if (InputManager.Aim() && coreControl.CanAim() && classControl.CanAim())
         {
             coreControl.StartAiming();
         }
         // Exit Aiming Mode
-        else if(coreControl.IsInAimingMode() && classControl.CanAim())
+        else
         {
             coreControl.StopAiming();
         }

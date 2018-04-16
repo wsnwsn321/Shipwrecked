@@ -18,7 +18,7 @@ public static class InputManager
 
     public static bool Aim()
     {
-        return Input.GetMouseButtonDown(1);
+        return Input.GetMouseButton(1) || LeftTrigger() > 0f;
     }
 
     public static bool Jump()
@@ -66,18 +66,6 @@ public static class InputManager
 
         rightTriggerInUse = RightTrigger() > 0.2f;
 
-        if (shootDown)
-        {
-            Debug.Log("Shoot.");
-        }
-        if (rightTriggerInUse)
-        {
-            Debug.Log("Trigger in use.");
-        }
-        else
-        {
-            Debug.Log("Trigger not in use.");
-        }
         return shootDown;
     }
 

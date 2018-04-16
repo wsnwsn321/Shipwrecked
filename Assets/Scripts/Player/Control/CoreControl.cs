@@ -28,6 +28,10 @@ public class CoreControl : Photon.PunBehaviour {
     private Rigidbody rb;
 	private PlayerHealth myhp;
 
+    private float reloadDelay;
+    private float currentReloadDelay;
+    private bool canReload;
+
     [HideInInspector]
 	public AmmoRemaining ammo;
     [HideInInspector]
@@ -60,9 +64,12 @@ public class CoreControl : Photon.PunBehaviour {
         gun = GetComponentInChildren<NewGun>();
 		myhp = GetComponent<PlayerHealth> ();
 
+        reloadDelay = 0.5f;
+        currentReloadDelay = 0.5f;
+        canReload = true;
+
         fireRate = gun.fireRate;
         currentFireTime = 2 / fireRate;
-        print(gun.fireRate);
     }
 
     public bool IsJumping()
@@ -95,7 +102,7 @@ public class CoreControl : Photon.PunBehaviour {
 
     public bool CanAim()
     {
-        return !CurrentStateTagIs(0, "aim_mode");
+        return true;
     }
 
     public bool CanJump()
@@ -110,7 +117,7 @@ public class CoreControl : Photon.PunBehaviour {
 
     public bool CanReload()
     {
-        return !CurrentStateNameIs(0, "Sprint") && !IsReloading();
+        return !CurrentStateNameIs(0, "Sprint") && !IsReloading() && canReload;
     }
 
     public bool CanShoot()
@@ -237,6 +244,17 @@ public class CoreControl : Photon.PunBehaviour {
 		ammo.reload ();
     }
 
+    IEnumerator DelayReloading()
+    {
+        canReload = false;
+        while (currentReloadDelay < reloadDelay)
+        {
+            yield return new WaitForFixedUpdate();
+            currentReloadDelay += Time.fixedDeltaTime;
+        }
+        canReload = true;
+    }
+
     public void Roll()
     {
 		if (animator && !dead&&!animator.GetCurrentAnimatorStateInfo (0).IsName ("Reviving")&&!animator.GetCurrentAnimatorStateInfo (0).IsName ("AB2"))
@@ -272,6 +290,12 @@ public class CoreControl : Photon.PunBehaviour {
 							animator.SetBool ("Shooting", true);
 						}
 
+                        currentReloadDelay = 0f;
+                        if (canReload)
+                        {
+                            StartCoroutine(DelayReloading());
+                        }
+                        
                         StartCoroutine(DelayShooting());
 
                         gun.ShootGun();
@@ -299,7 +323,7 @@ public class CoreControl : Photon.PunBehaviour {
 
     public void StartAiming()
     {
-		if (!dead&&!animator.GetCurrentAnimatorStateInfo (0).IsName ("Reviving")&&!animator.GetCurrentAnimatorStateInfo (0).IsName ("AB2"))
+		if (!aiming&&!dead&&!animator.GetCurrentAnimatorStateInfo (0).IsName ("Reviving")&&!animator.GetCurrentAnimatorStateInfo (0).IsName ("AB2"))
         {
             aiming = true;
             if (animator)
@@ -308,24 +332,16 @@ public class CoreControl : Photon.PunBehaviour {
             }
             horizontalSpeed = 0.5f;
             forwardSpeed = 0.5f;
-            if (InputManager.ShootDown() && Time.time >= nextTimeToFire)
-            {
-                nextTimeToFire = Time.time + 2f / fireRate;
-                //	GetComponent<AudioSource>().PlayOneShot(Shoot);// play audio
-                //AudioSource.PlayClipAtPoint(shootingAudio, transform.position, 1);
-
-            }
 
             Control control = GetComponent<Control>();
             control.main_c.fieldOfView = 15;
-            control.CamRef.transform.localPosition = new Vector3(0.6f, -1.1f, -1.2f);
-            control.main_c.transform.localEulerAngles = new Vector3(0.04f, 9.667f, 0.2f);
+            control.CamRef.transform.localPosition = new Vector3(0.71f, 0, -1.2f);
         }
     }
 
     public void StopAiming()
     {
-		if (!dead&&!animator.GetCurrentAnimatorStateInfo (0).IsName ("Reviving")&&!animator.GetCurrentAnimatorStateInfo (0).IsName ("AB2"))
+		if (aiming&&!dead&&!animator.GetCurrentAnimatorStateInfo (0).IsName ("Reviving")&&!animator.GetCurrentAnimatorStateInfo (0).IsName ("AB2"))
         {
             aiming = false;
             if (animator)
@@ -337,8 +353,7 @@ public class CoreControl : Photon.PunBehaviour {
 
             Control control = GetComponent<Control>();
             control.main_c.fieldOfView = 35;
-            control.CamRef.transform.localPosition = new Vector3(0.71f, -0, -0.22f);
-            control.main_c.transform.localEulerAngles = new Vector3(18.41f, 9.667f, 0.2f);
+            control.CamRef.transform.localPosition = new Vector3(0.71f, 0, -0.22f);
         }
     }
 
@@ -346,14 +361,12 @@ public class CoreControl : Photon.PunBehaviour {
     {
         if (animator)
         {
-            //print("Hit.");
 			if (rampage) {
 				animator.ResetTrigger ("Rampageshoot");
 			} else {
 				animator.ResetTrigger("Shoot");
 			}
         }
-        
     }
 
     public void Walk()
