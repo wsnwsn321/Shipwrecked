@@ -31,7 +31,7 @@ public class TurretBehaviors : GenericBehaviors
 
     // Gatling
     private bool isRotating;
-    private bool isShooting;
+    public bool isShooting;
     private float maxGunRotationSpeed = 1000f;
     private float gunRotationSpeed;
 
