@@ -98,11 +98,12 @@ public class CaptainControl : Photon.PunBehaviour, IClassControl
 					if (enemies [i].tag == "CrabAlien") {
 						enemy_animator = enemies [i].GetComponent<Animator> ();
 						enemy_animator.SetTrigger ("stunned");
-						StartCoroutine (WaitForStun ());
+						StartCoroutine (WaitForStun (enemy_animator));
 					} else if (enemies [i].tag == "SpiderBrain") {
 						bc = enemies[i].GetComponentInChildren<brain_control> ();
 						bc.stunned = true;
-						StartCoroutine (WaitForStunBrain ());
+						StartCoroutine (WaitForStunBrain (bc));
+						print (bc.stunned);
 					}
 				}
 
@@ -162,12 +163,12 @@ public class CaptainControl : Photon.PunBehaviour, IClassControl
 		Debug.Log ("Captain can kick again!");
 	}
 
-	IEnumerator WaitForStun()
+	IEnumerator WaitForStun(Animator an)
 	{
 		yield return new WaitForSeconds(EnemyStunnedTime);
-		enemy_animator.SetTrigger ("getUp");
+		an.SetTrigger ("getUp");
 	}
-	IEnumerator WaitForStunBrain()
+	IEnumerator WaitForStunBrain(brain_control bc)
 	{
 		yield return new WaitForSeconds(EnemyStunnedTime);
 		bc.stunned = false;
