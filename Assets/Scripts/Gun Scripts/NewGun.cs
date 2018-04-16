@@ -54,6 +54,11 @@ public class NewGun : Photon.MonoBehaviour {
 	}
 
 	void Update () {
+		if (PhotonNetwork.connected && !photonView.isMine) {
+			return;
+		}
+
+
 		if (!(newCamSpot != null && core != null)) {
 			newCamSpot = this.GetComponentInParent<Control> ().main_c;
 			core = GetComponentInParent<CoreControl> ();
