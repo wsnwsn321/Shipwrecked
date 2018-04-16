@@ -50,7 +50,7 @@ public class CoreControl : Photon.PunBehaviour {
         horizontalSpeed = 1.5f;
         timeScale = 0.3f * Time.deltaTime;
 
-		if (PlayerManager.LocalPlayerInstance == null) {
+		if (PlayerManager.LocalPlayerInstance == null && (!PhotonNetwork.connected || photonView.isMine)) {
 			Debug.Log ("ERROR in CoreControl! Local player instance not set!");
 		}
 

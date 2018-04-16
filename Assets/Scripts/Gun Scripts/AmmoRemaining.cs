@@ -98,6 +98,13 @@ public class AmmoRemaining : Photon.MonoBehaviour {
 
 	private void SetAmmoText() {
 		ammoText = GameObject.FindGameObjectWithTag ("AmmoText").GetComponent<Text>();
+		if (ammoText == null) {
+			Debug.Log ("Error retrieving ammo text in UI using its tag!");
+			ammoText = GameObject.Find ("AmmoText").GetComponent<Text> ();
+			if (ammoText != null) {
+				Debug.Log ("Ammo text was successfully retrieved using GameObject.Find method!");
+			}
+		}
 	}
 
 	private void checkAmmo()
