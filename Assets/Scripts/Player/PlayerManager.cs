@@ -31,6 +31,8 @@ public class PlayerManager : Photon.MonoBehaviour {
 			this.gameObject.GetComponent<Control> ().main_c = cam.GetComponentInChildren<Camera>();
 			this.gameObject.GetComponent<Control> ().CamRef = cam;
 			GameObject.Find("TeammateUISingleton").GetComponent<TeammateUI>().InitializeManager();
+			PhotonNetwork.player.SetScore (100);
+			GameObject.Find ("TeammateUISingleton").GetComponent<TeammateUI> ().HealthChanged ();
 
 		}
 	}
