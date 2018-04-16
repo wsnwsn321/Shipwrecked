@@ -10,7 +10,7 @@ public class SergeantControl : Photon.MonoBehaviour, IClassControl
     [Range(0f, 10f)]
     public float healCooldown = 10f;
 	public float autoCooldown = 10f;
-	public float autoBuffTime = 4f;
+	public float autoBuffTime = 6f;
     [Range(0f, 10f)]
     public float healTime = 5f;
     [Range(1, 100)]
