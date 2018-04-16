@@ -25,7 +25,7 @@ public class NewGun : Photon.MonoBehaviour {
 	public GameObject crosshairPrefab;
 
 
-	void LateStart(){
+	void Start(){
 		camera = this.GetComponentInParent<Control> ().CamRef;
 		crosshairPrefab = Instantiate (crosshairPrefab);
 
