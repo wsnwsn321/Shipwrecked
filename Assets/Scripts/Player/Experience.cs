@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+ 
 
 public class LevelThresholds
 {
@@ -18,6 +19,10 @@ public class Experience : MonoBehaviour {
     int nextLevelThreshold;
     int nextThresholdPosition;
     private Text levelText;
+
+	public AudioClip levelUpAudio;
+
+
 
     // Use this for initialization
     void Start () {
@@ -62,6 +67,8 @@ public class Experience : MonoBehaviour {
     private void levelUpAnimation()
     {
         core.LevelUp();
+		AudioSource.PlayClipAtPoint (levelUpAudio, transform.position, 1);
+
     }
 
     private void UpdateSkills()
