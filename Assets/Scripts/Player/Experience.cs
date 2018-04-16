@@ -270,7 +270,7 @@ public class Experience : MonoBehaviour {
                 break;
 		case 7:
 			control.healAmount = 50f;
-			control.autoBuffTime = 5f;
+			control.autoBuffTime = 8f;
 			control.healCooldown = 5f;
                 break;
             case 8:
@@ -278,7 +278,7 @@ public class Experience : MonoBehaviour {
                 break;
             case 9:
 			control.healTime = 2f;
-			control.autoBuffTime = 6f;
+			control.autoBuffTime =10f;
                 break;
             case 10:
 			control.healAmount = 80f;
