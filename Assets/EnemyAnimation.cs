@@ -118,9 +118,8 @@ public class EnemyAnimation : MonoBehaviour {
 		}
 
 		spaceshipDistance = Vector3.Distance (transform.position, Spaceship.transform.position);
-
 		//colliding with spaceship
-		if (spaceshipDistance<6f) {
+		if (spaceshipDistance<6.5f) {
 			ap.maxSpeed = 0;
 			ani.SetTrigger("attack");
 			setEnemyAttackTypeForSpaceship ();
