@@ -28,9 +28,7 @@ public class NewGun : Photon.MonoBehaviour {
 	void LateStart(){
 		camera = this.GetComponentInParent<Control> ().CamRef;
 		crosshairPrefab = Instantiate (crosshairPrefab);
-		newCamSpot = this.GetComponentInParent<Control> ().main_c;
 
-        core = GetComponentInParent<CoreControl>();
         TeammateTypes characterType = GetComponentInParent<EntityType>().teammateType;
         switch (characterType)
         {
@@ -56,8 +54,13 @@ public class NewGun : Photon.MonoBehaviour {
 	}
 
 	void Update () {
-
-
+		if (!(newCamSpot != null && core != null)) {
+			newCamSpot = this.GetComponentInParent<Control> ().main_c;
+			core = GetComponentInParent<CoreControl> ();
+			if (!(newCamSpot != null && core != null)) {
+				Debug.Log ("Cannot get component in parent!");
+			}
+		}
 			//add rid of GetButtonDown to make it fire on click
 			//add GetButton to fire automatically on click and hold
 
