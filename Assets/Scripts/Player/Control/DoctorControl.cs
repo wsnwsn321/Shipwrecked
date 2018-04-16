@@ -37,6 +37,14 @@ public class DoctorControl : Photon.PunBehaviour, IClassControl {
     void Start()
     {
 		canBuff = true;
+		if (animator == null) {
+			heal = false;
+			pills = new List<GameObject> ();
+			animator = GetComponent<CoreControl> ().GetAnimator ();
+			if (animator == null) {
+				Debug.Log ("ERROR! Doctor cannot retrieve its animator");
+			}
+		}
     }
 
     void Update()
@@ -47,14 +55,7 @@ public class DoctorControl : Photon.PunBehaviour, IClassControl {
 				timer.CooldownStart ();
 			}
 
-			if (animator == null) {
-				heal = false;
-				pills = new List<GameObject> ();
-				animator = GetComponent<CoreControl> ().GetAnimator ();
-				if (animator == null) {
-					Debug.Log ("ERROR! Doctor cannot retrieve its animator");
-				}
-			}
+
 			timer.CooldownUpdate (healingCooldown, healBuffCooldown, skillTimeStamp1, skillTimeStamp2);
     	}
 	}
@@ -80,6 +81,7 @@ public class DoctorControl : Photon.PunBehaviour, IClassControl {
 
 	[PunRPC]
 	void HealingCircle(){
+		Debug.Log ("Doctor is healing his teammates!");
 		if (animator&&!animator.GetCurrentAnimatorStateInfo(0).IsName("Die")&&canBuff)
 		{
 			if (!animator.GetCurrentAnimatorStateInfo (0).IsName ("AB2")) {
@@ -92,9 +94,10 @@ public class DoctorControl : Photon.PunBehaviour, IClassControl {
 			Collider[] players = Physics.OverlapSphere (transform.position, 15f,layerMask, QueryTriggerInteraction.Collide);
 			//Debug.Log (players.Length);
 			for(int i=0;i<players.Length;i++){
+				Debug.Log (players [i].gameObject.name + " is being healed!");
 				healEffect = players [i].transform.GetChild (5).gameObject;
 				healEffect.SetActive (true);
-				healEffect.GetComponent<HealEffect> ().hp = players [i].GetComponent<PlayerHealth> ();
+				healEffect.GetComponent<HealEffect> ().hp = players [i].gameObject.GetComponent<PlayerHealth> ();
 				//healing = PhotonNetwork.connected? PhotonNetwork.Instantiate(healEffect.name, players[i].transform.position, Quaternion.identity,0) :Instantiate(healEffect,  players[i].transform.position, Quaternion.identity);
 				//healing.transform.position = players [i].transform.position;	
 				StartCoroutine(EndBuff(healEffect));
