@@ -7,7 +7,7 @@ MonoImporter:
   serializedVersion: 2
   defaultReferences:
   - engineer: {instanceID: 0}
-  - muzzleFlash: {fileID: 100006, guid: 30b4cc2728d8cec499fad63ba93785a4, type: 2}
+  - turretAudio: {fileID: 8300000, guid: 884023c47af744072bbe2fb6d1aa65f9, type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

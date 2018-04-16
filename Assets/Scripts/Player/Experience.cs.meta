@@ -5,7 +5,8 @@ licenseType: Free
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - levelUpAudio: {fileID: 8300000, guid: fd06c50f2bcd04a519569aa872568eb9, type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
