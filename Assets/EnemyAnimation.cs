@@ -179,6 +179,10 @@ public class EnemyAnimation : MonoBehaviour {
         
     }
 
+	public void Hit() {
+
+	}
+
     void setEnemyAttackType()
     {
 		if (player_hit != null && Time.time > nextAttack) {
