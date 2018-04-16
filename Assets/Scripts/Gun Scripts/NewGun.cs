@@ -4,7 +4,7 @@ using PlayerAbilities;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class NewGun : PlayerManager {
+public class NewGun : Photon.MonoBehaviour {
 
 	public float damage = 10f;
 	public float range = 100f;
@@ -24,11 +24,8 @@ public class NewGun : PlayerManager {
 	private float nextTimeToFire = 0f;
 	public GameObject crosshairPrefab;
 
-	private PlayerManager playerManager;
 
-
-
-	void Start(){
+	void LateStart(){
 		camera = this.GetComponentInParent<Control> ().CamRef;
 		crosshairPrefab = Instantiate (crosshairPrefab);
 		newCamSpot = this.GetComponentInParent<Control> ().main_c;
