@@ -11,6 +11,7 @@ public class WaitingRoomManager : Photon.PunBehaviour {
 	public Text player1Name, player2Name, player3Name, player4Name;
 	public Text player1Class, player2Class, player3Class, player4Class;
 	public Text startReady;
+	public GameObject gameStarting;
 
 	[HideInInspector]
 	public bool playerIsReady = false;
@@ -22,6 +23,7 @@ public class WaitingRoomManager : Photon.PunBehaviour {
 		waitingWindow.SetActive(true);
 		lobbyTitle.text = PhotonNetwork.room.Name;
 		startReady.text = PhotonNetwork.isMasterClient ? "Start" : "Ready";
+		gameStarting.SetActive (false);
 	}
 
 	// ONLY CALLED BY MASTER CLIENT!!!

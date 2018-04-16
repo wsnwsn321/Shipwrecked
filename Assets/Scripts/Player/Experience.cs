@@ -220,19 +220,24 @@ public class Experience : MonoBehaviour {
             case 5:
                 control.maxTurrets++;
                 break;
-            case 6:
+		case 6:
+			ShipHealth.shipReganRate = 0.15f;
                 control.currentTurretBuildLevel++;
                 break;
-            case 7:
+		case 7:
+			control.repairSpaceShipCooldown = 8f;
                 control.maxTurrets++;
                 break;
             case 8:
+			ShipHealth.shipReganRate = 0.2f;
                 control.turretHealth = 80f;
                 break;
             case 9:
+			control.repairSpaceShipCooldown = 6f;
                 control.maxTurrets++;
                 break;
             case 10:
+			ShipHealth.shipReganRate = 0.3f;
                 control.currentTurretBuildLevel++;
                 control.turretHealth = 100f;
                 control.turretDamage = 5f;

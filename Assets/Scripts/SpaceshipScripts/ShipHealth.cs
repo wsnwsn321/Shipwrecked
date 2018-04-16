@@ -16,6 +16,7 @@ public class ShipHealth : Photon.MonoBehaviour {
 	public float timeThreshold = 1f;
 	public bool isReparing;
 	public AudioClip []clips;
+	public static float shipReganRate =0.1025f;
     void Start()
     {
         maxHealth = health;
@@ -41,9 +42,9 @@ public class ShipHealth : Photon.MonoBehaviour {
 		if (tookDmg)
 		{
 
-			//GameObject.Find("MissionText").GetComponent<AudioSource> ().clip = clips[0];
+			GameObject.Find("MissionText").GetComponent<AudioSource> ().clip = clips[0];
 
-			//GameObject.Find("MissionText").GetComponent<AudioSource> ().Play ();
+			GameObject.Find("MissionText").GetComponent<AudioSource> ().Play ();
 
 
 			tookDmg = false;
@@ -55,7 +56,7 @@ public class ShipHealth : Photon.MonoBehaviour {
 		}
 
 		if (isReparing) {
-			health += 0.1025f;
+			health += shipReganRate;
 		}
 		if ((!PhotonNetwork.connected || PhotonNetwork.isMasterClient) && health <= 750f) {
 			health += 0.0125f;

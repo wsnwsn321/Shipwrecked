@@ -122,13 +122,18 @@ public class LobbyNetworkManager : Photon.MonoBehaviour {
 			PhotonNetwork.room.IsVisible = false;
 			// Makes it so that the lobby cannot be joined by others
 			PhotonNetwork.room.IsOpen = false;
-
+			photonView.RPC ("DisplayGameStarting", PhotonTargets.All, null);
 			PhotonNetwork.LoadLevel (GameObject.Find ("NavigationManager").GetComponent<NavigationManager> ().sceneOnStart);
 		} else {
 			// Tell everyone that the player is ready
 			wrm.playerIsReady = !wrm.playerIsReady;
 			wrm.UpdateWindow ();
 		}
+	}
+
+	[PunRPC]
+	private void DisplayGameStarting() {
+		wrm.gameStarting.SetActive (true);
 	}
 
 	void OnJoinedRoom() {
