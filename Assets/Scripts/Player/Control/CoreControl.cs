@@ -364,7 +364,9 @@ public class CoreControl : Photon.PunBehaviour {
     {
 		if (animator && (!PhotonNetwork.connected || PlayerManager.LocalPlayerInstance.Equals(this.gameObject)))
         {
-			myhp.TakeDamage (100);
+			if (myhp.GetHealth () > 0) {
+				myhp.TakeDamage (myhp.GetHealth ());
+			}
             dead = true;
 			photonView.RPC ("FallDead", PhotonTargets.All, null);
         }

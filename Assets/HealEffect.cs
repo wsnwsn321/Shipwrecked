@@ -7,7 +7,7 @@ using UnityEngine;
 public class HealEffect : MonoBehaviour {
 
 	[HideInInspector]
-	public PlayerHealth hp;
+	public PlayerHealth hp = gameObject.GetComponentInParent<PlayerHealth>();
 	public float regenAmount = 0.1f;
 
 	// Update is called once per frame

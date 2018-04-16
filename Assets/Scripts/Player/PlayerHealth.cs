@@ -90,6 +90,7 @@ public class PlayerHealth : Photon.PunBehaviour {
 		health -= damage;
 		if (health <= 0) {
 			health = 0;
+			Die ();
 		}
 		healthChanged = true;
 	}

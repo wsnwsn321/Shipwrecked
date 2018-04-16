@@ -100,7 +100,7 @@ public class DoctorControl : Photon.PunBehaviour, IClassControl {
 				Debug.Log (players [i].gameObject.name + " is being healed!");
 				healEffect = players [i].transform.GetChild (5).gameObject;
 				healEffect.SetActive (true);
-				healEffect.GetComponent<HealEffect> ().hp = players [i].gameObject.GetComponent<PlayerHealth> ();
+				//healEffect.GetComponent<HealEffect> ().hp = players [i].gameObject.GetComponent<PlayerHealth> ();
 				//healing = PhotonNetwork.connected? PhotonNetwork.Instantiate(healEffect.name, players[i].transform.position, Quaternion.identity,0) :Instantiate(healEffect,  players[i].transform.position, Quaternion.identity);
 				//healing.transform.position = players [i].transform.position;	
 				StartCoroutine(EndBuff(healEffect));
@@ -120,8 +120,7 @@ public class DoctorControl : Photon.PunBehaviour, IClassControl {
 		yield return new WaitForSeconds(healBuffTime);
 		hE.SetActive (false);
 		//StopHealing ();
-		healBuff.SetActive (false);
-
+		Debug.Log ("Healing effect wore off!");
 	}
 
 	void StopHealing()
