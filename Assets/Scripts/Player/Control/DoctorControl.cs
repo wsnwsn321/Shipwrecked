@@ -136,8 +136,10 @@ public class DoctorControl : Photon.PunBehaviour, IClassControl {
     IEnumerator waitPillDie()
     {
         // Start cooldown animation for UI skill image
-        timer.startCooldownTimerUI(1);
-        skillTimeStamp1 = Time.time + healingCooldown;
+		if (!PhotonNetwork.connected || photonView.isMine) {
+			timer.startCooldownTimerUI (1);
+			skillTimeStamp1 = Time.time + healingCooldown;
+		}
         yield return new WaitForSeconds(5f);
 		if (PhotonNetwork.connected) {
 			if (pills [0] != null) {
@@ -153,6 +155,7 @@ public class DoctorControl : Photon.PunBehaviour, IClassControl {
 	{
 		yield return new WaitForSeconds(healBuffCooldown);
 		canBuff = true;
+		Debug.Log ("Doctor can heal teammates again!");
 	}
 		
 
@@ -162,8 +165,10 @@ public class DoctorControl : Photon.PunBehaviour, IClassControl {
 		yield return new WaitForSeconds(healBuffTime);
 		healBuff.SetActive (false);
 		animator.SetTrigger("Ab2Finished");
-		timer.startCooldownTimerUI(2);
-		skillTimeStamp2 = Time.time + healBuffCooldown;
+		if (!PhotonNetwork.connected || photonView.isMine) {
+			timer.startCooldownTimerUI (2);
+			skillTimeStamp2 = Time.time + healBuffCooldown;
+		}
 		StartCoroutine(WaitAbility2Use());
 	}
     #region Inherited Methods

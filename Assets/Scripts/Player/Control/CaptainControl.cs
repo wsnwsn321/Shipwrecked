@@ -66,6 +66,7 @@ public class CaptainControl : Photon.PunBehaviour, IClassControl
 	[PunRPC]
 	void Rampage(){
 		if (canRampage&&!animator.GetCurrentAnimatorStateInfo (0).IsName ("AB1")&&!animator.GetCurrentAnimatorStateInfo(0).IsName("Die")) {
+			Debug.Log ("Captain is on a RAMPAGE!!!");
 			isFlaming = true;
 			canRampage = false;
 			if (animator) {
@@ -133,8 +134,8 @@ public class CaptainControl : Photon.PunBehaviour, IClassControl
 			timer.startCooldownTimerUI (1);
 			skillTimeStamp1 = Time.time + RampageCooldown;
 
-			StartCoroutine (WaitAbility1Use ());
 		}
+		StartCoroutine (WaitAbility1Use ());
 	}
 
 	IEnumerator RampageForTime()
@@ -152,11 +153,13 @@ public class CaptainControl : Photon.PunBehaviour, IClassControl
 	{
 		yield return new WaitForSeconds(RampageCooldown);
 		canRampage = true;
+		Debug.Log ("Captain can rampage again!");
 	}
 	IEnumerator WaitAbility2Use()
 	{
 		yield return new WaitForSeconds(StunCooldown);
 		canKnockBack = true;
+		Debug.Log ("Captain can kick again!");
 	}
 
 	IEnumerator WaitForStun()
