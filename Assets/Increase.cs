@@ -16,7 +16,7 @@ public class Increase : Photon.MonoBehaviour {
     void OnCollisionEnter (Collision other)
 	{
 		if (PlayerManager.LocalPlayerInstance.Equals (thrower)) {
-			if (!activated && other.gameObject != thrower && other.gameObject.layer == LayerMask.NameToLayer ("Character")) {
+			if (!activated && other.gameObject != thrower && (other.gameObject.layer == LayerMask.NameToLayer ("Character") || other.gameObject.layer == LayerMask.NameToLayer ("PlayerDeadState"))) {
 				activated = true;
 				if (!PhotonNetwork.connected) {
 					float healHP = thrower.GetComponent<DoctorControl> ().pillHeal;
