@@ -89,7 +89,7 @@ public class AmmoRemaining : Photon.MonoBehaviour {
 	private void updateAmmoText()
 	{
 		if (ammoText != null) {
-			ammoText.text = ammo.ToString () + "/" + originalAmmo.ToString ();
+			ammoText.text = "Ammo: " + ammo.ToString () + "/" + originalAmmo.ToString ();
 		} else {
 			SetAmmoText ();
 			//ammoText = GameObject.FindGameObjectWithTag("AmmoText").GetComponent<Text>();
