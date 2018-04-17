@@ -41,6 +41,10 @@ public class CoreControl : Photon.PunBehaviour {
     [HideInInspector]
     NewGun gun;
 
+    [HideInInspector]
+    FreeLookCam cam;
+    float originalTurnSpeed;
+
 	public AudioClip footstepAudio;
 
     void Start () {
@@ -67,6 +71,9 @@ public class CoreControl : Photon.PunBehaviour {
 		ammo = GetComponentInChildren<AmmoRemaining> ();
         gun = GetComponentInChildren<NewGun>();
 		myhp = GetComponent<PlayerHealth> ();
+        cam = GetComponent<FreeLookCam>();
+
+        originalTurnSpeed = cam.m_TurnSpeed;
 
         reloadDelay = 0.5f;
         currentReloadDelay = 0.5f;
@@ -75,6 +82,10 @@ public class CoreControl : Photon.PunBehaviour {
         emoteDelay = 0.5f;
         currentEmoteDelay = 0.5f;
         canUseEmote = true;
+
+        rollDelay = 0.5f;
+        currentRollDelay = 0.5f;
+        canRoll = true;
 
         fireRate = gun.fireRate;
         currentFireTime = 2 / fireRate;
@@ -277,8 +288,27 @@ public class CoreControl : Photon.PunBehaviour {
     {
 		if (animator && !dead&&!animator.GetCurrentAnimatorStateInfo (0).IsName ("Reviving")&&!animator.GetCurrentAnimatorStateInfo (0).IsName ("AB2"))
         {
-            animator.SetTrigger("Roll");
+            if (canRoll)
+            {
+                StartCoroutine(DelayRolling());
+                animator.SetTrigger("Roll");
+            }
         }
+    }
+
+    float rollDelay;
+    float currentRollDelay;
+    bool canRoll;
+    IEnumerator DelayRolling()
+    {
+        canRoll = false;
+        currentRollDelay = 0;
+        while (currentRollDelay < rollDelay)
+        {
+            yield return new WaitForFixedUpdate();
+            currentRollDelay += Time.fixedDeltaTime;
+        }
+        canRoll = true;
     }
 
     public void Shoot()
@@ -350,6 +380,7 @@ public class CoreControl : Photon.PunBehaviour {
             }
             horizontalSpeed = 0.5f;
             forwardSpeed = 0.5f;
+            cam.m_TurnSpeed = 1.75f;
 
             Control control = GetComponent<Control>();
             control.main_c.fieldOfView = 15;
@@ -368,6 +399,7 @@ public class CoreControl : Photon.PunBehaviour {
             }
             horizontalSpeed = 1.5f;
             forwardSpeed = 1.5f;
+            cam.m_TurnSpeed = originalTurnSpeed;
 
             Control control = GetComponent<Control>();
             control.main_c.fieldOfView = 35;

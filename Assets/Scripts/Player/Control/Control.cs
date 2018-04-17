@@ -155,7 +155,7 @@ public class Control : Photon.MonoBehaviour {
         }
 
         // Roll
-        if (Input.GetKeyDown(KeyCode.C) && classControl.CanRoll())
+        if (InputManager.Roll() && classControl.CanRoll())
         {
             coreControl.Roll();
         }

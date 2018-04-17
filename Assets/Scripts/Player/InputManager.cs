@@ -80,6 +80,11 @@ public static class InputManager
         return Input.GetKeyDown(KeyCode.R) || XButton();
     }
 
+    public static bool Roll()
+    {
+        return Input.GetKeyDown(KeyCode.C) || RightThumbstick();
+    }
+
     public static bool ReviveAlly()
     {
         return Input.GetKeyDown(KeyCode.G) || YButton();
