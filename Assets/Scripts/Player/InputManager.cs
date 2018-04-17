@@ -111,7 +111,7 @@ public static class InputManager
 
     public static bool StopAbility()
     {
-        return Input.GetKeyDown(KeyCode.Escape) || BButton();
+        return Input.GetKeyDown(KeyCode.BackQuote) || BButton();
     }
 
     #endregion Controls
