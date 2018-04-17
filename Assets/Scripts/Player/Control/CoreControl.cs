@@ -27,6 +27,7 @@ public class CoreControl : Photon.PunBehaviour {
 	public Animator animator;
     private Rigidbody rb;
 	private PlayerHealth myhp;
+    private ReloadBar reloadBar;
 
     private float reloadDelay;
     private float currentReloadDelay;
@@ -74,6 +75,8 @@ public class CoreControl : Photon.PunBehaviour {
         cam = GetComponent<FreeLookCam>();
 
         originalTurnSpeed = cam.m_TurnSpeed;
+        reloadBar = GetComponentInChildren<ReloadBar>();
+        reloadBar.setInactive();
 
         reloadDelay = 0.5f;
         currentReloadDelay = 0.5f;
@@ -270,6 +273,8 @@ public class CoreControl : Photon.PunBehaviour {
         {
             animator.SetTrigger("Reload");
         }
+        reloadBar.setActive();
+        reloadBar.startReloadBar(reloadDelay, Time.time + reloadDelay);
 		ammo.reload ();
     }
 
