@@ -38,7 +38,7 @@ public class AmmoRemaining : Photon.PunBehaviour {
 			case "SargeGun":
 				ammo = 15;
 				playerType = "Sergeant";
-				reloadTime = 2f;
+				reloadTime = 1.5f;
 				break;
 			case "DoctorGun":
 				ammo = 12;
