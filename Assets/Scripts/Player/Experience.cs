@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class LevelThresholds
 {
-    public static List<int> Thresholds = new List<int> { 20, 40, 80, 100, 150, 200, 250, 300, 500 };
+    public static List<int> Thresholds = new List<int> { 20, 40, 80, 140, 220, 320, 440, 580, 740 };
 }
 
 [RequireComponent(typeof(Control))]
@@ -44,6 +44,7 @@ public class Experience : MonoBehaviour {
     {
         if (level < LevelThresholds.Thresholds.Count + 1)
         {
+			
             experience += amount;
 
             while (experience >= nextLevelThreshold && level < LevelThresholds.Thresholds.Count + 1)

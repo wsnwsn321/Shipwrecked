@@ -177,6 +177,7 @@ public class Enemy : Photon.MonoBehaviour {
         // Allocate more to most recent attacker.
         if (mostRecentCharacterAttacker)
         {
+			print (expToAllocate +expToAllocate / 2 );
             mostRecentCharacterAttacker.GetComponent<Experience>().IncreaseBy(expToAllocate / 2);
         }
     }

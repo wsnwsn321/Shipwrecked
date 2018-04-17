@@ -86,7 +86,7 @@ public class brain_control : MonoBehaviour {
 		}
 		spaceDistance = Vector3.Distance(transform.position, spaceship.transform.position);
 		//colliding with spaceship
-		if (spaceDistance > 6.8f) {
+		if (spaceDistance > 6.9f) {
 			collideSpace = false;
 		} else {
 			collideSpace = true;

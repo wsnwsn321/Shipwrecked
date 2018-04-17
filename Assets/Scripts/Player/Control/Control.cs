@@ -104,7 +104,7 @@ public class Control : Photon.MonoBehaviour {
         // Exit Aiming Mode
         else
         {
-            coreControl.StopAiming();
+				coreControl.StopAiming();
         }
 
         // Ensure the layer is weighted 1 when shooting and reloading.
@@ -223,10 +223,10 @@ public class Control : Photon.MonoBehaviour {
         //}
 
         //cheat on experience
-        //if (Input.GetKeyDown(KeyCode.Z))
-        //{
-        //    exp.IncreaseBy(20);
-        //}
+        if (Input.GetKeyDown(KeyCode.Z))
+        {
+            exp.IncreaseBy(20);
+        }
 
         //revive allies
         if (InputManager.ReviveAlly())
