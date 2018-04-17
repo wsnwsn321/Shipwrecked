@@ -32,6 +32,10 @@ public class CoreControl : Photon.PunBehaviour {
     private float currentReloadDelay;
     private bool canReload;
 
+    private float emoteDelay;
+    private float currentEmoteDelay;
+    private bool canUseEmote;
+
     [HideInInspector]
 	public AmmoRemaining ammo;
     [HideInInspector]
@@ -67,6 +71,10 @@ public class CoreControl : Photon.PunBehaviour {
         reloadDelay = 0.5f;
         currentReloadDelay = 0.5f;
         canReload = true;
+
+        emoteDelay = 0.5f;
+        currentEmoteDelay = 0.5f;
+        canUseEmote = true;
 
         fireRate = gun.fireRate;
         currentFireTime = 2 / fireRate;
@@ -129,6 +137,11 @@ public class CoreControl : Photon.PunBehaviour {
     public bool CanStopShooting()
     {
 		return !IsShooting();
+    }
+
+    public bool CanUseEmote()
+    {
+        return canUseEmote;
     }
 
     #endregion Can Action
@@ -196,6 +209,10 @@ public class CoreControl : Photon.PunBehaviour {
         if (animator)
         {
             animator.SetTrigger("Hit");
+            if (canUseEmote)
+            {
+                StartCoroutine(DelayEmotes());
+            }
         }
     }
 
@@ -232,6 +249,7 @@ public class CoreControl : Photon.PunBehaviour {
 		if (animator&&!dead&&!animator.GetCurrentAnimatorStateInfo (0).IsName ("Reviving"))
         {
             animator.SetTrigger("Pickup");
+            StartCoroutine(DelayEmotes());
         }
     }
 
@@ -393,6 +411,15 @@ public class CoreControl : Photon.PunBehaviour {
         }
     }
 
+    public void GetOffGround()
+    {
+        if (animator && (!PhotonNetwork.connected || PlayerManager.LocalPlayerInstance.Equals(this.gameObject)))
+        {
+            animator.SetTrigger("Jump");
+            StartCoroutine(DelayEmotes());
+        }
+    }
+
 	[PunRPC]
 	public void CheckForRevival(Vector3 revPos) {
 		if (Vector3.Distance(PlayerManager.LocalPlayerInstance.transform.position, revPos) < 5f) {
@@ -465,6 +492,10 @@ public class CoreControl : Photon.PunBehaviour {
         if (animator)
         {
             animator.SetTrigger("LevelUp");
+            if (canUseEmote)
+            {
+                StartCoroutine(DelayEmotes());
+            }
         }
 
     }
@@ -528,4 +559,16 @@ public class CoreControl : Photon.PunBehaviour {
 	public void WillBePilled(Vector3 pillPos) {
 		photonView.RPC("CheckForPillTarget", PhotonTargets.Others, pillPos);
 	}
+
+    IEnumerator DelayEmotes()
+    {
+        canUseEmote = false;
+        currentEmoteDelay = 0;
+        while (currentEmoteDelay < emoteDelay)
+        {
+            yield return new WaitForFixedUpdate();
+            currentEmoteDelay += Time.fixedDeltaTime;
+        }
+        canUseEmote = true;
+    }
 }

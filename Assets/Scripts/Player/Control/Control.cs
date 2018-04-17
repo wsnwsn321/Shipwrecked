@@ -166,18 +166,6 @@ public class Control : Photon.MonoBehaviour {
             coreControl.Jump();
         }
 
-        // Pick Up Object
-        if (Input.GetKeyDown(KeyCode.F) && coreControl.CanPickupObject() && classControl.CanPickUpObject())
-        {
-            coreControl.PickUpObject();
-        }
-
-        // Getting Hit.
-        if (Input.GetKeyDown(KeyCode.H))
-        {
-            coreControl.GetHit();
-        }
-
         // Stop current special action.
         if (InputManager.StopAbility())
         {
@@ -218,26 +206,27 @@ public class Control : Photon.MonoBehaviour {
         }
 
         //Enter dead state, for test
-        if (Input.GetKeyDown(KeyCode.K))
-        {
-            coreControl.DieOnGround();
-        }
+        //if (Input.GetKeyDown(KeyCode.K))
+        //{
+        //    coreControl.DieOnGround();
+        //}
 
         //revived by allies, for test
-		if (Input.GetKeyDown(KeyCode.N) )
-        {
-			if (coreControl.canReviveSelf) {
+        //if (Input.GetKeyDown(KeyCode.N))
+        //{
+        //    if (coreControl.canReviveSelf)
+        //    {
 
-				coreControl.canReviveSelf = false;
-				coreControl.Revived ();
-			}
-        }
+        //        coreControl.canReviveSelf = false;
+        //        coreControl.Revived();
+        //    }
+        //}
 
         //cheat on experience
-        if (Input.GetKeyDown(KeyCode.Z))
-        {
-            exp.IncreaseBy(20);
-        }
+        //if (Input.GetKeyDown(KeyCode.Z))
+        //{
+        //    exp.IncreaseBy(20);
+        //}
 
         //revive allies
         if (InputManager.ReviveAlly())
@@ -252,5 +241,30 @@ public class Control : Photon.MonoBehaviour {
 				}
 			}
     	}
-	}
+
+        // Emotes
+        // Reach down.
+        if (InputManager.Emote1() && coreControl.CanUseEmote() && !coreControl.dead)
+        {
+            coreControl.PickUpObject();
+        }
+
+        // Lean back.
+        if (InputManager.Emote2() && coreControl.CanUseEmote() && !coreControl.dead)
+        {
+            coreControl.GetHit();
+        }
+
+        // Jump without jumping.
+        if (InputManager.Emote3() && coreControl.CanUseEmote() && !coreControl.dead)
+        {
+            coreControl.GetOffGround();
+        }
+
+        // Raise hands.
+        if (InputManager.Emote4() && coreControl.CanUseEmote() && !coreControl.dead)
+        {
+            coreControl.LevelUp();
+        }
+    }
 }

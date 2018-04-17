@@ -21,6 +21,26 @@ public static class InputManager
         return Input.GetMouseButton(1) || LeftTrigger() > 0f;
     }
 
+    public static bool Emote1()
+    {
+        return Input.GetKeyDown(KeyCode.Alpha1) || DPadHorizontal() > 0f;
+    }
+
+    public static bool Emote2()
+    {
+        return Input.GetKeyDown(KeyCode.Alpha2) || DPadHorizontal() < 0f;
+    }
+
+    public static bool Emote3()
+    {
+        return Input.GetKeyDown(KeyCode.Alpha3) || DPadVertical() > 0f;
+    }
+
+    public static bool Emote4()
+    {
+        return Input.GetKeyDown(KeyCode.Alpha4) || DPadVertical() < 0f;
+    }
+
     public static bool Jump()
     {
         return Input.GetKeyDown(KeyCode.Space) || AButton();
@@ -48,6 +68,11 @@ public static class InputManager
     {
         float result = Input.GetAxis("Horizontal") + LeftJoystickHorizontal();
         return Mathf.Clamp(result, -1f, 1f);
+    }
+
+    public static bool Pause()
+    {
+        return Input.GetKeyDown(KeyCode.Escape) || StartButton();
     }
 
     public static bool Reload()
@@ -116,7 +141,7 @@ public static class InputManager
 
     private static float DPadHorizontal()
     {
-        float result = Input.GetAxis("DPad Vertical");
+        float result = Input.GetAxis("DPad Horizontal");
         return Mathf.Clamp(result, -1f, 1f);
     }
 
