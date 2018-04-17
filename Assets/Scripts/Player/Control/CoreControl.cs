@@ -28,6 +28,7 @@ public class CoreControl : Photon.PunBehaviour {
     private Rigidbody rb;
 	private PlayerHealth myhp;
     private ReloadBar reloadBar;
+    private float reloadCooldown;
 
     private float reloadDelay;
     private float currentReloadDelay;
@@ -81,6 +82,7 @@ public class CoreControl : Photon.PunBehaviour {
         reloadDelay = 0.5f;
         currentReloadDelay = 0.5f;
         canReload = true;
+        reloadCooldown = 1.5f;
 
         emoteDelay = 0.5f;
         currentEmoteDelay = 0.5f;
@@ -274,7 +276,7 @@ public class CoreControl : Photon.PunBehaviour {
             animator.SetTrigger("Reload");
         }
         reloadBar.setActive();
-        reloadBar.startReloadBar(reloadDelay, Time.time + reloadDelay);
+        reloadBar.startReloadBar(reloadCooldown, Time.time + reloadCooldown);
 		ammo.reload ();
     }
 

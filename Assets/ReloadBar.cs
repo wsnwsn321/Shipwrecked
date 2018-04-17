@@ -8,7 +8,7 @@ public class ReloadBar : MonoBehaviour {
     private Image reloadBarSprite;
     private bool startReload = false;
     private float endTimeStamp;
-    private float reloadDelay;
+    private float reloadCooldown;
 
 	// Use this for initialization
 	void Start () {
@@ -19,7 +19,7 @@ public class ReloadBar : MonoBehaviour {
 	void Update () {
 		if (startReload == true)
         {
-            reloadBarSprite.fillAmount = (endTimeStamp - Time.time) / reloadDelay;
+            reloadBarSprite.fillAmount = (endTimeStamp - Time.time) / reloadCooldown;
             if (reloadBarSprite.fillAmount < 0.01)
             {
                 startReload = false;
@@ -29,9 +29,9 @@ public class ReloadBar : MonoBehaviour {
 	}
 
 
-    public void startReloadBar(float reloadDelay, float endTimeStamp)
+    public void startReloadBar(float reloadCooldown, float endTimeStamp)
     {
-        this.reloadDelay = reloadDelay;
+        this.reloadCooldown = reloadCooldown;
         this.endTimeStamp = endTimeStamp;
         startReload = true;
     }
