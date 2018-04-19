@@ -39,6 +39,11 @@ public class IntroScene : MonoBehaviour {
 				//set text to next section of story
 				GameObject.Find ("Text").GetComponent<TypeOutScript> ().reset = true;
 				GameObject.Find ("Text").GetComponent<TypeOutScript> ().FinalText = Story [i];
+			if (GameObject.Find ("Text").GetComponent<TypeOutScript> ().FinalText.Length < 25) {
+				GameObject.Find ("Text").GetComponent<TypeOutScript> ().TotalTypeTime = 3;
+			} else {
+				GameObject.Find ("Text").GetComponent<TypeOutScript> ().TotalTypeTime = 10;
+			}
 				GameObject.Find ("Text").GetComponent<TypeOutScript> ().On = true;
 			gameObject.GetComponent<AudioSource> ().loop = true;
 			gameObject.GetComponent<AudioSource>().clip = clips [2];
@@ -52,6 +57,9 @@ yield return new WaitForSeconds (.1f);
 			gameObject.GetComponent<AudioSource> ().loop = false;
 			yield return new WaitForSeconds(3f); // wait to let people read
 			}
+		if (GameObject.Find ("Main Camera").GetComponent<AudioSource> ().isPlaying) {
+			yield return new WaitForSeconds (3f);
+		}
 			//set text to nothing
 			GameObject.Find ("Text").GetComponent<TypeOutScript> ().reset = true;
 			//GameObject.Find ("Text").GetComponent<TypeOutScript> ().FinalText = "";

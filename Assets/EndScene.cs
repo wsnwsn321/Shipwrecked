@@ -34,6 +34,11 @@ public class EndScene : MonoBehaviour {
 			//set text to next section of story
 			GameObject.Find ("Text").GetComponent<TypeOutScript> ().reset = true;
 			GameObject.Find ("Text").GetComponent<TypeOutScript> ().FinalText = Story [i];
+			if (GameObject.Find ("Text").GetComponent<TypeOutScript> ().FinalText.Length < 40) {
+				GameObject.Find ("Text").GetComponent<TypeOutScript> ().TotalTypeTime = 3;
+			} else {
+				GameObject.Find ("Text").GetComponent<TypeOutScript> ().TotalTypeTime = 10;
+			}
 			GameObject.Find ("Text").GetComponent<TypeOutScript> ().On = true;
 			gameObject.GetComponent<AudioSource> ().loop = true;
 			gameObject.GetComponent<AudioSource>().clip = clips [0];

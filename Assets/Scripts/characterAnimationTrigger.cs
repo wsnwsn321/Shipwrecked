@@ -35,6 +35,7 @@ public class characterAnimationTrigger : MonoBehaviour {
 			GameObject.Find ("WeaponInfoText").GetComponent<TypeOutScript> ().On = true;
 
 			GameObject.Find ("CharacterNameText").GetComponent<TypeOutScript> ().FinalText = characterName;
+		GameObject.Find ("CharacterNameText").GetComponent<TypeOutScript> ().TotalTypeTime = 2f;
 			GameObject.Find ("CharacterNameText").GetComponent<TypeOutScript> ().On = true;
 
 

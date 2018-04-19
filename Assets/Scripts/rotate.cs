@@ -19,16 +19,16 @@ public class rotate : MonoBehaviour {
 
 		transform.rotation = Quaternion.Lerp (transform.rotation, Quaternion.Euler (new Vector3 (0, wantedRotAngle, 0)), 2*Time.deltaTime);
 
-		if (Input.GetKeyDown (KeyCode.LeftArrow)||butl) {
-				wantedRotAngle = startRot + 90 ;
-				startRot = startRot+90;
-			butl = false;
+		if (Input.GetKeyDown (KeyCode.LeftArrow)||butr) {
+				wantedRotAngle = startRot - 90 ;
+				startRot = startRot-90;
+			butr = false;
 		}	
 		
-		if (Input.GetKeyDown (KeyCode.RightArrow)||butr) {
-			wantedRotAngle = startRot - 90 ;
-			startRot = startRot-90;
-			butr = false;
+		if (Input.GetKeyDown (KeyCode.RightArrow)||butl) {
+			wantedRotAngle = startRot + 90 ;
+			startRot = startRot+90;
+			butl = false;
 	}
 
 }
