@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -21,12 +22,21 @@ public class MainMenuButtonManager : MonoBehaviour
         button.onClick.AddListener(TaskOnClick);
     }
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Return))
+        {
+            TaskOnClick();
+        }
+    }
+
     public void TaskOnClick()
     {
-        if (button.tag == "Controls")
+        if (EventSystem.current.currentSelectedGameObject.tag == "Controls")
         {
             mainmenu.SetActive(false);
             controls.SetActive(true);
+            EventSystem.current.SetSelectedGameObject(GameObject.FindGameObjectWithTag("MainMenuSelect"));
         }
         else
         {
@@ -38,11 +48,11 @@ public class MainMenuButtonManager : MonoBehaviour
     IEnumerator waitForSound()
     {
         yield return new WaitForSeconds(1.0f); 
-		if (button.tag == "GameLevel") {
+		if (EventSystem.current.currentSelectedGameObject.tag == "GameLevel") {
 			SceneManager.LoadScene ("IntroScene");
 
 		} else {
-			SceneManager.LoadScene (button.tag.ToString ());
+			SceneManager.LoadScene (EventSystem.current.currentSelectedGameObject.tag.ToString ());
 		}
     }
 }
