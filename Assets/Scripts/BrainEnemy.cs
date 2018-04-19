@@ -122,10 +122,10 @@ public class BrainEnemy : Photon.MonoBehaviour {
         switch(monsterType)
         {
             case MonsterTypes.Brains:
-                expToAllocate = 3;
+                expToAllocate = 15;
                 break;
             case MonsterTypes.Critter:
-                expToAllocate = 2;
+                expToAllocate = 10;
                 break;
             case MonsterTypes.Spaz:
                 expToAllocate = 2;
