@@ -197,9 +197,17 @@ public class NewGun : PlayerManager {
 			if (PhotonNetwork.connected) {
 				GameObject bloodImpact = PhotonNetwork.Instantiate (bloodSplatter.name, hit.point, Quaternion.LookRotation (hit.normal), 0);
 				StartCoroutine (DestroyImpact (bloodImpact));
+				if(gameObject.GetComponent<AmmoRemaining> ().playerType.Equals ("Mechanic")){
+					GameObject rpgExplosion = PhotonNetwork.Instantiate(impactEffect.name, hit.point, Quaternion.LookRotation(hit.normal), 0);
+					StartCoroutine(DestroyImpact(rpgExplosion));
+				}
 			} else {
 				GameObject bloodImpact = GameObject.Instantiate (bloodSplatter, hit.point, Quaternion.identity);
 				Destroy (bloodImpact, 1f);
+				if(gameObject.GetComponent<AmmoRemaining> ().playerType.Equals ("Mechanic")){
+					GameObject rpgExplosion = GameObject.Instantiate(impactEffect, hit.point, Quaternion.identity);
+					Destroy(rpgExplosion, 1f);
+				}
 			}
 		} else if((!PhotonNetwork.connected || photonView.isMine)){
 			if (PhotonNetwork.connected) {

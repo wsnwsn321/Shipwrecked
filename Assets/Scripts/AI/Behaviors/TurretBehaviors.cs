@@ -264,7 +264,7 @@ public class TurretBehaviors : GenericBehaviors
                 target.AddCharacterAttacker(engineer.transform);
             }
 
-            yield return new WaitForSeconds(0.0833f * (maxGunRotationSpeed / gunRotationSpeed));
+            yield return new WaitForSeconds(0.06666f * (maxGunRotationSpeed / gunRotationSpeed));
         }
 
         isShooting = false;
