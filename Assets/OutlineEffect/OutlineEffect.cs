@@ -61,6 +61,7 @@ namespace cakeslice
         public Color lineColor0 = Color.red;
         public Color lineColor1 = Color.green;
         public Color lineColor2 = Color.blue;
+		public Color lineColor3 = Color.white;
 
         public bool additiveRendering = false;
 
@@ -358,6 +359,7 @@ namespace cakeslice
                 outlineShaderMaterial.SetColor("_LineColor1", lineColor0 * lineColor0);
                 outlineShaderMaterial.SetColor("_LineColor2", lineColor1 * lineColor1);
                 outlineShaderMaterial.SetColor("_LineColor3", lineColor2 * lineColor2);
+				outlineShaderMaterial.SetColor("_LineColor4", lineColor3 * lineColor3);
                 if(flipY)
                     outlineShaderMaterial.SetInt("_FlipY", 1);
                 else
