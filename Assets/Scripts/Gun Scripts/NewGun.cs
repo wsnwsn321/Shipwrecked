@@ -141,7 +141,10 @@ public class NewGun : PlayerManager {
 				}
 				if (enemy != null) {
 					enemy.TakeDamage (baseDamage * core.damageModifier);
+					Debug.Log ("Dealing " + baseDamage * core.damageModifier + " damage!");
 					enemy.AddAttacker (transform.parent);
+				} else {
+					Debug.Log ("Enemy can't be found!");
 				}
 
 			}
@@ -159,7 +162,11 @@ public class NewGun : PlayerManager {
 				}
 				if (enemy != null) {
 					enemy.TakeDamage (baseDamage * core.damageModifier);
+					Debug.Log ("Dealing " + baseDamage * core.damageModifier + " damage!");
+
 					enemy.AddAttacker (transform.parent);
+				} else {
+					Debug.Log ("Enemy can't be found!");
 				}
 
 			}
@@ -173,11 +180,16 @@ public class NewGun : PlayerManager {
 				}
 				if (enemy != null) {
 					enemy.TakeDamage (baseDamage * core.damageModifier);
+					Debug.Log ("Dealing " + baseDamage * core.damageModifier + " damage!");
+
 					enemy.AddAttacker (transform.parent);
+				} else {
+					Debug.Log ("Enemy can't be found!");
 				}
 					
 			}
 		} else {
+			Debug.Log ("Got to the else");
 			if (Physics.Raycast (rayOrigin, newCamSpot.transform.forward, out hit, range, hitMask)) {	
 				//Debug.DrawRay(charLocation.transform.position + charOffset, cameraLocation.transform.forward, Color.green);
 				Debug.Log (hit.transform.name); //This will display what is hit by the raycast
@@ -187,10 +199,16 @@ public class NewGun : PlayerManager {
 				}
 				if (enemy != null) {
 					enemy.TakeDamage (baseDamage * core.damageModifier);
+					Debug.Log ("Dealing " + baseDamage * core.damageModifier + " damage!");
+
 					enemy.AddAttacker (transform.parent);
+				} else {
+					Debug.Log ("Enemy can't be found!");
 				}
 
 
+			} else {
+				Debug.Log ("But not the if");
 			}
 		}
 		if ((hit.transform.name.Equals ("AI_Crab_Alien(Clone)") || hit.transform.name.Equals ("Spider_Brain")) && (!PhotonNetwork.connected || photonView.isMine)) {
