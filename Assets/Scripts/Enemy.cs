@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 
 [RequireComponent(typeof(PhotonView))]
-public class Enemy : Photon.MonoBehaviour {
+public class Enemy : Photon.PunBehaviour {
 	//extends MonsterSpawnManager class to update monster count
 	public MonsterSpawnManager spawnManager;
     private MonsterTypes monsterType;
@@ -82,12 +82,17 @@ public class Enemy : Photon.MonoBehaviour {
 	}
 
     public void TakeDamage(float amount){
+		photonView.RPC ("ReduceHealth", PhotonTargets.All, amount);
+	}
+
+	[PunRPC]
+	private void ReduceHealth(float amount) {
 		Debug.Log ("Enemy is taking " + amount + " damage!");
 		health -= amount;
-        if (health <= 0f && !isDead)
-        {
-            Die();
-        }
+		if (health <= 0f && !isDead)
+		{
+			Die();
+		}
 	}
 
     public void AddAttacker(Transform attacker)
