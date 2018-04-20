@@ -67,11 +67,13 @@ public class Enemy : Photon.MonoBehaviour {
 	{
 		if (stream.isWriting)
 		{
+			Debug.Log ("Sending current health of enemy to others: " + health + " health");
 			stream.SendNext (health);
 		}
 		else
 		{
 			health = (float)stream.ReceiveNext();
+			Debug.Log ("Receiving current health of enemy from others: " + health + " health");
 		}
 
 		if (health <= 0f && !isDead) {
@@ -80,6 +82,7 @@ public class Enemy : Photon.MonoBehaviour {
 	}
 
     public void TakeDamage(float amount){
+		Debug.Log ("Enemy is taking " + amount + " damage!");
 		health -= amount;
         if (health <= 0f && !isDead)
         {
