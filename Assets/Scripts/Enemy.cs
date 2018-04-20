@@ -82,7 +82,12 @@ public class Enemy : Photon.PunBehaviour {
 	}
 
     public void TakeDamage(float amount){
-		photonView.RPC ("ReduceHealth", PhotonTargets.All, amount);
+		if (!PhotonNetwork.connected) {
+			ReduceHealth (amount);
+		} else {
+			photonView.RPC ("ReduceHealth", PhotonTargets.All, amount);
+
+		}
 	}
 
 	[PunRPC]

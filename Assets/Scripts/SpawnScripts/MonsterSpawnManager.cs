@@ -89,7 +89,7 @@ public class MonsterSpawnManager : Photon.MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if (PhotonNetwork.connected) {
-			maxNumberMonsters = PhotonNetwork.playerList.Length * 7;
+			maxNumberMonsters = PhotonNetwork.playerList.Length * 6;
 		} else {
 			maxNumberMonsters = 8;
 		}
