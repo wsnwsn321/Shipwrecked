@@ -152,10 +152,10 @@ public class Enemy : Photon.MonoBehaviour {
         switch(monsterType)
         {
             case MonsterTypes.Brains:
-                expToAllocate = 15;
+                expToAllocate = 6;
                 break;
             case MonsterTypes.Critter:
-                expToAllocate = 10;
+                expToAllocate = 4;
                 break;
             case MonsterTypes.Spaz:
                 expToAllocate = 2;
@@ -177,7 +177,6 @@ public class Enemy : Photon.MonoBehaviour {
         // Allocate more to most recent attacker.
         if (mostRecentCharacterAttacker)
         {
-			print (expToAllocate +expToAllocate / 2 );
             mostRecentCharacterAttacker.GetComponent<Experience>().IncreaseBy(expToAllocate / 2);
         }
     }
