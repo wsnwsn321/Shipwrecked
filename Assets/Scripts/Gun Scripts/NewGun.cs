@@ -89,6 +89,11 @@ public class NewGun : PlayerManager {
             {
                 if (Time.time >= nextTimeToFire)
                 {
+					if (core.rampage) {
+						fireRate = 40f;
+					} else {
+						fireRate = 20f;
+					}
                     nextTimeToFire = Time.time + 2f / fireRate;
                     Shoot();
                 }
