@@ -25,7 +25,7 @@ public class MonsterSpawner : MonoBehaviour {
 			GameObject monster;
 			if (PhotonNetwork.connected) {
 				if (PhotonNetwork.isMasterClient) {
-					monster = PhotonNetwork.InstantiateSceneObject (monsters [index].monster.name, spawnPoint, transform.rotation, 0, null);
+					monster = PhotonNetwork.Instantiate (monsters [index].monster.name, spawnPoint, transform.rotation, 0);
 				} else {
 					// This line is added to fix compiler errors "Use of unassigned monster". 
 					monster = null;
