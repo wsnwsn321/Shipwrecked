@@ -129,30 +129,31 @@ public class Experience : MonoBehaviour {
         switch(level)
         {
             case 2:
-			control.RampageTime = 5f;
+			control.RampageTime = 6f;
                 break;
             case 3:
                 break;
 		case 4:
-			control.RampageTime = 6f;
+			control.RampageTime = 8f;
                 break;
 		case 5:
-			control.RampageCooldown = 9f;
+			control.RampageCooldown = 7f;
                 break;
 		case 6:
 			CaptainControl.EnemyStunnedTime = 2f;
                 break;
             case 7:
-			control.RampageTime = 7f;
+			control.RampageTime = 10f;
 			control.StunCooldown = 5f;
                 break;
             case 8:
-			control.RampageCooldown = 8f;
+			control.RampageCooldown = 5f;
 			control.StunDistance = 5f;
                 break;
             case 9:
-			control.RampageTime = 8f;
+			control.RampageTime = 12f;
 			control.StunCooldown = 4f;
+			control.RampageCooldown = 4f;
                 break;
             case 10:
 			CaptainControl.EnemyStunnedTime = 3f;
@@ -267,11 +268,12 @@ public class Experience : MonoBehaviour {
                 break;
 		case 6:
 			control.healTime = 3f;
+			control.autoBuffTime = 8f;
 			control.autoCooldown = 8f;
                 break;
 		case 7:
 			control.healAmount = 50f;
-			control.autoBuffTime = 8f;
+			control.autoBuffTime = 10f;
 			control.healCooldown = 5f;
                 break;
             case 8:
@@ -279,7 +281,7 @@ public class Experience : MonoBehaviour {
                 break;
             case 9:
 			control.healTime = 2f;
-			control.autoBuffTime =10f;
+			control.autoBuffTime =12f;
                 break;
             case 10:
 			control.healAmount = 80f;
