@@ -46,6 +46,38 @@ public static class InputManager
         return Input.GetKeyDown(KeyCode.Space) || AButton();
     }
 
+	public static bool NavigateUp() {
+		if (Input.GetKeyUp (KeyCode.UpArrow) || LeftJoystickVertical () > 0.2f) {
+			return true;
+		}
+		return false;
+	}
+
+	public static bool NavigateDown() {
+		if (Input.GetKeyUp (KeyCode.DownArrow) || LeftJoystickVertical () < -0.2f) {
+			return true;
+		}
+		return false;
+	}
+
+	public static bool NavigateLeft() {
+		if (Input.GetKeyUp (KeyCode.LeftArrow) || LeftJoystickHorizontal () < -0.2f) {
+			return true;
+		}
+		return false;
+	}
+
+	public static bool NavigateRight() {
+		if (Input.GetKeyUp (KeyCode.RightArrow) || LeftJoystickHorizontal () > 0.2f) {
+			return true;
+		}
+		return false;
+	}
+
+	public static bool ConfirmSelection() {
+		return (Input.GetKeyUp (KeyCode.Return) || AButton ());
+	}
+
     public static float LookVertical()
     {
         float result = Input.GetAxis("Mouse Y") + RightJoystickVertical();
