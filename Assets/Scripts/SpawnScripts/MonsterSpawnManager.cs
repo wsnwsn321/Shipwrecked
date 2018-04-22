@@ -31,6 +31,9 @@ public class MonsterSpawnManager : Photon.MonoBehaviour {
     public List<MonsterChance> monsters;
 
     [HideInInspector]
+    public int originalMaxMonsters;
+
+    [HideInInspector]
     public float spawnCountdown;
     [HideInInspector]
     public SpawnState state;
@@ -40,6 +43,17 @@ public class MonsterSpawnManager : Photon.MonoBehaviour {
     GameObject monsterContainer;
 
     void Start () {
+        if (PhotonNetwork.connected)
+        {
+            maxNumberMonsters = PhotonNetwork.playerList.Length * 6;
+        }
+        else
+        {
+            maxNumberMonsters = 8;
+        }
+
+        originalMaxMonsters = maxNumberMonsters;
+
         state = SpawnState.Counting;
         spawnCountdown = 0f;
         SpawnPoints = new List<MonsterSpawner>();
@@ -88,11 +102,6 @@ public class MonsterSpawnManager : Photon.MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if (PhotonNetwork.connected) {
-			maxNumberMonsters = PhotonNetwork.playerList.Length * 6;
-		} else {
-			maxNumberMonsters = 8;
-		}
         if (state == SpawnState.Waiting)
         {
             if (numMonsters < maxNumberMonsters)
@@ -124,6 +133,12 @@ public class MonsterSpawnManager : Photon.MonoBehaviour {
 
         foreach (MonsterSpawner spawnPoint in SpawnPoints)
         {
+            // If the spawn point has been deactivate, don't spawn anything at it.
+            if (!spawnPoint.gameObject.activeSelf)
+            {
+                continue;
+            }
+
             if (numMonsters < maxNumberMonsters)
             {
                 spawnPoint.spawnMonster(monsters, spawnChances, monsterContainer);
