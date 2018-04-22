@@ -7,29 +7,16 @@ using UnityEngine.UI;
 
 public class MainMenuButtonManager : MonoBehaviour
 {
-    public GameObject controls;
-    public GameObject mainmenu;
-    private Button button;
-    private AudioSource audioSource;
 
     private GameObject[] buttonArr = new GameObject[5];
-    private int selectionIndex;
+    public static int selectionIndex;
 
-    private string[] controllerNames;
+    bool canInput;
+    float inputDelay;
 
     // Use this for initialization
     void Start()
     {
-        audioSource = GameObject.Find("Key Press Audio").GetComponent<AudioSource>();
-
-        if (!mainmenu)
-        {
-            mainmenu = GameObject.Find("MenuCanvas");
-        }
-
-        button = GetComponent<Button>();
-        button.onClick.AddListener(TaskOnClick);
-
         buttonArr[0] = GameObject.Find("Single Player");
         buttonArr[1] = GameObject.Find("Multiplayer");
         buttonArr[2] = GameObject.Find("Controls");
@@ -41,39 +28,18 @@ public class MainMenuButtonManager : MonoBehaviour
         inputDelay = 0.2f;
     }
 
-    bool canInput;
-    float inputDelay;
     private void Update()
     {
-        if (!canInput)
-        {
-            return;
-        }
-
-        if (!mainmenu || !mainmenu.activeSelf)
-        {
-            EventSystem.current.SetSelectedGameObject(gameObject);
-            if (InputManager.MenuSelect())
-            {
-                TaskOnClick();
-            }
-
-            return;
-        }
-
-        if (InputManager.MenuSelect())
-        {
-            TaskOnClick();
-        }
-        else if (InputManager.MenuNavigateUp())
+        if (InputManager.MenuNavigateUp())
         {
             selectionIndex--;
-
+            Debug.Log("Up: selectionIndex = " + selectionIndex);
             StartCoroutine(DelayInput());
         }
         else if (InputManager.MenuNavigateDown())
         {
             selectionIndex++;
+            Debug.Log("Down: selectionIndex = " + selectionIndex);
             StartCoroutine(DelayInput());
         }
 
@@ -85,8 +51,6 @@ public class MainMenuButtonManager : MonoBehaviour
         {
             selectionIndex = 0;
         }
-
-        EventSystem.current.SetSelectedGameObject(buttonArr[selectionIndex]);
     }
 
     private IEnumerator DelayInput()
@@ -94,35 +58,5 @@ public class MainMenuButtonManager : MonoBehaviour
         canInput = false;
         yield return new WaitForSeconds(inputDelay);
         canInput = true;
-    }
-
-    public void TaskOnClick()
-    {
-        if (EventSystem.current.currentSelectedGameObject.tag == "Controls")
-        {
-            controls.SetActive(true);
-            mainmenu.SetActive(false);
-        }
-        else if (EventSystem.current.currentSelectedGameObject.name == "MainBack")
-        {
-            mainmenu.SetActive(true);
-            controls.SetActive(false);
-        }
-        else
-        {
-            audioSource.Play();
-            StartCoroutine("waitForSound");
-        }
-    }
-
-    IEnumerator waitForSound()
-    {
-        yield return new WaitForSeconds(1.0f); 
-		if (EventSystem.current.currentSelectedGameObject.tag == "GameLevel") {
-			SceneManager.LoadScene ("IntroScene");
-
-		} else {
-			SceneManager.LoadScene (EventSystem.current.currentSelectedGameObject.tag.ToString ());
-		}
     }
 }
