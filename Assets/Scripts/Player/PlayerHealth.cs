@@ -34,6 +34,25 @@ public class PlayerHealth : Photon.PunBehaviour {
 		}
 	}
 
+    public static float GetDamageFromAttackType(EnemyAttackType attackType)
+    {
+        switch (attackType)
+        {
+            case EnemyAttackType.CRAB_ALIEN:
+                return EnemyStats.Critter.Damage;
+
+            case EnemyAttackType.SPIDER_BRAIN:
+                return EnemyStats.Brain.Damage;
+
+            case EnemyAttackType.NONE:
+                return 0;
+
+            default:
+                Debug.LogError("Something caused damage when it shouldn't have.");
+                return 0;
+        }
+    }
+
     // Update is called once per frame
     void Update () {
 		// This is required in Update instead of LateStart since the prefab
@@ -51,7 +70,7 @@ public class PlayerHealth : Photon.PunBehaviour {
         if (enemyAttackType != EnemyAttackType.NONE)
         {
 			if (this.gameObject.Equals (PlayerManager.LocalPlayerInstance)) {
-				TakeDamage ((float)enemyAttackType);
+				TakeDamage (GetDamageFromAttackType(enemyAttackType));
 			}
 			enemyAttackType = EnemyAttackType.NONE;
         }
