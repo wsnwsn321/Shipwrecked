@@ -16,7 +16,6 @@ public class NavigationManager : MonoBehaviour {
 	public GameObject[] navigateableWindows;
 
 	public NavController currentNavController;
-	public Text setShowSelect;
 
 
 
@@ -33,6 +32,7 @@ public class NavigationManager : MonoBehaviour {
     }
 
 	public void ChangeNavController() {
+		NavController prevNav = currentNavController;
 		foreach(GameObject window in navigateableWindows) {
 			if (window.activeInHierarchy) {
 				currentNavController = window.GetComponent<NavController> ();
@@ -40,12 +40,17 @@ public class NavigationManager : MonoBehaviour {
 				break;
 			}
 		}
+		if (prevNav.Equals (currentNavController)) {
+			// This line of code hurts me to add
+			currentNavController = navigateableWindows[3].GetComponent<NavController>();
+		}
 	}
 
 	public void OpenCharacterSelect() {
 		characterSelect.SetActive (true);
 		bg.SetActive (false);
 		waitingRoom.SetActive (false);
+		ChangeNavController ();
 	}
 
 	public void CloseCharacterSelect() {
@@ -53,6 +58,8 @@ public class NavigationManager : MonoBehaviour {
 		bg.SetActive (true);
 		waitingRoom.SetActive (true);
 		wrm.UpdateWindow ();
+
+		ChangeNavController ();
 	}
 
 

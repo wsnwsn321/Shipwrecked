@@ -26,21 +26,28 @@ public class NavController : MonoBehaviour {
 		if (currentSelected != null) {
 			if (InputManager.MenuNavigateUp ()) {
 				currentSelected = currentSelected.moveUp ();
-				EventSystem.current.SetSelectedGameObject(currentSelected.gameObject);
+				EventSystem.current.SetSelectedGameObject (currentSelected.gameObject);
 			} else if (InputManager.MenuNavigateDown ()) {
 				currentSelected = currentSelected.moveDown ();
-				EventSystem.current.SetSelectedGameObject(currentSelected.gameObject);
+				EventSystem.current.SetSelectedGameObject (currentSelected.gameObject);
 			} else if (InputManager.MenuNavigateLeft ()) {
 				currentSelected = currentSelected.moveLeft ();
-				EventSystem.current.SetSelectedGameObject(currentSelected.gameObject);
+				EventSystem.current.SetSelectedGameObject (currentSelected.gameObject);
 			} else if (InputManager.MenuNavigateRight ()) {
 				currentSelected = currentSelected.moveRight ();
-				EventSystem.current.SetSelectedGameObject(currentSelected.gameObject);
+				EventSystem.current.SetSelectedGameObject (currentSelected.gameObject);
 			} else if (InputManager.MenuSelect ()) {
 				currentSelected.Select ();
 			}
 			
+		} else {
+			InitializeController ();
+			Debug.Log ("Initializing controller for navigation...");
 		}
 
+	}
+
+	public void UnselectCurrent() {
+		EventSystem.current.SetSelectedGameObject (null);
 	}
 }
