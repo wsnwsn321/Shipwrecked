@@ -212,10 +212,10 @@ public class EnemyAnimation : MonoBehaviour {
 			case "CrabAlien":
 				// make this access the specific player that got hit instead of all instances of PlayerHealth
 				// Otherwise, this will hit every player.
-				ph.TakeDamage((int)PlayerHealth.EnemyAttackType.CRAB_ALIEN);
+				ph.TakeDamage((int)PlayerHealth.GetDamageFromAttackType(PlayerHealth.EnemyAttackType.CRAB_ALIEN));
 				break;
 			case "SpiderBrain":
-				ph.TakeDamage((int)PlayerHealth.EnemyAttackType.SPIDER_BRAIN);
+				ph.TakeDamage((int)PlayerHealth.GetDamageFromAttackType(PlayerHealth.EnemyAttackType.SPIDER_BRAIN));
 				break;
 			default:
 				break;
@@ -233,10 +233,10 @@ public class EnemyAnimation : MonoBehaviour {
 			case "CrabAlien":
 				// make this access the specific player that got hit instead of all instances of PlayerHealth
 				// Otherwise, this will hit every player.
-				tb.TakeDamage((int)PlayerHealth.EnemyAttackType.CRAB_ALIEN);
+				tb.TakeDamage(PlayerHealth.GetDamageFromAttackType(PlayerHealth.EnemyAttackType.CRAB_ALIEN));
 				break;
 			case "SpiderBrain":
-				tb.TakeDamage((int)PlayerHealth.EnemyAttackType.SPIDER_BRAIN);
+				tb.TakeDamage(PlayerHealth.GetDamageFromAttackType(PlayerHealth.EnemyAttackType.SPIDER_BRAIN));
 				break;
 			default:
 				break;

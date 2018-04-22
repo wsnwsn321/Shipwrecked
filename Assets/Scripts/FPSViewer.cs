@@ -7,8 +7,18 @@ public class FPSViewer: MonoBehaviour {
 	public float deltaTime;
 
 	void Update() {
-		deltaTime += (Time.deltaTime - deltaTime) * 0.1f;
-		float fps = 1.0f / deltaTime;
+        float fps = 0;
+        if (GameplayManager.State == GameState.Paused)
+        {
+            fps = 120;
+        }
+        else
+        {
+            deltaTime += (Time.deltaTime - deltaTime) * 0.1f;
+            fps = 1.0f / deltaTime;
+        }
+
+		
 		fpsText.text = "FPS: " + Mathf.Ceil(fps).ToString();
 
 	}

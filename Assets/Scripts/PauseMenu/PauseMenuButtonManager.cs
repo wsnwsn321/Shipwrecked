@@ -28,6 +28,7 @@ public class PauseMenuButtonManager : MonoBehaviour
     {
         if (button.tag == "Controls")
         {
+            gm.Pause();
             pauseMenu.SetActive(false);
             controls.SetActive(true);
         }
@@ -40,10 +41,7 @@ public class PauseMenuButtonManager : MonoBehaviour
 
     IEnumerator waitForSound()
     {
-
-
         gm.Resume();
-
 
         if (button.name.Equals("Resume"))
         {

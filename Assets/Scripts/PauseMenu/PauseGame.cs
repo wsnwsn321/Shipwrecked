@@ -5,6 +5,7 @@ using UnityEngine;
 public class PauseGame : MonoBehaviour {
 
     public GameObject pauseMenu;
+    public GameObject controlsMenu;
     private GameplayManager gm;
 
     // Use this for initialization
@@ -26,6 +27,11 @@ public class PauseGame : MonoBehaviour {
             {
                 pauseMenu.SetActive(true);
                 gm.Pause();
+            }
+
+            if (controlsMenu.activeInHierarchy)
+            {
+                controlsMenu.SetActive(false);
             }
         }
     }

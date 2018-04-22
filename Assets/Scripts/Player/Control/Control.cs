@@ -228,6 +228,11 @@ public class Control : Photon.MonoBehaviour {
             exp.IncreaseBy(20);
         }
 
+        if (Input.GetKeyDown(KeyCode.M))
+        {
+            EnemyStats.Critter.Damage += 1;
+        }
+
         //revive allies
         if (InputManager.ReviveAlly())
 		{
