@@ -37,6 +37,7 @@ public class NavController : MonoBehaviour {
 				currentSelected = currentSelected.moveRight ();
 				EventSystem.current.SetSelectedGameObject (currentSelected.gameObject);
 			} else if (InputManager.MenuSelect ()) {
+				EventSystem.current.SetSelectedGameObject (this.gameObject);
 				currentSelected.Select ();
 			}
 			
@@ -45,9 +46,5 @@ public class NavController : MonoBehaviour {
 			Debug.Log ("Initializing controller for navigation...");
 		}
 
-	}
-
-	public void UnselectCurrent() {
-		EventSystem.current.SetSelectedGameObject (null);
 	}
 }
