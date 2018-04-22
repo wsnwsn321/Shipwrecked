@@ -37,11 +37,14 @@ public class Enemy : Photon.PunBehaviour {
         {
             monsterType = type.monsterType;
         }
+
 		if (this.tag == "CrabAlien") {
 			crab_ani = GetComponent<Animator> ();
+            health = EnemyStats.Critter.Health;
 		} else if (this.tag == "SpiderBrain") {
 			bc = GetComponentInChildren<brain_control> ();
-		}
+            health = EnemyStats.Brain.Health;
+        }
 
         isDead = false;
         attackers = new List<Transform>();
