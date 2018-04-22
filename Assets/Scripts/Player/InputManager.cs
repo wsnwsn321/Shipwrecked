@@ -47,39 +47,7 @@ public class InputManager : MonoBehaviour
     {
         return Input.GetKeyDown(KeyCode.Space) || AButton();
     }
-
-	public static bool NavigateUp() {
-		if (Input.GetKeyUp (KeyCode.UpArrow) || LeftJoystickVertical () > 0.2f) {
-			return true;
-		}
-		return false;
-	}
-
-	public static bool NavigateDown() {
-		if (Input.GetKeyUp (KeyCode.DownArrow) || LeftJoystickVertical () < -0.2f) {
-			return true;
-		}
-		return false;
-	}
-
-	public static bool NavigateLeft() {
-		if (Input.GetKeyUp (KeyCode.LeftArrow) || LeftJoystickHorizontal () < -0.2f) {
-			return true;
-		}
-		return false;
-	}
-
-	public static bool NavigateRight() {
-		if (Input.GetKeyUp (KeyCode.RightArrow) || LeftJoystickHorizontal () > 0.2f) {
-			return true;
-		}
-		return false;
-	}
-
-	public static bool ConfirmSelection() {
-		return (Input.GetKeyUp (KeyCode.Return) || AButton ());
-	}
-
+		
     public static float LookVertical()
     {
         float result = Input.GetAxis("Mouse Y") + RightJoystickVertical();
@@ -165,6 +133,20 @@ public class InputManager : MonoBehaviour
 
         return navUp;
     }
+
+	public static bool MenuNavigateLeft()
+	{
+		bool navLeft = Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow) || DPadHorizontal() < -0.2f || LeftJoystickHorizontal() < -0.2f;
+
+		return navLeft;
+	}
+
+	public static bool MenuNavigateRight()
+	{
+		bool navRight = Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow) || DPadHorizontal() > 0.2f || LeftJoystickHorizontal() > 0.2f;
+
+		return navRight;
+	}
 
     public static bool MenuSelect()
     {

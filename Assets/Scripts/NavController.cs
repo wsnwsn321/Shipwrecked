@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
+
 
 public class NavController : MonoBehaviour {
 
@@ -9,7 +11,6 @@ public class NavController : MonoBehaviour {
 
 	private Navigator currentSelected;
 
-	private bool wasSelected = false;
 	private int selectedCooldown = 40;
 	private int currentCooldown = 0;
 
@@ -17,47 +18,28 @@ public class NavController : MonoBehaviour {
 	public void InitializeController () {
 		if (initialSelected != null) {
 			currentSelected = initialSelected;
-			NavigationManager.showSelect.gameObject.transform.position = currentSelected.gameObject.transform.position;
-		} else {
-			Debug.Log ("Navigation controls not implemented for this view!");
 		}
 	}
 	
 	// Update is called once per frame
 	public void UpdateController () {
-		if (currentSelected != null && !wasSelected) {
-			if (InputManager.NavigateUp ()) {
+		if (currentSelected != null) {
+			if (InputManager.MenuNavigateUp ()) {
 				currentSelected = currentSelected.moveUp ();
-				Debug.Log (currentSelected.name);
-				NavigationManager.showSelect.gameObject.transform.position = currentSelected.gameObject.transform.position;
-			} else if (InputManager.NavigateDown ()) {
+				EventSystem.current.SetSelectedGameObject(currentSelected.gameObject);
+			} else if (InputManager.MenuNavigateDown ()) {
 				currentSelected = currentSelected.moveDown ();
-				Debug.Log (currentSelected.name);
-				NavigationManager.showSelect.gameObject.transform.position = currentSelected.gameObject.transform.position;
-
-			} else if (InputManager.NavigateLeft ()) {
+				EventSystem.current.SetSelectedGameObject(currentSelected.gameObject);
+			} else if (InputManager.MenuNavigateLeft ()) {
 				currentSelected = currentSelected.moveLeft ();
-				Debug.Log (currentSelected.name);
-				NavigationManager.showSelect.gameObject.transform.position = currentSelected.gameObject.transform.position;
-
-			} else if (InputManager.NavigateRight ()) {
+				EventSystem.current.SetSelectedGameObject(currentSelected.gameObject);
+			} else if (InputManager.MenuNavigateRight ()) {
 				currentSelected = currentSelected.moveRight ();
-				Debug.Log (currentSelected.name);
-				NavigationManager.showSelect.gameObject.transform.position = currentSelected.gameObject.transform.position;
-
-			} else if (InputManager.ConfirmSelection ()) {
+				EventSystem.current.SetSelectedGameObject(currentSelected.gameObject);
+			} else if (InputManager.MenuSelect ()) {
 				currentSelected.Select ();
-				currentSelected.highlightable.color = Color.green;
-				wasSelected = true;
 			}
 			
-		} else {
-			currentCooldown++;
-			if (currentCooldown >= selectedCooldown) {
-				currentCooldown = 0;
-				wasSelected = false;
-				currentSelected.highlightable.color = Color.blue;
-			}
 		}
 
 	}

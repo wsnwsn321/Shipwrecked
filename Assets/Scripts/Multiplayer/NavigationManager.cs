@@ -18,11 +18,9 @@ public class NavigationManager : MonoBehaviour {
 	public NavController currentNavController;
 	public Text setShowSelect;
 
-	public static Text showSelect;
 
 
 	void Start() {
-		showSelect = setShowSelect;
 		currentNavController.InitializeController ();
 	}
 
