@@ -49,6 +49,13 @@ public class Navigator : MonoBehaviour {
 	public Navigator moveUp() {
 		if (upObject != null) {
 			if (upObject.activeInHierarchy) {
+				if (!upObject.GetComponent<Navigator> ().isInputField) {
+					if (upObject.GetComponent<Button> ().interactable) {
+						return upObject.GetComponent<Navigator> ();
+					} else {
+						return this;
+					}
+				}
 				return upObject.GetComponent<Navigator> ();
 			} else {
 				return defaultObject.GetComponent<Navigator> ();
@@ -61,7 +68,8 @@ public class Navigator : MonoBehaviour {
 	public Navigator moveDown() {
 		// Navigational input messes with input fields
 		if (!isInputField && downObject != null) {
-			if (downObject.activeInHierarchy) {
+			// Check if button is active
+			if (downObject.activeInHierarchy && downObject.transform.localScale.magnitude > 0f) {
 				return downObject.GetComponent<Navigator> ();
 			} else {
 				return defaultObject.GetComponent<Navigator> ();
@@ -74,12 +82,12 @@ public class Navigator : MonoBehaviour {
 		// I only bothered to tag InputFields since only two are in the game
 		if (this.gameObject.tag.Equals ("InputField")) {
 			//TODO Add inputfield keyboard input for controllers
-			if (downObject.activeInHierarchy) {
+			if (downObject.activeInHierarchy && downObject.transform.localScale.magnitude > 0f && downObject.GetComponent<Button>().interactable) {
 				downObject.GetComponent<Navigator> ().Select();
 			}
 		} else {
 			// We know it is a button
-			this.gameObject.GetComponent<Button>().onClick.Invoke();
+			this.gameObject.GetComponent<Button> ().onClick.Invoke ();
 		}
 	}
 
