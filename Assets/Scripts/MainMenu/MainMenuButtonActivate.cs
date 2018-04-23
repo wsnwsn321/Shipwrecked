@@ -49,7 +49,7 @@ public class MainMenuButtonActivate : MonoBehaviour, IPointerEnterHandler, IPoin
         {
             TaskOnClick();
         }
-        if (controls.activeSelf == false)
+        if (controls.activeSelf == false && !SceneManager.GetActiveScene().name.Equals("RegularCredits"))
         {
             EventSystem.current.SetSelectedGameObject(buttonArr[MainMenuButtonManager.selectionIndex]);
         }
@@ -101,7 +101,7 @@ public class MainMenuButtonActivate : MonoBehaviour, IPointerEnterHandler, IPoin
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        if (controls.activeSelf == false)
+        if (controls.activeSelf == false && !SceneManager.GetActiveScene().name.Equals("RegularCredits"))
         {
             for (int i = 0; i < buttonArr.Length; i++)
             {
