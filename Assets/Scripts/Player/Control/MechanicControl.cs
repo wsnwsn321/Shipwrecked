@@ -363,9 +363,9 @@ public class MechanicControl : Photon.MonoBehaviour, IClassControl {
     }
 
 	void RepairShip(){
-		AudioSource.PlayClipAtPoint (abilityAudio, transform.position, 1);
 		if (ani && !ani.GetCurrentAnimatorStateInfo (0).IsName ("Die")&&canRepair) {
 			if (!ani.GetCurrentAnimatorStateInfo (0).IsName ("AB2")&&distanceWithSpace < 9.5f) {
+				AudioSource.PlayClipAtPoint (abilityAudio, transform.position, 1);
 				canRepair = false;
 				ani.SetTrigger ("Repairing");
 				shp.isReparing = true;
