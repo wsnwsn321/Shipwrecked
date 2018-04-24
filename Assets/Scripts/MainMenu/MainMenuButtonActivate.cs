@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -91,6 +92,8 @@ public class MainMenuButtonActivate : MonoBehaviour, IPointerEnterHandler, IPoin
 
     IEnumerator waitForSound()
     {
+
+        String sceneName = EventSystem.current.currentSelectedGameObject.tag.ToString();
         yield return new WaitForSeconds(1.0f);
         if (EventSystem.current.currentSelectedGameObject.tag == "GameLevel")
         {
@@ -99,7 +102,7 @@ public class MainMenuButtonActivate : MonoBehaviour, IPointerEnterHandler, IPoin
         }
         else
         {
-            SceneManager.LoadScene(EventSystem.current.currentSelectedGameObject.tag.ToString());
+            SceneManager.LoadScene(sceneName);
         }
     }
 
