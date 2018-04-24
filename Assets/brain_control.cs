@@ -92,11 +92,11 @@ public class brain_control : MonoBehaviour {
 			collideSpace = true;
 		}
 		if (player_hit != null&&player_hit.layer==16) {
-			Physics.IgnoreCollision (GetComponent<BoxCollider>(), player_hit.GetComponent<BoxCollider> ());
+			Physics.IgnoreCollision (GetComponent<BoxCollider>(), player_hit.GetComponent<CapsuleCollider> ());
 		}
 
 		if (player_hit != null && player_hit.layer == 10) {
-			Physics.IgnoreCollision (GetComponent<BoxCollider>(), player_hit.GetComponent<BoxCollider> (),false);
+			Physics.IgnoreCollision (GetComponent<BoxCollider>(), player_hit.GetComponent<CapsuleCollider> (),false);
 		}
 
 
