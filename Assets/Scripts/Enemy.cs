@@ -31,19 +31,26 @@ public class Enemy : Photon.PunBehaviour {
 
 	void Start()
     {
-		health = 50f;
         EntityType type = GetComponent<EntityType>();
         if (type)
         {
             monsterType = type.monsterType;
         }
 
-		if (this.tag == "CrabAlien") {
+		if (this.tag == "CrabAlien")
+        {
 			crab_ani = GetComponent<Animator> ();
             health = EnemyStats.Critter.Health;
-		} else if (this.tag == "SpiderBrain") {
+		}
+        else if (this.tag == "SpiderBrain")
+        {
 			bc = GetComponentInChildren<brain_control> ();
             health = EnemyStats.Brain.Health;
+        }
+        else
+        {
+            // Nest health.
+            health = 1000f;
         }
 
         isDead = false;
@@ -144,21 +151,33 @@ public class Enemy : Photon.PunBehaviour {
     }
 
 	void Die() {
-		if (this.tag == "CrabAlien") {
-			crab_ani.SetTrigger("die");
-			AudioSource.PlayClipAtPoint (deadCrabAudio, transform.position, 2);
-		} else if (this.tag == "SpiderBrain") {
-			bc.dead = true;
-			AudioSource.PlayClipAtPoint (deadBrainAudio, transform.position, 2);
-		}
-        isDead = true;
-        foreach (Transform child in transform)
+        if (!(this.tag == "MonsterSpawner"))
         {
-            child.gameObject.layer = LayerMask.NameToLayer("Dead");
-        }
+            if (this.tag == "CrabAlien")
+            {
+                crab_ani.SetTrigger("die");
+                AudioSource.PlayClipAtPoint(deadCrabAudio, transform.position, 2);
+            }
+            else if (this.tag == "SpiderBrain")
+            {
+                bc.dead = true;
+                AudioSource.PlayClipAtPoint(deadBrainAudio, transform.position, 2);
+            }
 
-        Destroy (gameObject,2f);
-		UpdateMonsterAmount ();
+            isDead = true;
+            foreach (Transform child in transform)
+            {
+                child.gameObject.layer = LayerMask.NameToLayer("Dead");
+            }
+
+            Destroy(gameObject, 2f);
+            UpdateMonsterAmount();
+        }
+        else
+        {
+            gameObject.SetActive(false);
+        }
+		
         AllocateExp();
 	}
 

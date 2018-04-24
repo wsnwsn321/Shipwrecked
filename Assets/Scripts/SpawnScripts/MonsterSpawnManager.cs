@@ -5,6 +5,7 @@ using UnityEngine;
 public class MonsterSpawnManager : Photon.MonoBehaviour {
 
     List<MonsterSpawner> SpawnPoints;
+    List<GameObject> InactiveSpawnPoints;
     List<float> spawnChances;
 
     public enum SpawnState
@@ -24,6 +25,7 @@ public class MonsterSpawnManager : Photon.MonoBehaviour {
     }
 
     public float timeBetweenSpawns = 5f;
+    public float timeUntilActivateSpawn = 20f;
     [Range(1, 10)]
     public float spawnRate = 1;
     [Range(0, 200)]
@@ -35,6 +37,8 @@ public class MonsterSpawnManager : Photon.MonoBehaviour {
 
     [HideInInspector]
     public float spawnCountdown;
+    [HideInInspector]
+    public float activateSpawnCountdown;
     [HideInInspector]
     public SpawnState state;
     [HideInInspector]
@@ -56,7 +60,9 @@ public class MonsterSpawnManager : Photon.MonoBehaviour {
 
         state = SpawnState.Counting;
         spawnCountdown = 0f;
+        activateSpawnCountdown = 0f;
         SpawnPoints = new List<MonsterSpawner>();
+        InactiveSpawnPoints = new List<GameObject>();
         spawnChances = new List<float>();
 
         foreach (Transform child in transform)
@@ -64,6 +70,27 @@ public class MonsterSpawnManager : Photon.MonoBehaviour {
             if (child.CompareTag("MonsterSpawner"))
             {
                 SpawnPoints.Add(child.GetComponent<MonsterSpawner>());
+                InactiveSpawnPoints.Add(child.gameObject);
+                child.gameObject.SetActive(false);
+            }
+        }
+
+        if (PhotonNetwork.connected)
+        {
+            int playerCount = PhotonNetwork.playerList.Length;
+
+            // Activate up to the max number of spawns or the number of players * 2 spawn points.
+            for (int i = 0; i < InactiveSpawnPoints.Count || i < playerCount * 2; i++)
+            {
+                ActivateRandomSpawnPoint();
+            }
+        }
+        else
+        {
+            // In SinglePlayer, activate 4 spawn points.
+            for (int i = 0; i < 4; i++)
+            {
+                ActivateRandomSpawnPoint();
             }
         }
 
@@ -121,11 +148,49 @@ public class MonsterSpawnManager : Photon.MonoBehaviour {
                 spawnCountdown -= timeBetweenSpawns;
                 state = SpawnState.Counting;
             }
-        } else
+        }
+        else
         {
             spawnCountdown += Time.deltaTime;
         }
+
+        if (InactiveSpawnPoints.Count > 0)
+        {
+            if (activateSpawnCountdown >= timeUntilActivateSpawn)
+            {
+                activateSpawnCountdown -= timeUntilActivateSpawn;
+
+                if (PhotonNetwork.connected)
+                {
+                    photonView.RPC("ActivateRandomSpawnPoint", PhotonTargets.All);
+                }
+                else
+                {
+                    ActivateRandomSpawnPoint();
+                }
+            }
+            else
+            {
+                activateSpawnCountdown += Time.deltaTime;
+            }
+        }
+        else
+        {
+            activateSpawnCountdown = 0f;
+        }
+        
 	}
+
+    [PunRPC]
+    void ActivateRandomSpawnPoint()
+    {
+        int randomIndex = Random.Range(0, InactiveSpawnPoints.Count);
+
+        GameObject spawnPoint = InactiveSpawnPoints[randomIndex];
+        spawnPoint.SetActive(true);
+        spawnPoint.GetComponent<Enemy>().health = 1000;
+        InactiveSpawnPoints.Remove(spawnPoint);
+    }
 
     IEnumerator SpawnMonsters()
     {
@@ -136,6 +201,10 @@ public class MonsterSpawnManager : Photon.MonoBehaviour {
             // If the spawn point has been deactivate, don't spawn anything at it.
             if (!spawnPoint.gameObject.activeSelf)
             {
+                if (!InactiveSpawnPoints.Contains(spawnPoint.gameObject))
+                {
+                    InactiveSpawnPoints.Add(spawnPoint.gameObject);
+                }
                 continue;
             }
 
