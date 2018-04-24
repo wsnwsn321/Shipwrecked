@@ -20,7 +20,7 @@ public class NavigationManager : MonoBehaviour {
 
 
 	void Start() {
-		currentNavController.InitializeController ();
+		//currentNavController.InitializeController ();
 	}
 
 	// Update is called once per frame
@@ -28,29 +28,29 @@ public class NavigationManager : MonoBehaviour {
 		if (InputManager.Pause()) {
             ExitMultiplayer ();
 		}
-		currentNavController.UpdateController ();
+		//currentNavController.UpdateController ();
     }
 
 	public void ChangeNavController() {
-		NavController prevNav = currentNavController;
-		foreach(GameObject window in navigateableWindows) {
-			if (window.activeInHierarchy) {
-				currentNavController = window.GetComponent<NavController> ();
-				currentNavController.InitializeController ();
-				break;
-			}
-		}
-		if (prevNav.Equals (currentNavController)) {
-			// This line of code hurts me to add
-			currentNavController = navigateableWindows[3].GetComponent<NavController>();
-		}
+//		NavController prevNav = currentNavController;
+//		foreach(GameObject window in navigateableWindows) {
+//			if (window.activeInHierarchy) {
+//				currentNavController = window.GetComponent<NavController> ();
+//				currentNavController.InitializeController ();
+//				break;
+//			}
+//		}
+//		if (prevNav.Equals (currentNavController)) {
+//			// This line of code hurts me to add
+//			currentNavController = navigateableWindows[3].GetComponent<NavController>();
+//		}
 	}
 
 	public void OpenCharacterSelect() {
 		characterSelect.SetActive (true);
 		bg.SetActive (false);
 		waitingRoom.SetActive (false);
-		ChangeNavController ();
+		//ChangeNavController ();
 	}
 
 	public void CloseCharacterSelect() {
@@ -59,7 +59,7 @@ public class NavigationManager : MonoBehaviour {
 		waitingRoom.SetActive (true);
 		wrm.UpdateWindow ();
 
-		ChangeNavController ();
+		//ChangeNavController ();
 	}
 
 
