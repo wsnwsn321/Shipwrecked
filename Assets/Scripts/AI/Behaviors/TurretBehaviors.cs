@@ -76,7 +76,8 @@ public class TurretBehaviors : GenericBehaviors
 			PhotonNetwork.Destroy (gameObject);
 			engineer.GetComponent<MechanicControl> ().RemoveTurretFromBuiltList (gameObject);
 		} else if (engineer.Equals (PlayerManager.LocalPlayerInstance)) {
-			Destroy (gameObject);
+            engineer.GetComponent<MechanicControl>().RemoveTurretFromBuiltList(gameObject);
+            Destroy (gameObject);
 		} else {
 			Debug.Log ("Allied turret has been destroyed!");
 		}
