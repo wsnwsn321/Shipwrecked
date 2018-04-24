@@ -64,6 +64,10 @@ public class MainMenuButtonActivate : MonoBehaviour, IPointerEnterHandler, IPoin
 
     public void TaskOnClick()
     {
+        if (EventSystem.current.currentSelectedGameObject == null)
+        {
+            return;
+        }
         if (EventSystem.current.currentSelectedGameObject.tag == "Controls")
         {
             audioSource.Play();
