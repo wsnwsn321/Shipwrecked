@@ -93,32 +93,39 @@ public class Experience : MonoBehaviour {
         switch(level)
         {
             case 3:
+                core.damageModifier = 1.1f;
+                core.ammo.maxAmmo = (int)(core.ammo.originalAmmo * 1.5);
                 break;
             case 5:
+                core.damageModifier = 1.3f;
+                core.ammo.maxAmmo = (int)(core.ammo.originalAmmo * 2);
                 core.hasSpecialAbility = true;
                 break;
             case 7:
+                core.damageModifier = 1.6f;
+                core.ammo.maxAmmo = (int)(core.ammo.originalAmmo * 2.5);
                 break;
             case 9:
+                core.damageModifier = 2.0f;
+                core.ammo.maxAmmo = (int)(core.ammo.originalAmmo * 3);
                 break;
         }
 
-		switch(currentSlot)
-		{
-		case 1:
-			core.damageModifier = 0.95f;
-			break;
-		case 2:
-			core.damageModifier = 0.9f;
-			break;
-		case 3:
-			core.damageModifier = 0.85f;
-			break;
-		case 4:
-			core.damageModifier =0.8f;
-			break;
-		}
-
+        //switch (currentSlot)
+        //{
+        //    case 1:
+        //        core.damageModifier = 0.95f;
+        //        break;
+        //    case 2:
+        //        core.damageModifier = 0.9f;
+        //        break;
+        //    case 3:
+        //        core.damageModifier = 0.85f;
+        //        break;
+        //    case 4:
+        //        core.damageModifier = 0.8f;
+        //        break;
+        //}
 
     }
 

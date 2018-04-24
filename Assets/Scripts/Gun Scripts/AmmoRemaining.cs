@@ -10,7 +10,10 @@ public class AmmoRemaining : Photon.PunBehaviour {
 
 	public int ammo;
 	public int ammoPerShot = 1;
-	private int originalAmmo;
+    [HideInInspector]
+	public int maxAmmo;
+    [HideInInspector]
+    public int originalAmmo;
 	public string playerType;
 	public float reloadTime;
 	private Text ammoText;
@@ -60,7 +63,8 @@ public class AmmoRemaining : Photon.PunBehaviour {
 				print ("Ope");
 				break;
 			}
-			originalAmmo = ammo;
+			maxAmmo = ammo;
+            originalAmmo = ammo;
 			isReloading = false;
 			SetAmmoText ();
 		}
@@ -103,7 +107,7 @@ public class AmmoRemaining : Photon.PunBehaviour {
 	private void updateAmmoText()
 	{
 		if (ammoText != null) {
-			ammoText.text = "Ammo: " + ammo.ToString () + "/" + originalAmmo.ToString ();
+			ammoText.text = "Ammo: " + ammo.ToString () + "/" + maxAmmo.ToString ();
 		} else {
 			SetAmmoText ();
 			//ammoText = GameObject.FindGameObjectWithTag("AmmoText").GetComponent<Text>();
@@ -141,6 +145,6 @@ public class AmmoRemaining : Photon.PunBehaviour {
         isReloading = true;
 		yield return new WaitForSeconds(reloadTime);
         isReloading = false;
-		ammo = originalAmmo;
+		ammo = maxAmmo;
 	}
 }
