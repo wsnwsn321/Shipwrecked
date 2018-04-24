@@ -52,6 +52,10 @@ public class PauseMenuButtonManager : MonoBehaviour
         else
         {
             yield return new WaitForSeconds(1.0f);
+            if (button.tag.ToString().Equals("MainMenuSelect"))
+            {
+                Cursor.visible = true;
+            }
             SceneManager.LoadScene(button.tag.ToString());
         }
     }
