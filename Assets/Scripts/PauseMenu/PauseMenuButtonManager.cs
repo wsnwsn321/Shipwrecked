@@ -28,7 +28,7 @@ public class PauseMenuButtonManager : MonoBehaviour
     {
         if (button.tag == "Controls")
         {
-            gm.Pause();
+           // gm.Pause();
             pauseMenu.SetActive(false);
             controls.SetActive(true);
         }
@@ -54,7 +54,7 @@ public class PauseMenuButtonManager : MonoBehaviour
             yield return new WaitForSeconds(1.0f);
             if (button.tag.ToString().Equals("MainMenuSelect"))
             {
-                Cursor.visible = true;
+                gm.MainMenu();
             }
             SceneManager.LoadScene(button.tag.ToString());
         }

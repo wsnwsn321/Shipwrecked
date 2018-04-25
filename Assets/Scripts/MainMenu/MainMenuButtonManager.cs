@@ -17,6 +17,7 @@ public class MainMenuButtonManager : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        Cursor.visible = true;
         buttonArr[0] = GameObject.Find("Single Player");
         buttonArr[1] = GameObject.Find("Multiplayer");
         buttonArr[2] = GameObject.Find("Controls");

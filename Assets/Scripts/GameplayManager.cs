@@ -6,7 +6,8 @@ using UnityEngine.UI;
 public enum GameState
 {
     Paused,
-    Running
+    Running,
+    MainMenu
 }
 
 public class GameplayManager : MonoBehaviour
@@ -36,5 +37,14 @@ public class GameplayManager : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
         State = GameState.Running;
+    }
+
+    public void MainMenu()
+    {
+        Time.timeScale = 1;
+        // Lock the cursor.
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+        State = GameState.MainMenu;
     }
 }
