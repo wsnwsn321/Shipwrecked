@@ -13,7 +13,7 @@ It's the year 5912. The Earth has long gone dark. Rumored to be an apocalyptic w
 ---
 
 ##How To Start
-Once you have the game built and running, select your graphics and input settings (if applicable) and select "Play!". Once passing the loading screen, and after the main menu appears, you have two options for playing the game. Select "Single Player" if you are by yourself, and "Multiplayer" if you are playing with others. In single player, select "New Game" if you are starting from scratch, or "Continue" if you have previous progress in the game. In Multiplayer, select "New Game", and then enter the nickname that will be used in your game. From there, if you are the group leader, create a lobby. This involves entering a lobby name of at least four characters. From there, wait for other players to join the lobby and then click "Start Game". If you are joining a group, first click "Refresh" to show the list of available lobbies. From there, select the lobby you want to join then click the button "Join Game". In both single player and multi-player, once the game starts, there will be an initial cutscene before gameplay. Press the spacebar if you would like to skip the cutscene.
+Once you have the game built and running, select your graphics and input settings (if applicable) and select "Play!". Once passing the loading screen, and after the main menu appears, you have two options for playing the game. Select "Single Player" if you are by yourself, and "Multiplayer" if you are playing with others. In single player, select "New Game" to start a new game. In Multiplayer, select "New Game", and then enter the nickname that will be used in your game. From there, if you are the group leader, create a lobby. This involves entering a lobby name of at least four characters. From there, wait for other players to join the lobby and then click "Start". If you are joining a group, first click "Refresh" to show the list of available lobbies. From there, select the lobby you want to join then click the button "Join Game". From there, select your character using the button "Select", then click "Ready" if you are not the host but are ready to play. Once everyone is ready to play, the host can select "Start" to start the game. In both single player and multi-player, once the game starts, there will be an initial cutscene before gameplay. Press the spacebar if you would like to skip the cutscene.
 
 ---
 
@@ -22,7 +22,7 @@ Once you have the game built and running, select your graphics and input setting
 
 ###Single Player
 
-Your ship has crash landed, and you must survive and escape the planet. You have a gun to fend off the enemy and the ability to repair your spaceship with parts that can be found around the map. You are required to find Reactor Fuel, Hydraulic Lines, High Pressure Hoses, Clamps, and a Navigation Screen. These parts have been spread around the map in your descent to the planet. You must fight your way to these supplies while keeping your ship from being destroyed. Enemies have been awoken by your crash. Enemies spawn from hives that are located throughout the map. Enemies differ in size, speed, and strength. The player gains experience for each enemy that they kill. The experience the player gains differs for each type of opponent. The goal of the game is to collect the parts required to repair your ship without you or your ship being destroyed.
+Your ship has crash landed, and you must survive and escape the planet. You have a gun to fend off the enemy and the ability to repair your spaceship with parts that can be found around the map. You are required to find Reactor Fuel, Hydraulic Lines, High Pressure Hoses, Clamps, and a Navigation Screen. These parts have been spread around the map in your descent to the planet. You must fight your way to these supplies while keeping your ship from being destroyed. Enemies have been awoken by your crash. Enemies spawn from hives that are located throughout the map. Enemies differ in size, speed, and strength. The player gains experience for each enemy that they kill. The experience the player gains differs for each type of opponent. The enemies will increase in number and become more difficult to kill the more parts the player collects. However, the player also will have increased abilities and have more effect against the enemies the higher his level. The goal of the game is to collect the parts required to repair your ship without you or your ship being destroyed.
 
 ###Multi-Player
 
@@ -33,8 +33,8 @@ Game will consist of four players, working together, to collect parts to repair 
 
 
 
-##Default Controls
-W/Up Arrow: Move up
+##Keyboard/Mouse Controls
+JoystickW/Up Arrow: Move up
 
 A/Left Arrow: Move left
 
@@ -50,8 +50,6 @@ Left Click: Shoot
 
 Right Click: Aim Mode
 
-F: Pick Up Items
-
 Q: Special Ability
 
 E: Special Skill
@@ -62,19 +60,52 @@ C: Front Flip
 
 R: Reload
 
-H: Dodge
+G: Revive: 
 
-P: Pause Menu
+Escape Key: Pause Menu
+
+Keys 1-4: Emotes
 
 ---
 
+##Controller Controls
+Left Joystick: Move
+
+X/A: Jump
+
+R2: Shoot
+
+L2: Aim Mode
+
+L1: Special Ability
+
+R1: Special Skill
+
+L3: Sprint
+
+R3: Front Flip
+
+Square/X: Reload
+
+Triangle/Y: Revive
+
+Start: Pause Menu
+
+D-Pad: Emotes
+
+---
 ##Menus
 ###Main Menu
-New Game: Starts new game
+Single Player: Starts single player game
+
+Multiplayer: Brings up multiplayer lobby system
 
 Controls: Displays basic controls
 
 Credits: Displays team member's names + pictures
+
+Quit: Displays credits screen + quits application
+
 
 ###Pause Menu
 
