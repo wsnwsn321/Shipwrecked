@@ -47,7 +47,7 @@ public class CoreControl : Photon.PunBehaviour {
     FreeLookCam cam;
     float originalTurnSpeed;
 
-	public AudioClip footstepAudio;
+	//public AudioClip footstepAudio;
 
     void Start () {
         damageModifier = 1f;

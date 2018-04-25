@@ -29,9 +29,8 @@ public class AmmoRemaining : Photon.PunBehaviour {
 
 	// Use this for initialization
 	void LateStart () {
-		//ammoText = GameObject.FindGameObjectWithTag("AmmoText").GetComponent<Text>();
+		SetAmmoText ();	}
 	
-	}
 
 	void Start(){
 		if (photonView.isMine || !PhotonNetwork.connected) {
@@ -66,7 +65,6 @@ public class AmmoRemaining : Photon.PunBehaviour {
 			maxAmmo = ammo;
             originalAmmo = ammo;
 			isReloading = false;
-			SetAmmoText ();
 		}
 	}
 
