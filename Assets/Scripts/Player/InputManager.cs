@@ -150,7 +150,7 @@ public class InputManager : MonoBehaviour
 
     public static bool MenuSelect()
     {
-        return Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.Return) || AButton() || StartButton();
+        return Input.GetKeyDown(KeyCode.Return) || AButton() || StartButton();
     }
 
     #endregion Menu
