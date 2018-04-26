@@ -49,7 +49,7 @@ public class CoreControl : Photon.PunBehaviour {
 
 	//public AudioClip footstepAudio;
 
-    void Start () {
+    public void LateStart () {
         damageModifier = 1f;
         forwardMovement = 0;
         horizontalMovement = 0;
@@ -249,14 +249,18 @@ public class CoreControl : Photon.PunBehaviour {
 
     public void Move()
     {
-        Camera main_c = GetComponent<Control>().main_c;
-		if (main_c && !dead&&!animator.GetCurrentAnimatorStateInfo (0).IsName ("Reviving"))
-        {
-            Vector3 movement = new Vector3(horizontalMovement * Time.deltaTime * horizontalSpeed, 0.0f, forwardMovement * Time.deltaTime * forwardSpeed);
+		if (animator) {
+			Camera main_c = GetComponent<Control> ().main_c;
+			if (main_c && !dead && !animator.GetCurrentAnimatorStateInfo (0).IsName ("Reviving")) {
+				Vector3 movement = new Vector3 (horizontalMovement * Time.deltaTime * horizontalSpeed, 0.0f, forwardMovement * Time.deltaTime * forwardSpeed);
 
-            movement = transform.TransformDirection(movement);
-            rb.MovePosition(transform.position + movement);
-        }
+				movement = transform.TransformDirection (movement);
+				rb.MovePosition (transform.position + movement);
+			}
+		} else {
+			Debug.Log ("CoreControl cannot get the animator from Control!");
+			animator = gameObject.GetComponent<Animator> ();
+		}
     }
 
     public void PickUpObject()

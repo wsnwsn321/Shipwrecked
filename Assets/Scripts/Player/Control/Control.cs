@@ -21,43 +21,48 @@ public class Control : Photon.MonoBehaviour {
     private Animator ani;
     //test only
     private Experience exp;
-    void Start ()
-    {
-        exp = GetComponent<Experience>();
-        EntityType type = GetComponent<EntityType>();
 
-        if (type.type == EntityTypes.Teammate)
-        {
-            coreControl = GetComponent<CoreControl>();
-            ani = GetComponent<Animator>();
-            switch(type.teammateType)
-            {
-                case TeammateTypes.Captain:
-                    classControl = GetComponent<CaptainControl>();
-                    characterType = TeammateTypes.Captain;
-                    break;
-                case TeammateTypes.Doctor:
-                    classControl = GetComponent<DoctorControl>();
-                    characterType = TeammateTypes.Doctor;
-                    break;
-                case TeammateTypes.Engineer:
-                    classControl = GetComponent<MechanicControl>();
-                    characterType = TeammateTypes.Engineer;
-                    break;
-                case TeammateTypes.Sergeant:
-                    classControl = GetComponent<SergeantControl>();
-                    characterType = TeammateTypes.Sergeant;
-                    break;
-            }
-        }
-        else
-        {
-            Debug.LogError("Object is not a player type.");
-        }
-    }
 
-	void LateStart()
-    {
+	private void InitControl() {
+		exp = GetComponent<Experience>();
+		EntityType type = GetComponent<EntityType>();
+
+		if (type.type == EntityTypes.Teammate)
+		{
+			coreControl = GetComponent<CoreControl>();
+
+			// Cringey code
+			coreControl.LateStart ();
+
+			ani = GetComponent<Animator>();
+			switch(type.teammateType)
+			{
+			case TeammateTypes.Captain:
+				classControl = GetComponent<CaptainControl>();
+				characterType = TeammateTypes.Captain;
+				break;
+			case TeammateTypes.Doctor:
+				classControl = GetComponent<DoctorControl>();
+				characterType = TeammateTypes.Doctor;
+				break;
+			case TeammateTypes.Engineer:
+				classControl = GetComponent<MechanicControl>();
+				characterType = TeammateTypes.Engineer;
+				break;
+			case TeammateTypes.Sergeant:
+				classControl = GetComponent<SergeantControl>();
+				characterType = TeammateTypes.Sergeant;
+				break;
+			}
+		}
+		else
+		{
+			Debug.LogError("Object is not a player type.");
+		}
+		//    }
+		//
+		//	void LateStart()
+		//    {
 		camera_position = CamRef.transform.localPosition;
 	}
 
@@ -69,8 +74,12 @@ public class Control : Photon.MonoBehaviour {
 		{
 			return;
 		}
-
-        classControl.UpdateActions(Time.deltaTime);
+		if (classControl != null) {
+			classControl.UpdateActions (Time.deltaTime);
+		} else {
+			Debug.Log ("Assigning class control in update...");
+			InitControl ();
+		}
     }
 
     // Update is called once per frame

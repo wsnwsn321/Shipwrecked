@@ -51,7 +51,6 @@ public class CaptainControl : Photon.PunBehaviour, IClassControl
 				Debug.Log ("ERROR! Captain couldn't retrieve his animator or core control in CaptControl!");
 			} else {
 				Debug.Log ("Captain retrieved his animator or core control in CaptControl!");
-
 			}
 		}
 
